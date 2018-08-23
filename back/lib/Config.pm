@@ -99,8 +99,6 @@ sub get_page_data {
 		
 	call_for_role ("recalculate_$_REQUEST{type}");
 	
-	$id_contract_event and sql_do ('UPDATE contract_events SET dt = CURRENT_TIMESTAMP, fake = 0 WHERE id = ?', $id_contract_event);
-	
 	return $data;
 
 }
