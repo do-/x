@@ -1,25 +1,18 @@
 {
-		
-	"fcgi": {
-		"name"    : "elu_dia_w2ui_template",
-		"pidfile" : "/var/run/elu_dia_w2ui_template.pid",
-		"port"    : ...
-	},
-		
-	"files": "/var/projects/elu_dia_w2ui_template/files",
 
-	"db": {
-		"dsn"      : "DBI:Pg:database=elu_dia_w2ui_template;host=localhost",
-		"user"     : "elu_dia_w2ui_template",
-		"password" : "..."
-	},		
+        "listen": {
+                "host"    : "127.0.0.1",
+                "port"    : 8003
+        },
 
-	"core_debug_profiling": 1,
-	
-	"auth": {
-		"allow_test_admin": 1,
-		"sessions": {"timeout": 30},
-		"salt_file" : "/etc/elu_dia_w2ui_template.salt"		
-	}
+        "db": {
+                "connectionString": "postgresql://tmp:XXXXXX@localhost:5432/tmp"
+        },
+
+        "auth": {
+                "allow_test_admin": 1,
+                "sessions": {"timeout": 30},
+                "salt_file": "/etc/tasks.salt"
+        }
 
 }

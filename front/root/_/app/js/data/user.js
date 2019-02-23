@@ -3,12 +3,26 @@ define ([], function () {
     $_DO.cancel_user = function (e) {
         
         if (!confirm ('Отменить несохранённые правки?')) return
-
+        
         query ({}, {}, function (data) {
 
             data.__read_only = true
 
             $_F5 (data)
+
+        })
+        
+    }
+    
+    $_DO.delete_user = function (e) {
+        
+        if (!confirm ('Серьёзно?')) return
+        
+        query ({action: 'delete'}, {}, function (data) {
+
+            refreshOpener ()
+            
+            window.close ()
 
         })
         
@@ -25,7 +39,7 @@ define ([], function () {
         var data = w2ui ['form'].record
 
         data.__read_only = false
-
+                
         $_F5 (data)
 
     }
