@@ -19,7 +19,7 @@ define ([], function () {
 
     $_F5 = function () {
         use.block (getBlockType ())
-        use.block ('nav')
+        show_block ('nav')
     }
     
     return function (data, view) {           
