@@ -65,7 +65,7 @@ $_GET.nav = async function (o) {
                 id: "open_user_password",
                 label: "Смена пароля",
                 icon: "keys",
-                off: is_admin
+//                off: is_admin
             },
             {
                 id: "open_settings",

@@ -4,12 +4,21 @@ $_DRAW.nav = async function (data) {
     
         function button (o) {
         
+            function svg (name) {return staticURL (
+            
+                `libs/elu_dia_w2ui_template/svg/${name}.svg`
+            
+            )}
+        
             let $b = $('<button>').attr ({
                 name:  o.id, 
                 title: o.label, 
-                class: 'svg-' + o.icon
             })
             
+            .css ({
+                backgroundImage: `url(${svg (o.icon)})`
+            })
+
             if (o.id == 'open_' + $_REQUEST.type) $b.addClass ('active');
                 else clickOn ($b, $_DO [o.id + '_nav']);
 
@@ -28,9 +37,6 @@ $_DRAW.nav = async function (data) {
             .append (part ('header', data.header))
             .append (part ('footer', data.footer))
         .insertBefore ($('main'))
-
-    $('body > nav header button').after ('<hr>')
-    $('body > nav footer button').before ('<hr>')
     
     return $nav
 
