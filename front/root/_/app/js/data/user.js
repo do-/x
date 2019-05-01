@@ -42,7 +42,7 @@ $_DO.choose_tab_user = function (e) {
 
     localStorage.setItem ('user.active_tab', e.tab.id)
 
-    use.block (e.tab.id)
+    show_block (e.tab.id)
 
 }
 
