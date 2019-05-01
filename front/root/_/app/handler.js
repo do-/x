@@ -192,6 +192,6 @@ requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (jq, elu, elu_w2ui) {
 
     setup_request ()
 
-    $_USER ? use.block ('main') : show_block ('login')
+    show_block ($_USER ? 'main' : 'login')
 
 });

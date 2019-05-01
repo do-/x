@@ -1,30 +1,11 @@
+$_DRAW.main = async function (data) {
 
-define ([], function () {
+    let $main = $('body').html ('<main/>')
 
-    function get_single (s) {
+    use.block ($_REQUEST.id ? en_unplural ($_REQUEST.type) : $_REQUEST.type)
 
-        // if (s == '...') return '...' // exceptions
-
-        return en_unplural (s)
-
-    }
-
-    function getBlockType () {
+    show_block ('nav')
     
-        if (!$_USER) return 'login'
-        
-        return $_REQUEST.id ? get_single ($_REQUEST.type) : $_REQUEST.type
-        
-    }
+    return $main
 
-    $_F5 = function () {
-        use.block (getBlockType ())
-        show_block ('nav')
-    }
-    
-    return function (data, view) {           
-        fill (view, {}, $('body'))
-        $_F5 ()
-    }
-
-});
+}
