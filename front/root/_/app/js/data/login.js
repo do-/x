@@ -1,31 +1,23 @@
-define ([], function () {
+////////////////////////////////////////////////////////////////////////////////
 
-    $_DO.execute_login = function (e) {
+$_DO.execute_login = async function (e) {
         
-        var param = values ($('main'))
-        
-        w2ui ['form'].lock ()
-
-        query ({type: 'sessions', action: 'create'}, {data: param}, function (data) {
-
-            w2ui ['form'].unlock ()
-
-            if (!data || !data.user) return alert ('Ошибка аутентификации')
-
-            $_SESSION.start (data.user, data.timeout)
-                        
-            location.reload ()
-
-        })
-
-    }
-
-    return function (done) {
+    let form = w2ui ['form']
     
-        var data = {}
+    form.lock ()
+
+    let data = await response ({type: 'sessions', action: 'create'}, {data: values ($('main'))})
+
+    form.unlock ()
+
+    if (!data || !data.user) return alert ('Ошибка аутентификации')
+
+    $_SESSION.start (data.user, data.timeout)
                 
-        done (data)
-        
-    }
-    
-})
+    location.reload ()
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$_GET.login = async function (o) {}
