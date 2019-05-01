@@ -19,6 +19,8 @@ $_DO.open_settings_nav = function () {
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.logout_nav = function () {
+
+    if (!confirm ("Завершить работу в системе?")) return
         
     query ({type: 'sessions', action: 'delete'}, {}, $.noop, $.noop)
     
@@ -33,13 +35,51 @@ $_DO.logout_nav = function () {
 $_GET.nav = async function (o) {
 
     let is_admin = ($_USER.role == 'admin')
-
-    return {_can: {
-        open_users: is_admin,
-        open_user_password: is_admin,
-        open_settings: true,
-        open_widgets: true,
-        logout: true
-    }}
-
+    
+    return {
+    
+        header: [
+        
+            {
+                id: "open_widgets",
+                label: "Меню",
+                icon: "menu",
+            },
+            {
+                id: "open_help",
+                label: "Справка",
+                icon: "help",
+            },
+            {
+                id: "open_users",
+                label: "Пользователи",
+                icon: "users",
+                off: !is_admin
+            },
+            
+        ].filter (not_off),
+        
+        footer: [
+        
+            {
+                id: "open_user_password",
+                label: "Смена пароля",
+                icon: "keys",
+                off: is_admin
+            },
+            {
+                id: "open_settings",
+                label: "Настройки",
+                icon: "settings",
+            },
+            {
+                id: "logout",
+                label: "Выход",
+                icon: "logout",
+            },
+            
+        ].filter (not_off),
+        
+    }
+    
 }
