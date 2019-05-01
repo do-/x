@@ -4,7 +4,7 @@ $_DO.delete_user = async function (e) {
     
     if (!confirm ('Серьёзно?')) return
     
-    await response ({action: 'delete'})
+    await response ({type: 'users', action: 'delete'})
 
     refreshOpener ()
         
@@ -30,7 +30,7 @@ $_DO.update_user = async function (e) {
 
     form.lock ()
 
-    await response ({action: 'update'}, {data: form.values ()})
+    await response ({type: 'users', action: 'update'}, {data: form.values ()})
 
     location.reload ()
 
@@ -50,7 +50,7 @@ $_DO.choose_tab_user = function (e) {
 
 $_GET.user = async function (o) {
 
-    let data = await response ({})
+    let data = await response ({type: 'users'})
     
     data.active_tab = localStorage.getItem ('user.active_tab') || 'user_options'
 
