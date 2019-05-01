@@ -21,7 +21,7 @@ $_DO.update_user_new = async function (e) {
     
     grid.reload (grid.refresh)
 
-    w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {openTab ('/users/' + data.uuid)})
+    w2confirm ('Пользователь зарегистрирован. Открыть его карточку?').yes (function () {open_tab ('/user/' + data.uuid)})
 
 }
 
