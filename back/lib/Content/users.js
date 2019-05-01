@@ -187,19 +187,10 @@ do_delete_users:
 
     async function () {
     
-        return Promise.all ([
-
-            this.db.update ('user_users', {
-                id_user_ref : this.rq.id,
-                is_on       : 0,
-            }, ['id_user_ref']),
-
-            this.db.update ('users', {
-                uuid        : this.rq.id, 
-                is_deleted  : 1, 
-            }),
-
-        ])
+        this.db.update ('users', {
+            uuid        : this.rq.id, 
+            is_deleted  : 1, 
+        })
 
     },
 
