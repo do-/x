@@ -22,7 +22,7 @@ $_DRAW.users = async function (data) {
         url: '_back/?type=users',
 
         onAdd:      ( ) => show_block ('user_new'),
-        onDblClick: (e) => openTab   (`/user/${e.recid}`),
+        onDblClick: (e) => open_tab   (`/user/${e.recid}`),
 
     }).refresh ();
     
