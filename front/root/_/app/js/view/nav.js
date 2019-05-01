@@ -1,43 +1,29 @@
 $_DRAW.nav = async function (data) {
     
-    function part (name, items) {
+    function svg (icon) {return staticURL (            
+        `libs/elu_dia_w2ui_template/svg/${icon}.svg`            
+    )}
+
+    let $nav = $('<nav class=left-sidebar>')
     
-        function button (o) {
+    for (let name of ['header', 'footer']) {
+
+        let $result = $(`<${name}>`).appendTo ($nav)
+
+        for (let o of data [name]) {
         
-            function svg (name) {return staticURL (
-            
-                `libs/elu_dia_w2ui_template/svg/${name}.svg`
-            
-            )}
-        
-            let $b = $('<button>').attr ({
-                name:  o.id, 
-                title: o.label, 
-            })
-            
-            .css ({
-                backgroundImage: `url(${svg (o.icon)})`
-            })
+            let $b = $('<button>')
+                .attr ({name: o.id, title: o.label})
+                .css  ({backgroundImage: `url(${svg (o.icon)})`})
+                .appendTo ($result)
 
             if (o.id == 'open_' + $_REQUEST.type) $b.addClass ('active');
-                else clickOn ($b, $_DO [o.id + '_nav']);
-
-            return $b            
-            
+                else clickOn ($b, $_DO [o.id + '_nav'])
+                
         }
-        
-        let $result = $('<' + name + '>')        
-        for (let o of items) $result.append (button (o))        
-        return $result
-    
+
     }
 
-    var $nav = 
-        $('<nav class=left-sidebar>')
-            .append (part ('header', data.header))
-            .append (part ('footer', data.footer))
-        .insertBefore ($('main'))
-    
-    return $nav
+    return $nav.insertBefore ($('main'))
 
 }
