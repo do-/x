@@ -7,11 +7,9 @@
 		</noscript>
 		<script>
 
-//			window.alarm = setTimeout (function () {window.location.href='/_unmaintainable_browser/'} , 1000);
+			window.alarm = setTimeout (function () {window.location.href='/_unmaintainable_browser/'} , 1000);
 
-			window.autoExec = function () {};
-
-			var ver = '1.0.186';
+			var ver = '1.0.198';
 
 			sessionStorage.setItem ('staticRoot', '__' + ver.replace (/\./g, '_'));
 			sessionStorage.setItem ('dynamicRoot', '/_back');
@@ -36,5 +34,5 @@
 
 		</script>
 	</head>
-	<body onLoad="window.autoExec ()"></body>
+	<body></body>
 </html>
