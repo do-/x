@@ -1,49 +1,48 @@
 <span>
+
+	<style>
+		input[data-block-name=user] {width: 300px!important;}
+	</style>
+
 	<div>
 
         <div class="w2ui-page page-0">
 
 			<header>
-				<span data-text="role.label" /> <span data-text="org.label" /> <span data-text="label" />
+				<span data-text="role.label" /> <span data-text="label" />
 			</header>
 
             <div class="w2ui-field">
                 <label>ФИО</label>
                 <div>
-                    <input name="label" style="width:300px" />
+                    <input name="label" />
                 </div>
             </div>
 
-            <div class="w2ui-field" data-off=is_alien>
+            <div class="w2ui-field">
                 <label>login</label>
                 <div>
-                    <input name="login" style="width:300px" />
+                    <input name="login" />
                 </div>
             </div>
 
             <div class="w2ui-field">
                 <label>E-mail</label>
                 <div>
-                    <input name="mail" style="width:300px" />
+                    <input name="mail"  />
                 </div>
             </div>
-<!--
-            <div class="w2ui-field">
-                <label>Без права редактирования</label>
-                <div>
-                    <input type=checkbox value=1 name="is_read_only" style="width:298px;" />
-                </div>
-            </div>
--->
+
         </div>
 
         <div class="w2ui-buttons">
         	<span>
-				<button class=w2ui-btn name=edit   data-on=__read_only>Редактировать</button>
-				<button class=w2ui-btn name=update data-off=__read_only>Сохранить</button>
-				<button class=w2ui-btn name=cancel data-off=__read_only>Отменить</button>
-				<button class=w2ui-btn name=pass   data-on=__read_only>Установить пароль</button>
-				<button class=w2ui-btn name=delete data-on=__read_only>Удалить</button>
+                <button class=w2ui-btn name=edit   >Редактировать</button>
+                <button class=w2ui-btn name=pass   >Установить пароль</button>
+                <button class=w2ui-btn name=delete >Удалить</button>
+
+                <button class=w2ui-btn name=update data-edit>Сохранить</button>
+                <button class=w2ui-btn name=cancel data-edit>Отменить</button>
             </span>
         </div>
 
