@@ -1,5 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.cancel_user = function (e) {
+    
+    if (confirm ('Отменить несохранённые правки?')) w2_panel_form ().reload_block ()
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+$_DO.edit_user = function (e) {
+
+	$_SESSION.delete ('__read_only')
+	
+	w2_panel_form ().refresh ()
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.delete_user = async function (e) {
     
     if (!confirm ('Серьёзно?')) return
@@ -38,23 +56,13 @@ $_DO.update_user = async function (e) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.choose_tab_user = function (e) {
-
-    localStorage.setItem ('user.active_tab', e.tab.id)
-
-    show_block (e.tab.id)
-
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 $_GET.user = async function (o) {
 
     let data = await response ({type: 'users'})
     
-    data.active_tab = localStorage.getItem ('user.active_tab') || 'user_options'
-
     $('body').data ('data', data)
+
+    $_SESSION.set ('__read_only', 1)
 
     return data
 

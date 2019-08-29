@@ -12,7 +12,7 @@ $_DO.toggle_user_options = async function (e) {
 
     if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
 
-    await response ({action: 'set_option'}, {data: data})
+    await response ({type: 'users', action: 'set_option'}, {data: data})
 
     g.request ('get')
 

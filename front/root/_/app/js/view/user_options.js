@@ -1,6 +1,6 @@
 $_DRAW.user_options = async function (data) {
 
-    $(w2ui ['main'].el ('main')).w2regrid ({ 
+    $(w2_waiting_panel ()).w2regrid ({ 
     
         name   : 'options_grid', 
 

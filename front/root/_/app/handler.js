@@ -1,6 +1,8 @@
 (function () {
 
     clearTimeout (window.alarm)
+    
+    $(window).keydown (check_hotkeys)
 
     if (!$_USER) return show_block ('login')
 
