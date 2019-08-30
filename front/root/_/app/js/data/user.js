@@ -43,12 +43,14 @@ $_DO.pass_user = function (e) {
 $_DO.update_user = async function (e) {
 
     if (!confirm ('Сохранить изменения?')) return
-
-    let form = w2ui ['form']
+    
+    let form = w2_panel_form ()
+    
+    let data = form.values ().actual ().validated ()
 
     form.lock ()
 
-    await response ({type: 'users', action: 'update'}, {data: form.values ()})
+    await response ({type: 'users', action: 'update'}, {data})
 
     location.reload ()
 
