@@ -2,7 +2,7 @@
 
 $_GET.users = async function (o) {
 
-    let data = await response ({type: 'roles'})
+    let data = await response ({type: 'users', part: 'vocs'})
     
     add_vocabularies (data, {roles: 1})
     
