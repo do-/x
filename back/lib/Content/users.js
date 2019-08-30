@@ -4,6 +4,18 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+get_vocs_of_users: 
+
+    function () {
+
+        return this.db.add_vocabularies ({_fields: this.db.model.tables.users.columns}, {
+            roles: {},
+        })
+
+    },
+    
+////////////////////////////////////////////////////////////////////////////////
+
 select_users: 
     
     function () {
