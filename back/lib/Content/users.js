@@ -201,11 +201,7 @@ do_update_users:
     async function () {
     
         let data = this.rq.data
-            
-        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
 
-        if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
-        
         let uuid = this.rq.id
 
         let d = {uuid}
@@ -231,10 +227,6 @@ do_create_users:
             
         if (!data.id_role) throw '#id_role#: Не указана роль'
 
-        if (!/^[А-ЯЁ][А-ЯЁа-яё\- ]+[а-яё]$/.test (data.label)) throw '#label#: Проверьте, пожалуйста, правильность заполнения ФИО'
-
-        if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
-
         let d = {uuid: this.rq.id}
 
         for (let k of ['login', 'label', 'id_role']) d [k] = data [k]        
@@ -243,7 +235,7 @@ do_create_users:
             d.uuid = await this.db.insert ('users', d)
         }
         catch (x) {
-            if (this.db.is_pk_violation (e)) return d
+            if (this.db.is_pk_violation (x)) return d
             throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
         }
         
