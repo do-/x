@@ -1,3 +1,7 @@
+function _ts (record, ind, col_ind, data) {
+    return dt_dmy (data) + ' ' + data.substr (11, 12)
+}
+
 (function () {
 
     clearTimeout (window.alarm)

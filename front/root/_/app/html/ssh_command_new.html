@@ -1,0 +1,36 @@
+<span
+	data-popup-width=500
+	data-popup-height=330
+	data-popup-title='Запуск команды'
+>
+
+	<style>
+		input[data-block-name=ssh_command_new] {
+			width: 270px !important;
+		}
+	</style>
+
+	<div class="w2ui-reset w2ui-form" style="height:280px; margin:8px 0 0 0;">
+
+        <div class="w2ui-page page-0">
+
+        	<input name=uuid type=hidden>
+
+			<div class="w2ui-field">
+				<label>Команда:</label>
+				<div>
+					<input name=cmd required>
+				</div>
+			</div>
+
+			<div id=container style="width:460px;height:160px;margin-top:10px;" />
+
+        </div>
+
+        <div class="w2ui-buttons">
+			<button class=w2ui-btn name=update data-hotkey=Ctrl-Enter>Создать...</button>
+        </div>
+
+	</div>
+
+</span>
