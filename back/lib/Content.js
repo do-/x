@@ -182,6 +182,7 @@ module.exports.create_queue = function (conf) {
                 conf, 
                 pools: {
                     db: conf.pools.db,
+                    queue: conf.pools.queue,
                 }, 
                 module_name, 
                 method_name, 

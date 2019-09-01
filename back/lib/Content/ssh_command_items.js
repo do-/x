@@ -31,6 +31,20 @@ select_ssh_command_items:
     
 ////////////////////////////////////////////////////////////////////////////////
 
+do_update_ssh_command_items: 
+
+    async function () {
+
+        let data = this.rq.data
+
+        data.uuid = this.rq.id
+
+		await this.db.update ('ssh_command_items', data)
+
+    },    
+    
+////////////////////////////////////////////////////////////////////////////////
+
 do_run_ssh_command_items: 
 
     async function () {
@@ -51,20 +65,25 @@ do_run_ssh_command_items:
 		let key = `${o.host}:${o.port}`
 
 		let conn = new Client ()
+		
+		let q = this.queue
+		
+		function log (msg, data) {
+			darn (`SSH ${key} ${msg}`)
+			q.publish ('ssh_command_items', 'do_update_ssh_command_items', {id: item.uuid, data})			
+		}
 
 		conn.on ('ready', function () {
 
-			darn (`SSH ${key} connected`)
-			db.update ('ssh_command_items', {uuid, ts_conn: new Date ()})
-
+			log ('connected', {ts_conn: new Date ()})
+			
 			conn.exec (item ['ssh_commands.cmd'], function (err, stream) {
 
 				if (err) throw err;
 
 				stream.on ('close', function (code, signal) {
 					conn.end ()
-					darn (`SSH ${key} disconnected`)						
-					db.update ('ssh_command_items', {uuid, code, signal, ts_to: new Date ()})
+					log ('disconnected', {code, signal, ts_to: new Date ()})
 				})
 				.on ('data', function(data) {
 				  darn ('STDOUT: ' + data);
@@ -77,44 +96,10 @@ do_run_ssh_command_items:
 
 		})
 
-		darn (`SSH ${key} connecting...`)
-		db.update ('ssh_command_items', {uuid, ts_from: new Date ()})
+		log ('connecting', {ts_from: new Date ()})
 
 		conn.connect (o)
 
 	},
     
-/*
-////////////////////////////////////////////////////////////////////////////////
-    
-get_item_of_ssh_command_items: 
-
-    async function () {
-        
-        let data = await this.db.get ([{ssh_command_items: 
-
-            {uuid: this.rq.id},
-
-        }])
-        
-        data._fields = this.db.model.tables.ssh_command_items.columns
-        
-        return data
-
-    },
-
-////////////////////////////////////////////////////////////////////////////////
-
-do_delete_ssh_command_items: 
-
-    async function () {
-    
-        this.db.update ('ssh_command_items', {
-            uuid        : this.rq.id, 
-            is_deleted  : 1, 
-        })
-
-    },
-
-*/
 }
