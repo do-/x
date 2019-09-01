@@ -17,6 +17,7 @@ $_DRAW.ssh_command_items = async function (data) {
             {field: 'ts_to',          caption: 'Окончание',    size: 25, render: _ts},
             {field: 'code',           caption: 'Код',    size: 10},
             {field: 'signal',         caption: 'Сигнал',    size: 20},
+            {field: 'error',          caption: 'Ошибка',    size: 20},
         ],
                     
         src: data.src,
