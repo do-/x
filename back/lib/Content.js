@@ -149,7 +149,10 @@ module.exports.create_http_server = function (conf) {
             
                 conf, 
                 
-                pools: {db: conf.pools.db}, 
+                pools: {
+                	db: conf.pools.db,
+                    queue: conf.pools.queue,
+                }, 
                 
                 http: {request, response}
                 
@@ -166,5 +169,29 @@ module.exports.create_http_server = function (conf) {
             }
         
         )
+
+}
+
+module.exports.create_queue = function (conf) {
+
+    return {
+    
+        publish: (module_name, method_name, rq) => {
+        
+            let h = new Dia.Handler ({
+                conf, 
+                pools: {
+                    db: conf.pools.db,
+                }, 
+                module_name, 
+                method_name, 
+                rq
+            })
+
+            setImmediate (() => h.run ())
+
+        }
+
+    }
 
 }

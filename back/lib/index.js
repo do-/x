@@ -12,6 +12,8 @@ async function _ () {
     catch (x) {
         return darn (['DB MIGRATION FAILED', x])
     }
+    
+    conf.pools.queue = Content.create_queue (conf)
 
     Content.create_http_server (conf)
 
