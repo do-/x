@@ -9,7 +9,7 @@
 
 //			window.alarm = setTimeout (function () {window.location.href='/_unmaintainable_browser/'} , 1000);
 
-			var ver = '1.0.337';
+			var ver = '1.0.7';
 
 			sessionStorage.setItem ('staticRoot', '__' + ver.replace (/\./g, '_'));
 			sessionStorage.setItem ('dynamicRoot', '/_back');
@@ -27,7 +27,7 @@
 				function ahead (e) {document.head.appendChild (e)}
 
 				ahead (el ('link',   {href: r + '/libs/w2ui/w2ui-1.5.rc1.min.css', rel: 'stylesheet', type: 'text/css'}))
-				ahead (el ('link',   {href: r + '/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.css', rel: 'stylesheet', type: 'text/css'}))
+				ahead (el ('link',   {href: r + '/libs/x5bus/x5bus.css', rel: 'stylesheet', type: 'text/css'}))
 				ahead (el ('script', {src:  r + '/app/js/_.js'}))
 
 			})()

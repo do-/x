@@ -28,17 +28,6 @@ do_create_sessions:
         user.role = user ['roles.name']
         user.id = user.uuid
         
-        user.opt = await this.db.fold ([
-
-            {'user_options()': {
-                is_on: 1,
-                id_user: user.uuid
-            }},
-
-            'voc_user_options(name)'
-
-        ], (i, d) => {d [i ['voc_user_options.name']] = 1}, {})
-
         return {user, timeout: this.session.o.timeout}
 
     },

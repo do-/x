@@ -1,6 +1,6 @@
 {
   "name": "front",
-  "version": "1.0.337",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
     "grunt-shell": "^2.1.0",
     "grunt-text-replace": "^0.4.0",
     "jit-grunt": "^0.10.0"
+  },
+  "dependencies": {
+    "node-gyp": "^5.0.3"
   }
 }

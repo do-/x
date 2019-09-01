@@ -13,7 +13,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.css": "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.less"
+          "root/_/libs/x5bus/x5bus.css": "root/_/libs/x5bus/x5bus.less"
         }
       }
     },
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
     },    
 /*    
     shell: {
-        reboot: {command: '/etc/init.d/elu_dia_w2ui_template restart'}
+        reboot: {command: '/etc/init.d/x5bus restart'}
     },
 */
     compress: {
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
       },
 
       styles: {
-        files: ['root/_/libs/elu_dia_w2ui_template/*.less'],
+        files: ['root/_/libs/x5bus/*.less'],
         tasks: ['less'],
         options: {nospawn: true}
       },

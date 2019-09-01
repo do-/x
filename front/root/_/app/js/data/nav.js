@@ -9,12 +9,6 @@ $_DO.open_users_nav = function () {
 $_DO.open_user_password_nav = function () {
     show_block ('user_password')
 }
-        
-////////////////////////////////////////////////////////////////////////////////
-
-$_DO.open_settings_nav = function () {
-    show_block ('user_own_options')
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -45,11 +39,13 @@ $_GET.nav = async function (o) {
                 label: "Меню",
                 icon: "menu",
             },
+/*            
             {
                 id: "open_help",
                 label: "Справка",
                 icon: "help",
             },
+*/            
             {
                 id: "open_users",
                 label: "Пользователи",
@@ -66,11 +62,6 @@ $_GET.nav = async function (o) {
                 label: "Смена пароля",
                 icon: "keys",
 //                off: is_admin
-            },
-            {
-                id: "open_settings",
-                label: "Настройки",
-                icon: "settings",
             },
             {
                 id: "logout",

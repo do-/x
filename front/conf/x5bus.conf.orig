@@ -1,0 +1,13 @@
+server {
+
+    listen		*:80;
+    server_name		x5bus.mydomain;
+
+    root		/var/projects/x5bus/front/root;
+
+    access_log		/var/log/nginx/x5bus.access.log eludia_requests;
+    error_log		/var/log/nginx/x5bus.error.log;
+
+    include		/var/projects/x5bus/front/conf/app.conf;
+
+}

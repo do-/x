@@ -1,7 +1,7 @@
 $_DRAW.nav = async function (data) {
     
     function svg (icon) {return staticURL (            
-        `libs/elu_dia_w2ui_template/svg/${icon}.svg`            
+        `libs/x5bus/svg/${icon}.svg`            
     )}
 
     let $nav = $('<nav class=left-sidebar>')
