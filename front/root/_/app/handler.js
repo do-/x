@@ -8,7 +8,7 @@
 
     let [type, id] = location.pathname.split ('/').filter ((i) => i)
 
-    if (!type) return redirect (window.name = '/users')
+    if (!type) return redirect (window.name = '/ssh_hosts')
 
     $_REQUEST = {type, id}
 
