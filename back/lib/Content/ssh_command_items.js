@@ -19,23 +19,13 @@ select_ssh_command_items:
     
     function () {
    
-        this.rq.sort = this.rq.sort || [{field: "host", direction: "asc"}]
-
-        if (this.rq.searchLogic == 'OR') {
-
-            let q = this.rq.search [0].value
-
-            this.rq.search = [
-                {field: 'cmd', operator: 'contains', value: q},
-            ]
-
-        }
+        this.rq.sort = this.rq.sort || [{field: "ssh_hosts.host", direction: "asc"}]
     
         let filter = this.w2ui_filter ()
         
-        filter.is_deleted  = 0
-
-        return this.db.add_all_cnt ({}, [{ssh_command_items: filter}])
+        return this.db.add_all_cnt ({}, [{ssh_command_items: filter}
+        	, 'ssh_hosts(host)'
+        ])
 
     },
 /*
