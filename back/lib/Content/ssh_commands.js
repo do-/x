@@ -80,13 +80,11 @@ do_create_ssh_commands:
 
        	let id_host = data.id_host; if (!id_host || !id_host.length) throw '#id_host#: Не указаны hostы'
 
+        data.id_host = JSON.stringify (data.id_host)
+
         data.uuid = this.rq.id
 
-       	let result = await this.db.insert ('ssh_commands', data)
-
-       	await this.db.insert ('ssh_command_items', id_host.map (id_host => ({id_host, id_command: data.uuid})))
-
-       	return result
+       	this.db.insert ('ssh_commands', data)
 
     },
 
