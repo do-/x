@@ -90,4 +90,63 @@ do_create_ssh_commands:
 
     },
 
+////////////////////////////////////////////////////////////////////////////////
+
+do_run_ssh_commands: 
+
+    async function () {
+    
+		let items = await this.db.list ([{ssh_command_items: {id_command: this.rq.id}}
+        	, 'ssh_hosts'
+        	, 'ssh_commands'
+        ])    
+        
+        let db = this.db
+        
+        let Client = require ('ssh2').Client
+
+        for (let item of items) {
+
+        	let uuid = item.uuid
+
+        	let o = {}; for (let k of ['host', 'port', 'username', 'password']) o [k] = item ['ssh_hosts.' + k]
+
+			let key = `${o.host}:${o.port}`
+
+			let conn = new Client ()
+
+			conn.on ('ready', function () {
+
+				darn (`SSH ${key} connected`)
+				db.update ('ssh_command_items', {uuid, ts_conn: new Date ()})
+
+				conn.exec (item ['ssh_commands.cmd'], function (err, stream) {
+
+					if (err) throw err;
+
+					stream.on ('close', function (code, signal) {
+						conn.end ()
+						darn (`SSH ${key} disconnected`)						
+						db.update ('ssh_command_items', {uuid, code, signal, ts_to: new Date ()})
+					})
+					.on ('data', function(data) {
+					  darn ('STDOUT: ' + data);
+					})
+					.stderr.on ('data', function(data) {
+					  darn ('STDERR: ' + data);
+					})
+
+				})
+
+			})
+
+			darn (`SSH ${key} connecting...`)
+			db.update ('ssh_command_items', {uuid, ts_from: new Date ()})
+
+			conn.connect (o)
+
+        }
+
+    }
+
 }

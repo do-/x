@@ -12,6 +12,11 @@ $_DRAW.ssh_command_items = async function (data) {
 
         columns: [                
             {field: 'ssh_hosts.host',        caption: 'Host',    size: 100},
+            {field: 'ts_from',        caption: 'Начало',    size: 25, render: _ts},
+            {field: 'ts_conn',        caption: 'Соединение',    size: 25, render: _ts},
+            {field: 'ts_to',          caption: 'Окончание',    size: 25, render: _ts},
+            {field: 'code',           caption: 'Код',    size: 10},
+            {field: 'signal',         caption: 'Сигнал',    size: 20},
         ],
                     
         src: data.src,
