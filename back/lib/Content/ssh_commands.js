@@ -95,12 +95,14 @@ do_create_ssh_commands:
 do_run_ssh_commands: 
 
     async function () {
-    
-		let items = await this.db.list ([{ssh_command_items: {id_command: this.rq.id}}])    
-        
-        for (let item of items) 
-        
-        	this.queue.publish ('ssh_command_items', 'do_run_ssh_command_items', {id: item.uuid})        
+
+    	this.db.fold (
+
+    		[{'ssh_command_items(uuid)': {id_command: this.rq.id}}], 
+
+    		item => this.queue.publish ('ssh_command_items', 'do_run_ssh_command_items', {id: item.uuid})
+
+    	)
 
     }
 
