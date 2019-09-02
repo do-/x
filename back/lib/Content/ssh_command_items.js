@@ -19,13 +19,11 @@ select_ssh_command_items:
     
     function () {
    
-        this.rq.sort = this.rq.sort || [{field: "ssh_hosts.host", direction: "asc"}]
+        this.rq.sort = this.rq.sort || [{field: "host", direction: "asc"}]
     
         let filter = this.w2ui_filter ()
         
-        return this.db.add_all_cnt ({}, [{ssh_command_items: filter}
-        	, 'ssh_hosts(host)'
-        ])
+        return this.db.add_all_cnt ({}, [{vw_ssh_command_items: filter}])
 
     },
     
