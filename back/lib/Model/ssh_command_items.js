@@ -10,6 +10,7 @@ module.exports = {
 		ts_to      : 'timestamp,     // Дата/время окончания',
 		code       : 'int,           // Код завершения',
 		signal     : 'string,        // Сигнал',
+		error      : 'string,        // Ошибка',
     },
 
     keys: {

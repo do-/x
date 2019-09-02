@@ -5,6 +5,7 @@ module.exports = {
     columns : {
         is_deleted : 'int=0              // 1, если удалена', 
         cmd        : 'string             // Команда',
+        ttl        : 'int                // Время на исполнение, с',
 		ts_created : 'timestamp=now()    // Дата/время создания',
 		id_host    : 'text               // JSON-массив UUID hostов',
     },

@@ -53,16 +53,14 @@ do_run_ssh_command_items:
         	, 'ssh_hosts'
         	, 'ssh_commands'
         ])    
-        
-        let db = this.db
-        
+
         let Client = require ('ssh2').Client
 
         let uuid = item.uuid
 
         let o = {}; for (let k of ['host', 'port', 'username', 'password']) o [k] = item ['ssh_hosts.' + k]
 
-		let key = `${o.host}:${o.port}`
+		let key = `${item.id_command} ${o.host}:${o.port}`
 
 		let conn = new Client ()
 		
@@ -77,14 +75,15 @@ do_run_ssh_command_items:
 
 			log ('connected', {ts_conn: new Date ()})
 			
-			conn.exec (item ['ssh_commands.cmd'], function (err, stream) {
+			conn.exec ('timeout ' + item ['ssh_commands.ttl'] + 's ' + item ['ssh_commands.cmd'], function (err, stream) {
 
-				if (err) throw err;
+				if (err) throw err
 
 				stream.on ('close', function (code, signal) {
 					conn.end ()
 					log ('disconnected', {code, signal, ts_to: new Date ()})
 				})
+
 				.on ('data', function(data) {
 				  darn ('STDOUT: ' + data);
 				})
@@ -95,10 +94,16 @@ do_run_ssh_command_items:
 			})
 
 		})
-
+		
+		conn.on ('error', function(data) {
+			conn.end ()
+			let error = data.message
+			log ('connection failed: ' + error, {ts_to: new Date (), error})
+		})
+		
 		log ('connecting', {ts_from: new Date ()})
 
-		conn.connect (o)
+		conn.connect (o)		
 
 	},
     

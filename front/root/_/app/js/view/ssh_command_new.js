@@ -7,11 +7,7 @@ $_DRAW.ssh_command_new = async function (data) {
             name: 'users_new_form',
 
             record: data,
-
-            field_options : {                
-                id_role: {voc: data.roles},
-            },
-
+            
         })
         
 		$('#container').w2regrid ({ 
@@ -30,6 +26,8 @@ $_DRAW.ssh_command_new = async function (data) {
 			],
 
 			src: 'ssh_hosts',
+			
+			onRefresh: () => $('#cmd').focus ()
 
 		}).refresh ();
         

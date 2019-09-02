@@ -25,6 +25,7 @@ $_GET.ssh_command_new = async function (o) {
     let data = clone ($('body').data ('data'))
     
     data.uuid = new_uuid ()
+    data.ttl  = 5
     
     return data
 
