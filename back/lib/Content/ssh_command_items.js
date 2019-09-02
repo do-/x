@@ -68,6 +68,15 @@ do_run_ssh_command_items:
 			darn (`SSH ${key} ${msg}`)
 			q.publish ('ssh_command_items', 'do_update_ssh_command_items', {id: item.uuid, data})			
 		}
+		
+		const fs = require ('fs')
+		let path = this.rq.data.path
+		
+		function appender (ext) {
+			return function (data) {
+				fs.promises.appendFile (path + '/' + o.host + '.' + ext, data)
+			}
+		}
 
 		conn.on ('ready', function () {
 
@@ -77,16 +86,12 @@ do_run_ssh_command_items:
 
 				if (err) throw err
 
+				stream.on ('data', appender ('out'))
+				stream.stderr.on ('data', appender ('err'))
+
 				stream.on ('close', function (code, signal) {
 					conn.end ()
 					log ('disconnected', {code, signal, ts_to: new Date ()})
-				})
-
-				.on ('data', function(data) {
-				  darn ('STDOUT: ' + data);
-				})
-				.stderr.on ('data', function(data) {
-				  darn ('STDERR: ' + data);
 				})
 
 			})

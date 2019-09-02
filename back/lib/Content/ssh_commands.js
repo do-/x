@@ -93,12 +93,16 @@ do_create_ssh_commands:
 do_run_ssh_commands: 
 
     async function () {
+    
+    	let path = this.conf.ssh_logs + '/' + (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + this.rq.id
 
+		require ('fs').mkdirSync (path, {recursive: true})
+		
     	this.db.fold (
 
     		[{'ssh_command_items(uuid)': {id_command: this.rq.id}}], 
 
-    		item => this.queue.publish ('ssh_command_items', 'do_run_ssh_command_items', {id: item.uuid})
+    		item => this.queue.publish ('ssh_command_items', 'do_run_ssh_command_items', {id: item.uuid, data: {path}})
 
     	)
 

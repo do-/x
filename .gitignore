@@ -5,7 +5,7 @@
 /front/logs
 /front/node_modules/
 /files
-/front/root/_photos/
+/front/root/_ssh_logs/
 /front/root/_/app/js/app.js
 /front/root/_/app/js/*.js*
 /front/root/_/app/xslt/*.gz
