@@ -13,8 +13,8 @@ async function fork (tia, rq) {
 
 	if (!rq) rq = {}
 
-	for (let k of ['type', 'id', 'action']) rq [k] = tia [k]
-darn (['fork 1', rq])
+	for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
+
 	return new Promise (function (resolve, reject) {
 
 		let h = new Async_handler ({
@@ -25,7 +25,7 @@ darn (['fork 1', rq])
                 queue: conf.pools.queue,
             }, 
 		}, resolve, reject)
-darn (['fork 2', h])
+
 		setImmediate (() => h.run ())        
 
 	})
@@ -204,6 +204,8 @@ module.exports.create_http_server = function (conf) {
 let Async_handler = class extends Dia.Async.Handler {
 
     get_method_name () { return get_method_name.apply (this) }
+
+    is_transactional () { return false }
 
 	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
 

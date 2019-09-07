@@ -92,11 +92,7 @@ do_create_ssh_commands:
        	await this.db.insert ('ssh_commands', data)
        	await this.db.commit ()
 
-       	let rq = this.rq; return this.fork ({
-       		type:    rq.type,
-       		id:      rq.id,
-       		action: 'run'
-       	})
+       	let rq = this.rq; return this.fork ({action: 'run'})
 
     },
 
@@ -113,17 +109,25 @@ do_run_ssh_commands:
 		let data = {data: {path}}
 		
 		let ids = await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])
-		
-		let tias = ids.map (i => ({
-			type:   'ssh_command_items', 
-			id:      i.uuid, 
-			action: 'run'
-		}))
-		
-		let proms = tias.map (tia => this.fork (tia, data))
+			
+		let proms = ids.map (i => this.fork ({type: 'ssh_command_items', id: i.uuid, action: 'run'}, data))
 
-darn (proms)    	
+		let all = await Promise.all (proms)
+		
+		this.fork ({action: 'notify_completion'})
 
-    }
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_notify_completion_ssh_commands: 
+
+    async function () {
+    
+		let data = await this.db.list ([{vw_ssh_command_items: {id_command: this.rq.id}}])
+		
+		darn (data)
+
+    },
 
 }
