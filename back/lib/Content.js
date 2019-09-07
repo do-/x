@@ -1,5 +1,37 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 
+function get_method_name () {
+	let rq = this.rq
+	if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
+	if (rq.action) return 'do_'  + rq.action + '_' + rq.type
+	return (rq.id ? 'get_item_of_' : 'select_') + rq.type
+}
+
+async function fork (tia, rq) {
+
+	let conf = this.conf
+
+	if (!rq) rq = {}
+
+	for (let k of ['type', 'id', 'action']) rq [k] = tia [k]
+darn (['fork 1', rq])
+	return new Promise (function (resolve, reject) {
+
+		let h = new Async_handler ({
+			conf,
+			rq,
+            pools: {
+            	db: conf.pools.db,
+                queue: conf.pools.queue,
+            }, 
+		}, resolve, reject)
+darn (['fork 2', h])
+		setImmediate (() => h.run ())        
+
+	})
+
+}    
+
 let HTTP_handler = class extends Dia.HTTP.Handler {
 
     check () {
@@ -116,17 +148,14 @@ let HTTP_handler = class extends Dia.HTTP.Handler {
         return user
     }
     
-    get_method_name () {
-        let rq = this.rq
-        if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
-        if (rq.action) return 'do_'  + rq.action + '_' + rq.type
-        return (rq.id ? 'get_item_of_' : 'select_') + rq.type
-    }
+    get_method_name () { return get_method_name.apply (this) }
     
     w2ui_filter () {
         return new (require ('./Ext/DiaW2ui/Filter.js')) (this.rq)
     }
-
+    
+	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
+	
 }
 
 function http_listener (conf) {
@@ -169,6 +198,14 @@ module.exports.create_http_server = function (conf) {
             }
         
         )
+
+}
+
+let Async_handler = class extends Dia.Async.Handler {
+
+    get_method_name () { return get_method_name.apply (this) }
+
+	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
 
 }
 

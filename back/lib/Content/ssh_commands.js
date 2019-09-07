@@ -89,9 +89,14 @@ do_create_ssh_commands:
 
         data.uuid = this.rq.id
 
-       	this.db.insert ('ssh_commands', data)
-       	
-       	this.queue.publish ('ssh_commands', 'do_run_ssh_commands', {id: data.uuid})
+       	await this.db.insert ('ssh_commands', data)
+       	await this.db.commit ()
+
+       	let rq = this.rq; return this.fork ({
+       		type:    rq.type,
+       		id:      rq.id,
+       		action: 'run'
+       	})
 
     },
 
@@ -104,14 +109,20 @@ do_run_ssh_commands:
     	let path = this.conf.ssh.logs + '/' + (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + this.rq.id
 
 		require ('fs').mkdirSync (path, {recursive: true})
+
+		let data = {data: {path}}
 		
-    	this.db.fold (
+		let ids = await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])
+		
+		let tias = ids.map (i => ({
+			type:   'ssh_command_items', 
+			id:      i.uuid, 
+			action: 'run'
+		}))
+		
+		let proms = tias.map (tia => this.fork (tia, data))
 
-    		[{'ssh_command_items(uuid)': {id_command: this.rq.id}}], 
-
-    		item => this.queue.publish ('ssh_command_items', 'do_run_ssh_command_items', {id: item.uuid, data: {path}})
-
-    	)
+darn (proms)    	
 
     }
 
