@@ -47,7 +47,7 @@ do_update_ssh_command_items:
 do_run_ssh_command_items: 
 
     async function () {
-    
+
 		let item = await this.db.get ([{ssh_command_items: {uuid: this.rq.id}}
         	, 'ssh_commands'
         ])    

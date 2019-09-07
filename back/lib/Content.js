@@ -7,23 +7,23 @@ function get_method_name () {
 	return (rq.id ? 'get_item_of_' : 'select_') + rq.type
 }
 
-async function fork (tia, rq) {
+async function fork (tia, data) {
 
 	let conf = this.conf
+	let pools = conf.pools
 
-	if (!rq) rq = {}
+	let rq = {}
 
+	if (data) for (let k in data) rq [k] = data [k]
 	for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
+	
+	let b = this.get_log_banner ()
 
 	return new Promise (function (resolve, reject) {
 
-		let h = new Async_handler ({
-			conf,
-			rq,
-            pools: {
-            	db: conf.pools.db,
-            }, 
-		}, resolve, reject)
+		let h = new Async_handler ({conf, rq, pools}, resolve, reject)
+		
+		darn (b + ' -> ' + h.get_log_banner ())
 
 		setImmediate (() => h.run ())        
 
@@ -205,6 +205,10 @@ let Async_handler = class extends Dia.Async.Handler {
 
     is_transactional () { return false }
 
-	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
+    get_log_banner () {
+        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
+    }
+    
+    async fork (tia, rq) {return fork.apply (this, [tia, rq])}
 
 }

@@ -108,11 +108,15 @@ do_run_ssh_commands:
 
 		let data = {data: {path}}
 		
-		let ids = await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])
-			
-		let proms = ids.map (i => this.fork ({type: 'ssh_command_items', id: i.uuid, action: 'run'}, data))
+		let tia = (await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])).map (i => ({
+			type: 'ssh_command_items', 
+			id: i.uuid, 
+			action: 'run',
+		}))
+		
+darn (tia)			
 
-		let all = await Promise.all (proms)
+		let all = await Promise.all (tia.map (i => this.fork (i, data)))
 		
 		this.fork ({action: 'notify_completion'})
 
