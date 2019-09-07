@@ -1,4 +1,5 @@
 const Dia = require ('../Ext/Dia/Dia.js')
+const Client = require ('ssh2').Client
 
 module.exports = {
 
@@ -37,7 +38,7 @@ do_update_ssh_command_items:
 
         data.uuid = this.rq.id
 
-		await this.db.update ('ssh_command_items', data)
+		return this.db.update ('ssh_command_items', data)
 
     },    
     
@@ -57,10 +58,12 @@ do_run_ssh_command_items:
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
 		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
+		
+		let updates = []
 				
 		let log = (msg, data) => {
 			darn (`SSH ${key} ${msg}`)
-			this.fork ({action: 'update'}, {data})			
+			updates.push (this.fork ({action: 'update'}, {data}))
 		}
 		
 		const fs = require ('fs')
@@ -71,9 +74,9 @@ do_run_ssh_command_items:
 				fs.promises.appendFile (path + '/' + o.host + '.' + ext, data)
 			}
 		}
-
-        let Client = require ('ssh2').Client
+        
 		let conn = new Client ()
+		
 		conn.on ('ready', function () {
 
 			log ('connected', {ts_conn: new Date ()})
@@ -100,9 +103,21 @@ do_run_ssh_command_items:
 			log ('connection failed: ' + error, {ts_to: new Date (), error})
 		})
 		
-		log ('connecting', {ts_from: new Date ()})
+		return new Promise (function (resolve, reject) {
 
-		conn.connect (o)		
+			conn.on ('end', async function () {
+			
+				await Promise.all (updates)
+				
+				resolve (uuid)
+
+			})
+			
+			log ('connecting', {ts_from: new Date ()})
+
+			conn.connect (o)		
+
+		})
 
 	},
     
