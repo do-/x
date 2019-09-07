@@ -22,7 +22,6 @@ async function fork (tia, rq) {
 			rq,
             pools: {
             	db: conf.pools.db,
-                queue: conf.pools.queue,
             }, 
 		}, resolve, reject)
 
@@ -180,7 +179,6 @@ module.exports.create_http_server = function (conf) {
                 
                 pools: {
                 	db: conf.pools.db,
-                    queue: conf.pools.queue,
                 }, 
                 
                 http: {request, response}
@@ -208,30 +206,5 @@ let Async_handler = class extends Dia.Async.Handler {
     is_transactional () { return false }
 
 	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
-
-}
-
-module.exports.create_queue = function (conf) {
-
-    return {
-    
-        publish: (module_name, method_name, rq) => {
-        
-            let h = new Dia.Handler ({
-                conf, 
-                pools: {
-                    db: conf.pools.db,
-                    queue: conf.pools.queue,
-                }, 
-                module_name, 
-                method_name, 
-                rq
-            })
-
-            setImmediate (() => h.run ())
-
-        }
-
-    }
 
 }

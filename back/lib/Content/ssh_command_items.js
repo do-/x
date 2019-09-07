@@ -51,25 +51,16 @@ do_run_ssh_command_items:
         	, 'ssh_commands'
         ])    
 
-        let Client = require ('ssh2').Client
-
         let uuid = item.uuid
 
-        let o = {
-        	privateKey: this.conf.ssh.privateKey,
-        }
-
+        let o = {privateKey: this.conf.ssh.privateKey}
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
 		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
-
-		let conn = new Client ()
-		
-		let q = this.queue
-		
-		function log (msg, data) {
+				
+		let log = (msg, data) => {
 			darn (`SSH ${key} ${msg}`)
-			q.publish ('ssh_command_items', 'do_update_ssh_command_items', {id: item.uuid, data})			
+			this.fork ({action: 'update'}, {data})			
 		}
 		
 		const fs = require ('fs')
@@ -81,6 +72,8 @@ do_run_ssh_command_items:
 			}
 		}
 
+        let Client = require ('ssh2').Client
+		let conn = new Client ()
 		conn.on ('ready', function () {
 
 			log ('connected', {ts_conn: new Date ()})
