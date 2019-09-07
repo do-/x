@@ -92,7 +92,7 @@ do_create_ssh_commands:
        	await this.db.insert ('ssh_commands', data)
        	await this.db.commit ()
 
-       	let rq = this.rq; return this.fork ({action: 'run'})
+       	this.fork ({action: 'run'})
 
     },
 
@@ -113,8 +113,6 @@ do_run_ssh_commands:
 			id: i.uuid, 
 			action: 'run',
 		}))
-		
-darn (tia)			
 
 		let all = await Promise.all (tia.map (i => this.fork (i, data)))
 		
