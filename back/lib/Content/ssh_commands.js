@@ -90,6 +90,8 @@ do_create_ssh_commands:
         data.uuid = this.rq.id
 
        	this.db.insert ('ssh_commands', data)
+       	
+       	this.queue.publish ('ssh_commands', 'do_run_ssh_commands', {id: data.uuid})
 
     },
 
