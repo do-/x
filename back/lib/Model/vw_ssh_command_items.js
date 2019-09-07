@@ -11,6 +11,8 @@ module.exports = {
 		signal     : 'string,        // Сигнал',
 		error      : 'string,        // Ошибка',
 		host       : 'string,        // SSH host',
+        port       : 'int            // Порт',
+        username   : 'string         // Пользователь',
 		ms_conn    : 'int,           // время соединения, мс',
 		ms_exec    : 'int,           // время исполнения, мс',
 		ms_total   : 'int,           // время, мс',
@@ -18,21 +20,22 @@ module.exports = {
 
     sql: `
     	SELECT     	
-    		ssh_command_items.uuid,
-			ssh_command_items.id_command, 
-			ssh_command_items.ts_from, 
-			ssh_command_items.ts_conn, 
-			ssh_command_items.ts_to, 
-			ssh_command_items.code, 
-			ssh_command_items.signal, 
-			ssh_command_items.error,
-			ssh_hosts.host,
+    		uuid,
+			id_command, 
+			ts_from, 
+			ts_conn, 
+			ts_to, 
+			code, 
+			signal, 
+			error,
+			host,
+			port,
+			username,
 			1000 * (extract (epoch from ts_conn) - extract (epoch from ts_from)) ms_conn,
 			1000 * (extract (epoch from ts_to)   - extract (epoch from ts_conn)) ms_exec,
 			1000 * (extract (epoch from ts_to)   - extract (epoch from ts_from)) ms_total
     	FROM
     		ssh_command_items
-    		INNER JOIN ssh_hosts ON ssh_command_items.id_host = ssh_hosts.uuid
     `,
 
 }

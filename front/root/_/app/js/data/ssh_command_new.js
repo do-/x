@@ -6,8 +6,11 @@ $_DO.update_ssh_command_new = async function (e) {
 
     let data = f.values ().actual ().validated ()
     
-    data.id_host = w2ui ['ssh_hosts_grid'].getSelection ()
-    
+    data.addr = data.addr
+    	.split (/[\n\r]+/)
+    	.map (s => s.trim ())
+    	.filter (s => s)
+
     f.lock ()
 
     await response ({action: 'create', id: data.uuid}, {data})

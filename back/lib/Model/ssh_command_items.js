@@ -3,8 +3,14 @@ module.exports = {
     label: 'SSH-команды по hostaм',
 
     columns: {
+    
         id_command : "(ssh_commands) // команда",
-        id_host    : "(ssh_hosts)    // host",
+
+        host       : 'string         // Host',
+        port       : 'int=22         // Порт',
+        username   : 'string         // Пользователь',
+
+//        id_host    : "(ssh_hosts)    // host",
 		ts_from    : 'timestamp,     // Дата/время запуска',
 		ts_conn    : 'timestamp,     // Дата/время установления соединения',
 		ts_to      : 'timestamp,     // Дата/время окончания',
@@ -14,7 +20,7 @@ module.exports = {
     },
 
     keys: {
-        id_command: 'id_command,id_host',
+        id_command: 'id_command,host',
     },
 
 }

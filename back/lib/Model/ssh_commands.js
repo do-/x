@@ -7,7 +7,8 @@ module.exports = {
         cmd        : 'string             // Команда',
         ttl        : 'int                // Время на исполнение, с',
 		ts_created : 'timestamp=now()    // Дата/время создания',
-		id_host    : 'text               // JSON-массив UUID hostов',
+//		id_host    : 'text               // JSON-массив UUID hostов',
+		addr       : 'text               // JSON-массив записей {host, port, username}',
     },
 
     keys : {
@@ -18,9 +19,13 @@ module.exports = {
 
     	after_insert: `
     	    		
-			INSERT INTO ssh_command_items (id_command, id_host) 
-				SELECT NEW.uuid, json_array_elements_text (NEW.id_host::json)::uuid;
-			
+			INSERT INTO ssh_command_items (id_command, host, port, username) 
+				SELECT 
+					NEW.uuid id_command, 
+					addr.* 
+				FROM 
+					json_to_recordset (NEW.addr::json) AS addr (host TEXT, port INT, username TEXT);
+
 			RETURN NEW;
 			
     	`,

@@ -78,9 +78,14 @@ do_create_ssh_commands:
     
         let data = this.rq.data
 
-       	let id_host = data.id_host; if (!id_host || !id_host.length) throw '#id_host#: Не указаны hostы'
+       	let addr = data.addr
+       	
+       	if (!addr || !addr.length) throw '#addr#: Не указаны адреса'
 
-        data.id_host = JSON.stringify (data.id_host)
+        data.addr = JSON.stringify (addr.map (a => {
+        	let [username, host, port] = (a + ':22').split (/[\@\:]/)
+        	return {username, host, port}
+        }))
 
         data.uuid = this.rq.id
 

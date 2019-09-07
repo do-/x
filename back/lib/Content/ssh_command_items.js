@@ -48,7 +48,6 @@ do_run_ssh_command_items:
     async function () {
     
 		let item = await this.db.get ([{ssh_command_items: {uuid: this.rq.id}}
-        	, 'ssh_hosts'
         	, 'ssh_commands'
         ])    
 
@@ -57,13 +56,12 @@ do_run_ssh_command_items:
         let uuid = item.uuid
 
         let o = {
-        	username: 'root', 
         	privateKey: this.conf.ssh.privateKey,
         }
 
-        for (let k of ['host', 'port']) o [k] = item ['ssh_hosts.' + k]
+        for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
-		let key = `${item.id_command} ${o.host}:${o.port}`
+		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
 
 		let conn = new Client ()
 		
