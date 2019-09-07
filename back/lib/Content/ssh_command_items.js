@@ -56,7 +56,12 @@ do_run_ssh_command_items:
 
         let uuid = item.uuid
 
-        let o = {}; for (let k of ['host', 'port', 'username', 'password']) o [k] = item ['ssh_hosts.' + k]
+        let o = {
+        	username: 'root', 
+        	privateKey: this.conf.ssh.privateKey,
+        }
+
+        for (let k of ['host', 'port']) o [k] = item ['ssh_hosts.' + k]
 
 		let key = `${item.id_command} ${o.host}:${o.port}`
 

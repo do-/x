@@ -94,7 +94,7 @@ do_run_ssh_commands:
 
     async function () {
     
-    	let path = this.conf.ssh_logs + '/' + (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + this.rq.id
+    	let path = this.conf.ssh.logs + '/' + (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + this.rq.id
 
 		require ('fs').mkdirSync (path, {recursive: true})
 		
