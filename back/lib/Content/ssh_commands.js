@@ -127,9 +127,10 @@ do_notify_completion_ssh_commands:
 
     async function () {
     
+		let db = this.db
     	let id = this.rq.id
     
-		let status = await this.db.fold (
+		let status = await db.fold (
 			[{'vw_ssh_command_items(host, status)': {id_command: id}}],
 			(i, h) => h [i.host] = i.status,
 			{}
@@ -145,27 +146,47 @@ do_notify_completion_ssh_commands:
 			'Content-Type': 'application/json',
 			'Content-Length': json.length
 		}				
+
+		async function update (data) {
+			data.uuid = id
+			return db.update ('ssh_commands', data)
+		}
+		
+		db.commit ()
 		
 		try {
 
-			await new Promise (function (ok, fail) {
+			await new Promise (async function (ok, fail) {
+
+				await update ({
+					ts_notif_start  : new Date (),
+					ts_notif_finish : null,
+					ts_notif_error  : null,
+					notif_error     : null,
+				})
 
 				http.request (o, rp => {
-					let code = rp.statusCode
-					if (code == 200) return ok ()
+
+					let code = rp.statusCode; if (code == 200) return ok ()
+
 					fail (new Error (code + ' ' + rp.statusMessage))
-				})
-				.on ('error', fail)
-				.end (json)
+
+				}).on ('error', fail).end (json)
 
 			})		
 
 		}
 		catch (x) {
 		
-			throw ('#foo#: ' + x.message)
+			let notif_error = x.message
+			
+			await update ({ts_notif_error: new Date (), notif_error})		
+			
+			throw ('#foo#: ' + notif_error)
 		
 		}
+		
+		await update ({ts_notif_finish: new Date ()})
 
     },
 

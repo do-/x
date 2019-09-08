@@ -3,12 +3,15 @@ module.exports = {
     label : 'SSH-команды',
 
     columns : {
-        is_deleted : 'int=0              // 1, если удалена', 
-        cmd        : 'string             // Команда',
-        ttl        : 'int                // Время на исполнение, с',
-		ts_created : 'timestamp=now()    // Дата/время создания',
-//		id_host    : 'text               // JSON-массив UUID hostов',
-		addr       : 'text               // JSON-массив записей {host, port, username}',
+        is_deleted      : 'int=0           // 1, если удалена', 
+        cmd             : 'string          // Команда',
+        ttl             : 'int             // Время на исполнение, с',
+		ts_created      : 'timestamp=now() // Дата/время создания',
+		addr            : 'text            // JSON-массив записей {host, port, username}',
+		ts_notif_start  : 'timestamp       // Дата/время начала отправки извещения',
+		ts_notif_finish : 'timestamp       // Дата/время подтверждения доставки извещения',
+		ts_notif_error  : 'timestamp       // Дата/время ошибки доставки извещения',
+		notif_error     : 'string          // Ошибка доставки извещения',
     },
 
     keys : {
