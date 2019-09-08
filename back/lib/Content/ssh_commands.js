@@ -126,9 +126,15 @@ do_notify_completion_ssh_commands:
 
     async function () {
     
-		let data = await this.db.list ([{vw_ssh_command_items: {id_command: this.rq.id}}])
+    	let id = this.rq.id
+    
+		let status = await this.db.fold (
+			[{'vw_ssh_command_items(host, status)': {id_command: id}}],
+			(i, h) => h [i.host] = i.status,
+			{}
+		)
 		
-		darn (data)
+		darn ({id, status})
 
     },
 

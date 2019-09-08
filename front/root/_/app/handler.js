@@ -12,7 +12,7 @@ function _ts (record, ind, col_ind, data) {
 
     let [type, id] = location.pathname.split ('/').filter ((i) => i)
 
-    if (!type) return redirect (window.name = '/ssh_hosts')
+    if (!type) return redirect (window.name = '/ssh_commands')
 
     $_REQUEST = {type, id}
 

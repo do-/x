@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-$_DO.run_ssh_command = async function () {
+$_DO.notify_completion_ssh_command = async function () {
 
-    await response ({type: 'ssh_commands', action: 'run'})
+    await response ({type: 'ssh_commands', action: 'notify_completion'})
     
-    reload_page ()
-
+    alert ('Извещение отправлено')
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
