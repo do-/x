@@ -90,7 +90,14 @@ do_create_ssh_commands:
 
         data.uuid = this.rq.id
 
-       	await this.db.insert ('ssh_commands', data)
+        try {
+	       	await this.db.insert ('ssh_commands', data)
+        }
+        catch (x) {
+            if (this.db.is_pk_violation (x)) return {}
+            throw x
+        }
+
        	await this.db.commit ()
 
        	this.fork ({action: 'run'})
