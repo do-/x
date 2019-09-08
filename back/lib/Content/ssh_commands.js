@@ -1,4 +1,5 @@
 const Dia = require ('../Ext/Dia/Dia.js')
+const http = require ('http')
 
 module.exports = {
 
@@ -134,7 +135,23 @@ do_notify_completion_ssh_commands:
 			{}
 		)
 		
-		darn ({id, status})
+		let data = {id, status}
+				
+		let json = JSON.stringify (data)
+		
+		let o = this.conf.ssh.callback
+		o.method = 'POST'
+		o.headers = {
+			'Content-Type': 'application/json',
+			'Content-Length': json.length
+		}
+		
+		let rq = http.request (o, rp => {
+			darn (rp.statusCode)
+			darn (rp.statusMessage)
+		})
+		
+		rq.end (json)
 
     },
 
