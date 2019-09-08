@@ -144,14 +144,28 @@ do_notify_completion_ssh_commands:
 		o.headers = {
 			'Content-Type': 'application/json',
 			'Content-Length': json.length
+		}				
+		
+		try {
+
+			await new Promise (function (ok, fail) {
+
+				http.request (o, rp => {
+					let code = rp.statusCode
+					if (code == 200) return ok ()
+					fail (new Error (code + ' ' + rp.statusMessage))
+				})
+				.on ('error', fail)
+				.end (json)
+
+			})		
+
 		}
+		catch (x) {
 		
-		let rq = http.request (o, rp => {
-			darn (rp.statusCode)
-			darn (rp.statusMessage)
-		})
+			throw ('#foo#: ' + x.message)
 		
-		rq.end (json)
+		}
 
     },
 
