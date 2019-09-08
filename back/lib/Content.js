@@ -1,4 +1,6 @@
 const Dia = require ('./Ext/Dia/Dia.js')
+const Async = require ('./Ext/Dia/Async.js')
+const HTTPJsonRpc = require ('./Ext/Dia/HTTPJsonRpc.js')
 
 function get_method_name () {
 	let rq = this.rq
@@ -169,21 +171,23 @@ function http_listener (conf) {
 
 module.exports.create_http_server = function (conf) {
 
+	let pools = conf.pools
+
     require ('http')
     
         .createServer (
         
-            (request, response) => {new HTTP_handler ({
+            (request, response) => {
             
-                conf, 
-                
-                pools: {
-                	db: conf.pools.db,
-                }, 
-                
-                http: {request, response}
-                
-            }).run ()}
+				let url = request.url
+				
+				let h = 
+					url.indexOf ('?') > -1 ? new HTTP_handler        ({conf, pools, http: {request, response}}) :
+					                         new HTTPJsonRpc_handler ({conf, pools, http: {request, response}})
+					
+				h.run ()
+				
+            }
 
         )
         
@@ -199,7 +203,21 @@ module.exports.create_http_server = function (conf) {
 
 }
 
-let Async_handler = class extends Dia.Async.Handler {
+let Async_handler = class extends Async.Handler {
+
+    get_method_name () { return get_method_name.apply (this) }
+
+    is_transactional () { return false }
+
+    get_log_banner () {
+        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
+    }
+    
+    async fork (tia, rq) {return fork.apply (this, [tia, rq])}
+
+}
+
+let HTTPJsonRpc_handler = class extends HTTPJsonRpc.Handler {
 
     get_method_name () { return get_method_name.apply (this) }
 

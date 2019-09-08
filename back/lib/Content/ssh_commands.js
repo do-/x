@@ -94,6 +94,8 @@ do_create_ssh_commands:
        	await this.db.commit ()
 
        	this.fork ({action: 'run'})
+       	
+       	return {}
 
     },
 
