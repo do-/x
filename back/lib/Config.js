@@ -7,8 +7,6 @@ module.exports = class {
 
         const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
         
-        conf.ssh.privateKey = fs.readFileSync (conf.ssh.private_key)
-
         for (let k in conf) this [k] = conf [k]
 
         this.pools = {db: this.setup_db ()}

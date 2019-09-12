@@ -54,7 +54,9 @@ do_run_ssh_command_items:
 
         let uuid = item.uuid
 
-        let o = {privateKey: this.conf.ssh.privateKey}
+		const fs = require ('fs')
+
+        let o = {privateKey: fs.readFileSync (this.conf.ssh.private_key)}
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
 		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
@@ -66,7 +68,6 @@ do_run_ssh_command_items:
 			updates.push (this.fork ({action: 'update'}, {data}))
 		}
 		
-		const fs = require ('fs')
 		let path = this.rq.data.path
 		
 		function appender (ext) {
