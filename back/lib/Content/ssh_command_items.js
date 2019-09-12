@@ -68,14 +68,10 @@ do_run_ssh_command_items:
 			updates.push (this.fork ({action: 'update'}, {data}))
 		}
 		
-		let path = this.rq.data.path
-		
-		function appender (ext) {
-			return function (data) {
-				fs.promises.appendFile (path + '/' + o.host + '.' + ext, data)
-			}
-		}
-        
+		let fn = this.rq.data.path + '/' + o.host + '.' 
+
+		let append = (ext) => ((data) => fs.appendFile (fn + ext + '.txt', data, darn))
+
 		let conn = new Client ()
 		
 		conn.on ('ready', function () {
@@ -86,8 +82,8 @@ do_run_ssh_command_items:
 
 				if (err) throw err
 
-				stream.on ('data', appender ('out'))
-				stream.stderr.on ('data', appender ('err'))
+				stream.on ('data', append ('out'))
+				stream.stderr.on ('data', append ('err'))
 
 				stream.on ('close', function (code, signal) {
 					conn.end ()
