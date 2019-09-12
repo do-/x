@@ -18,13 +18,31 @@ get_vocs_of_ssh_command_items:
 
 select_ssh_command_items: 
     
-    function () {
+    async function () {
    
         this.rq.sort = this.rq.sort || [{field: "host", direction: "asc"}]
     
         let filter = this.w2ui_filter ()
         
-        return this.db.add_all_cnt ({}, [{vw_ssh_command_items: filter}])
+        let data = await this.db.add_all_cnt ({}, [{vw_ssh_command_items: filter}])
+        
+		const fs = require ('fs')
+		
+		let root = this.conf.ssh.logs + '/'
+
+        for (let i of data.vw_ssh_command_items) {
+
+        	for (let j of ['out', 'err']) {
+
+        		let path = root + i ['path_' + j]
+
+        		if (fs.existsSync (path)) i [j] = fs.statSync (path).size
+
+        	}
+
+        }        
+
+        return data
 
     },
     

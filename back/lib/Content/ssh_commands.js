@@ -89,6 +89,7 @@ do_create_ssh_commands:
         }))
 
         data.uuid = this.rq.id
+    	data.path = (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + data.uuid
 
         try {
 	       	await this.db.insert ('ssh_commands', data)
@@ -111,13 +112,15 @@ do_create_ssh_commands:
 do_run_ssh_commands: 
 
     async function () {
-    
-    	let path = this.conf.ssh.logs + '/' + (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + this.rq.id
+
+        let item = await this.db.get ([{ssh_commands: {uuid: this.rq.id}}])
+
+    	let path = this.conf.ssh.logs + '/' + item.path
 
 		require ('fs').mkdirSync (path, {recursive: true})
 
 		let data = {data: {path}}
-		
+
 		let tia = (await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])).map (i => ({
 			type: 'ssh_command_items', 
 			id: i.uuid, 
@@ -125,7 +128,7 @@ do_run_ssh_commands:
 		}))
 
 		let all = await Promise.all (tia.map (i => this.fork (i, data)))
-		
+
 		this.fork ({action: 'notify_completion'})
 
     },

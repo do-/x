@@ -21,12 +21,30 @@ $_DRAW.ssh_command_items = async function (data) {
             {field: 'code',           caption: 'Код',    size: 10},
             {field: 'signal',         caption: 'Сигнал',    size: 20},
             {field: 'error',          caption: 'Ошибка',    size: 20},
+            {field: 'out',            caption: 'stdout',    size: 20, render: 'int'},
+            {field: 'err',            caption: 'stderr',    size: 20, render: 'int'},
         ],
                     
         src: data.src,
 
-//        onAdd:      ( ) => show_block ('ssh_command_new'),
         onDblClick: null,
+
+        onClick: function (e) {
+        
+        	let col = this.columns [e.column]
+
+        	let r = this.get (e.recid)        	
+
+        	switch (col.field) {
+        		case 'out':
+        			if (r.out) window.open ('/_ssh_logs/' + r.path_out)
+        			break
+        		case 'err':
+        			if (r.err) window.open ('/_ssh_logs/' + r.path_err)
+        			break
+        	} 
+
+        },
 
     }).refresh ();
     

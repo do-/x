@@ -12,6 +12,7 @@ module.exports = {
 		ts_notif_finish : 'timestamp       // Дата/время подтверждения доставки извещения',
 		ts_notif_error  : 'timestamp       // Дата/время ошибки доставки извещения',
 		notif_error     : 'string          // Ошибка доставки извещения',
+		path            : 'string          // Относительный путь для файлов',
     },
 
     keys : {
