@@ -1,6 +1,7 @@
 const Dia = require ('./Ext/Dia/Dia.js')
 const Async = require ('./Ext/Dia/Async.js')
 const HTTPJsonRpc = require ('./Ext/Dia/HTTPJsonRpc.js')
+const static = require ('node-static');
 
 function get_method_name () {
 	let rq = this.rq
@@ -33,7 +34,9 @@ async function fork (tia, data) {
 
 }    
 
-let HTTP_handler = class extends Dia.HTTP.Handler {
+let handler = {}
+
+handler.HTTP = class extends Dia.HTTP.Handler {
 
     check () {
         super.check ()
@@ -178,13 +181,14 @@ module.exports.create_http_server = function (conf) {
         .createServer (
         
             (request, response) => {
-            
-				let url = request.url
-				
-				let h = 
-					url.indexOf ('?') > -1 ? new HTTP_handler        ({conf, pools, http: {request, response}}) :
-					                         new HTTPJsonRpc_handler ({conf, pools, http: {request, response}})
-					
+								
+				let root = request.url.split ('/').filter (s => s) [0]
+
+				let h = new handler [
+					root == '_back' ? 'HTTP'
+					                : 'HTTP_JSON_RPC'					
+				] ({conf, pools, http: {request, response}})
+
 				h.run ()
 				
             }
@@ -217,7 +221,7 @@ let Async_handler = class extends Async.Handler {
 
 }
 
-let HTTPJsonRpc_handler = class extends HTTPJsonRpc.Handler {
+handler.HTTP_JSON_RPC = class extends HTTPJsonRpc.Handler {
 
     get_method_name () { return get_method_name.apply (this) }
 
