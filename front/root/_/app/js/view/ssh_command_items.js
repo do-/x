@@ -33,16 +33,12 @@ $_DRAW.ssh_command_items = async function (data) {
         
         	let col = this.columns [e.column]
 
-        	let r = this.get (e.recid)        	
+        	let r = this.get (e.recid)
 
         	switch (col.field) {
-        		case 'out':
-        			if (r.out) window.open ('/_ssh_logs/' + r.path_out)
-        			break
-        		case 'err':
-        			if (r.err) window.open ('/_ssh_logs/' + r.path_err)
-        			break
-        	} 
+        		case 'out': return $_DO.open_log_ssh_command_items (r.path_out)
+        		case 'err': return $_DO.open_log_ssh_command_items (r.path_err)
+        	}
 
         },
 
