@@ -183,25 +183,14 @@ module.exports.create_http_server = function (conf) {
             (request, response) => {
             
             	let url = request.url
-            
-            	if (url.substr (0, 7) == '/_front') {
-            		url = '/_front'
-            	}
-            	else {
-	            	url = url.replace (conf.static.prefix, '_front/_')
-            	}
             	
-            	request.url = url
+            	if (url == '/') return response.writeHead (302, {'Location': '/_front'}) + response.end ()
 
-darn ({
-	url: request.url,
-})           
-								
-				let root = request.url.split ('/').filter (s => s) [0] || '_front'
+				let root = request.url.split ('/').filter (s => s) [0]; 
+				
+				if (root == conf.static.prefix) root = '_front'
 
-				let clazz = handler [root] || handler._default
-
-				let h = new clazz ({conf, pools, http: {request, response}})
+				let h = new (handler [root] || handler._default) ({conf, pools, http: {request, response}})
 
 				h.run ()
 				
@@ -252,15 +241,15 @@ handler._default = class extends HTTPJsonRpc.Handler {
 handler._front = class extends HTTPStatic.Handler {
 
 	check_params () {
-		
+
 		let rq = this.http.request
-		
-		let url = rq.url.replace (/^\/_front/, '')
 
-darn ({url})	
+		let url = rq.url
 
-		rq.url = url || '/'
-	
+		let pre = this.conf.static.prefix
+
+		rq.url = url.substr (1, pre.length) == pre ? url.replace (pre, '_') : '/index.html'
+
 	}
 
 }
