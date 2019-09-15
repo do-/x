@@ -87,7 +87,9 @@ do_create_ssh_commands:
        	if (!addr.length) throw '#addr#:Список адресов пуст'
 
         data.addr = JSON.stringify (addr.map (a => {
-        	let [username, host, port] = (a + ':22').split (/[\@\:]/)
+        	let [_, username, host, p] = /^([\w\.\-]+)\@([\w\.\-]+)(\:\d+)?$/.exec (a) || []
+        	if (!_) throw `#addr#:Некорректный адрес: '${a}' (ожидается: user@host[:port])`
+        	port = p ? p.substr (1) : 22
         	return {username, host, port}
         }))
 
