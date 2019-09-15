@@ -10,9 +10,15 @@ function _ts (record, ind, col_ind, data) {
 
     if (!$_USER) return show_block ('login')
 
-    let [type, id] = location.pathname.split ('/').filter ((i) => i)
+    let [type, id] = location.pathname.split ('/').filter ((i) => i && i != '_front')        
 
-    if (!type) return redirect (window.name = '/ssh_commands')
+    if (!type) return redirect (window.name = '/_front/ssh_commands')
+    
+    let _open_tab = open_tab
+    
+    open_tab = function (url) {
+    	_open_tab ('/_front' + url)
+    }
 
     $_REQUEST = {type, id}
 

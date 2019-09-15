@@ -9,7 +9,14 @@ module.exports = class {
         
         for (let k in conf) this [k] = conf [k]
 
-        this.pools = {db: this.setup_db ()}
+        this.pools = {
+        	db: this.setup_db (),
+        	http_static_server: this.setup_http_static_server (),
+        }
+        
+        const pk = JSON.parse (fs.readFileSync ('../../front/package.json', 'utf8'))
+        
+        this.static = {prefix: '__' + pk.version.replace (/\./g, '_')}
 
     }
 
@@ -18,6 +25,14 @@ module.exports = class {
         let model = new (require ('./Model.js')) ({path: './Model'})
 
         return Dia.DB.Pool (this.db, model)
+
+    }
+    
+    setup_http_static_server () {
+    
+    	let s = require ('node-static')
+
+    	return new s.Server ('../../front/root', {serverInfo: '.'})
 
     }
 

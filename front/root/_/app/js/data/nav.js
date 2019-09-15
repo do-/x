@@ -1,3 +1,10 @@
+
+////////////////////////////////////////////////////////////////////////////////
+
+$_DO.open_ssh_commands_nav = function () {
+    open_tab ('/ssh_commands')
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 $_DO.open_users_nav = function () {
@@ -35,8 +42,8 @@ $_GET.nav = async function (o) {
         header: [
         
             {
-                id: "open_widgets",
-                label: "Меню",
+                id: "open_ssh_commands",
+                label: "Запуски SSH",
                 icon: "menu",
             },
 /*            

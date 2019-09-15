@@ -1,7 +1,7 @@
 const Dia = require ('./Ext/Dia/Dia.js')
-const Async = require ('./Ext/Dia/Async.js')
-const HTTPJsonRpc = require ('./Ext/Dia/HTTPJsonRpc.js')
-const static = require ('node-static');
+const Async = require ('./Ext/Dia/Content/Handler/Async.js')
+const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
+const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
 
 function get_method_name () {
 	let rq = this.rq
@@ -36,7 +36,7 @@ async function fork (tia, data) {
 
 let handler = {}
 
-handler.HTTP = class extends Dia.HTTP.Handler {
+handler._back = class extends Dia.HTTP.Handler {
 
     check () {
         super.check ()
@@ -181,13 +181,27 @@ module.exports.create_http_server = function (conf) {
         .createServer (
         
             (request, response) => {
-								
-				let root = request.url.split ('/').filter (s => s) [0]
+            
+            	let url = request.url
+            
+            	if (url.substr (0, 7) == '/_front') {
+            		url = '/_front'
+            	}
+            	else {
+	            	url = url.replace (conf.static.prefix, '_front/_')
+            	}
+            	
+            	request.url = url
 
-				let h = new handler [
-					root == '_back' ? 'HTTP'
-					                : 'HTTP_JSON_RPC'					
-				] ({conf, pools, http: {request, response}})
+darn ({
+	url: request.url,
+})           
+								
+				let root = request.url.split ('/').filter (s => s) [0] || '_front'
+
+				let clazz = handler [root] || handler._default
+
+				let h = new clazz ({conf, pools, http: {request, response}})
 
 				h.run ()
 				
@@ -221,7 +235,7 @@ let Async_handler = class extends Async.Handler {
 
 }
 
-handler.HTTP_JSON_RPC = class extends HTTPJsonRpc.Handler {
+handler._default = class extends HTTPJsonRpc.Handler {
 
     get_method_name () { return get_method_name.apply (this) }
 
@@ -232,5 +246,21 @@ handler.HTTP_JSON_RPC = class extends HTTPJsonRpc.Handler {
     }
     
     async fork (tia, rq) {return fork.apply (this, [tia, rq])}
+
+}
+
+handler._front = class extends HTTPStatic.Handler {
+
+	check_params () {
+		
+		let rq = this.http.request
+		
+		let url = rq.url.replace (/^\/_front/, '')
+
+darn ({url})	
+
+		rq.url = url || '/'
+	
+	}
 
 }
