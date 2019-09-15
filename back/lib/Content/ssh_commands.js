@@ -79,9 +79,12 @@ do_create_ssh_commands:
     
         let data = this.rq.data
 
-       	let addr = data.addr
-       	
-       	if (!addr || !addr.length) throw '#addr#: Не указаны адреса'
+    	if (data.cmd == null) throw '#cmd#:Не указана команда для запуска'
+
+       	let addr = data.addr       	
+       	if (addr == null) throw '#addr#:Не указаны адреса'
+       	if (!Array.isArray (addr)) throw '#addr#:Некорректный формат списка адресов'
+       	if (!addr.length) throw '#addr#:Список адресов пуст'
 
         data.addr = JSON.stringify (addr.map (a => {
         	let [username, host, port] = (a + ':22').split (/[\@\:]/)
