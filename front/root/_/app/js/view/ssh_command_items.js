@@ -5,16 +5,17 @@ $_DRAW.ssh_command_items = async function (data) {
         name: 'ssh_command_items_grid',             
         
         show: {
+            toolbarInput: false,
             toolbar: true,
             footer: true,
 //            toolbarAdd: true,
         },            
 
         columns: [                
-            {field: 'host',           caption: 'Host',    size: 100},
-            {field: 'ts_from',        caption: 'Начало',    size: 28, render: _ts},
-            {field: 'ts_conn',        caption: 'Соединение',    size: 28, render: _ts},
-            {field: 'ts_to',          caption: 'Окончание',    size: 28, render: _ts},
+            {field: 'host',           caption: 'Host',    size: 100, sortable: true},
+            {field: 'ts_from',        caption: 'Начало',    size: 28, render: _ts, sortable: true},
+            {field: 'ts_conn',        caption: 'Соединение',    size: 28, render: _ts, sortable: true},
+            {field: 'ts_to',          caption: 'Окончание',    size: 28, render: _ts, sortable: true},
             {field: 'ms_conn',        caption: 'Ожидание, мс',    size: 15, render: 'int'},
             {field: 'ms_exec',        caption: 'Исполнение, мс',    size: 15, render: 'int'},
             {field: 'ms_total',        caption: 'Всего, мс',    size: 15, render: 'int'},

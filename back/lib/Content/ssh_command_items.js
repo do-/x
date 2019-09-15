@@ -23,7 +23,7 @@ select_ssh_command_items:
         this.rq.sort = this.rq.sort || [{field: "host", direction: "asc"}]
     
         let filter = this.w2ui_filter ()
-        
+darn (filter)        
         let data = await this.db.add_all_cnt ({}, [{vw_ssh_command_items: filter}])
         
 		const fs = require ('fs')
@@ -78,12 +78,10 @@ do_run_ssh_command_items:
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
 		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
-		
-		let updates = []
-				
-		let log = (msg, data) => {
+						
+		let log = async (msg, data) => {
 			darn (`SSH ${key} ${msg}`)
-			updates.push (this.fork ({action: 'update'}, {data}))
+			await this.fork ({action: 'update'}, {data})
 		}
 		
 		let fn = this.rq.data.path + '/' + o.host + '.' 
@@ -122,7 +120,7 @@ do_run_ssh_command_items:
 
 			conn.on ('end', async function () {
 			
-				await Promise.all (updates)
+//				await Promise.all (updates)
 				
 				resolve (uuid)
 
