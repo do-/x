@@ -85,12 +85,24 @@ do_create_ssh_commands:
        	if (addr == null) throw '#addr#:Не указаны адреса'
        	if (!Array.isArray (addr)) throw '#addr#:Некорректный формат списка адресов'
        	if (!addr.length) throw '#addr#:Список адресов пуст'
+       	
+       	let hosts = new Set ()
 
         data.addr = JSON.stringify (addr.map (a => {
+
         	let [_, username, host, p] = /^([\w\.\-]+)\@([\w\.\-]+)(\:\d+)?$/.exec (a) || []
+
         	if (!_) throw `#addr#:Некорректный адрес: '${a}' (ожидается: user@host[:port])`
+
+        	if (hosts.has (host)) 
+        		throw `#addr#:Адрес '${a}': host '${host}' уже был упомянут в данном списке`;
+        	else 
+	        	hosts.add (host)
+
         	port = p ? p.substr (1) : 22
+
         	return {username, host, port}
+
         }))
 
         data.uuid = this.rq.id
