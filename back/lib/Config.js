@@ -6,16 +6,18 @@ module.exports = class {
     constructor () {
 
         const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
-        
+
         for (let k in conf) this [k] = conf [k]
 
         this.pools = {
-        	db: this.setup_db (),
-        	http_static_server: this.setup_http_static_server (),
+        	db                 : this.setup_db (),
+        	http_static_server : this.setup_http_static_server (),
+            sessions           : this.setup_sessions (),
+            users              : new Dia.Cache ({name: 'user'}),
         }
-        
+
         const pk = JSON.parse (fs.readFileSync ('../../front/package.json', 'utf8'))
-        
+
         this.static = {prefix: '__' + pk.version.replace (/\./g, '_')}
 
     }
@@ -36,4 +38,13 @@ module.exports = class {
 
     }
 
+    setup_sessions () {
+    
+        return new Dia.Cache ({
+        	name: 'session',
+        	ttl : this.auth.sessions.timeout * 60 * 1000,
+        })
+
+    }
+    
 }

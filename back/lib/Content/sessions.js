@@ -13,7 +13,8 @@ do_create_sessions:
         if (user.is_deleted) throw '#foo#: Вас пускать не велено'
                 
         if (user.uuid) {
-            if (user.password != await this.session.password_hash (user.salt, this.rq.password)) return {}
+			let hash = await this.fork ({type: 'users', action: 'encrypt_password'}, {salt: user.salt, password: this.rq.password})
+			if (user.password != hash) return {}
         }
         else if (this.conf.auth.allow_test_admin && this.rq.data.login == 'test' && this.rq.password == 'test') {
             user = await this.db.get ([{users: {uuid: '00000000-0000-0000-0000-000000000000'}}, 'roles(name)'])

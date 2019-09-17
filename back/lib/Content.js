@@ -55,89 +55,60 @@ handler._back = class extends Dia.HTTP.Handler {
     get_session () {
 
         return new class extends this.CookieSession {
-
-            async start () {
-            
-                super.start ()
+        
+        	time () {
+        		return new Date ().getTime ()
+        	}
                 
-                await this.h.db.do ("DELETE FROM sessions WHERE id_user = ?", [this.user.uuid])
+            keep_alive () {
+            	this.h.sessions.set (this.id, this.user.uuid)
+            	return this.user
+            }
 
-                return this.h.db.insert ('sessions', {
-                    id_user       : this.user.uuid,
-                    ts            : new Date (),
-                    uuid          : this.id,                    
-                })
-                
+            async start () {  
+                await super.start ()
+                this.keep_alive ()
             }
             
             async finish () {            
-                super.finish ()                
-                return this.h.db.do ('DELETE FROM sessions WHERE uuid = ?', [this.old_id])
+                await super.finish ()
+                this.h.sessions.del (this.id)
             }
-            
+
             restrict_access () {
-                let rq = this.h.rq
-                if (rq.type != 'sessions' && rq.action != 'create') throw '401 Authenticate first'
+            	if (!this.h.is_anonymous ()) throw '401 Authenticate first'
                 return undefined
             }
             
-            keep_alive () {            
-                setImmediate (() => 
-                    this.h.db.do ('UPDATE sessions SET ts = ? WHERE uuid = ?', [new Date (), this.id])
-                )
+            invalidate_user (uuid) {
+            	this.h.users.del (uuid)
             }
 
             async get_user () {
 
-                if (!this.id) return this.restrict_access ()
+                if (!this.id) return this.h.no_user ()
                 
-                let ts = new Date ()
-                ts.setMinutes (ts.getMinutes () - this.o.timeout - 1)
+                let uuid = this.h.sessions.get (this.id)
 
-                let r = await this.h.db.get ([                
-                    {sessions: {
-                        uuid:    this.id,
-                        'ts >=': ts,
-                    }},
-                    {'$users (uuid, label)': {is_deleted: 0}}, 
-                    'roles (name)'
-                ])
-
-                if (!r.uuid) return this.restrict_access ()
+                if (!uuid) {
+                	darn (`session ${this.id} not found`)
+                	return this.h.no_user ()
+                }
                 
-                this.keep_alive ()
-
-                return {
-                    uuid: r ['users.uuid'], 
-                    label: r ['users.label'], 
-                    role: r ['roles.name']
+                this.user = await this.h.users.to_get (uuid, async () => {
+                	let r = await this.h.db.get ([{vw_users: {uuid}}])
+                	return r.uuid ? r : null
+                })
+                
+                if (!this.user) {
+                	darn (`session ${this.id}: valid user ${uuid} not found`)
+                	return this.h.no_user ()
                 }
 
+                return this.keep_alive ()
+                                
             }
             
-            async password_hash (salt, password) {
-            
-                const fs     = require ('fs')
-                const crypto = require ('crypto')
-                const hash   = crypto.createHash ('sha256')
-                const input  = fs.createReadStream (this.h.conf.auth.salt_file)
-
-                return new Promise ((resolve, reject) => {
-
-                    input.on ('error', reject)
-
-                    input.on ('end', () => {
-                        hash.update (String (salt))
-                        hash.update (String (password), 'utf8')
-                        resolve (hash.digest ('hex'))
-                    })
-
-                    input.pipe (hash, {end: false})
-
-                })
-
-            }
-
         } ({
             cookie_name: this.conf.auth.sessions.cookie_name || 'sid',
             timeout: this.conf.auth.sessions.timeout || 10,
@@ -153,6 +124,10 @@ handler._back = class extends Dia.HTTP.Handler {
     }
     
     get_method_name () { return get_method_name.apply (this) }
+
+    is_anonymous () {
+        return this.rq.type == 'sessions' && this.rq.action == 'create'
+    }
     
     w2ui_filter () {
         return new (require ('./Ext/DiaW2ui/Filter.js')) (this.rq)

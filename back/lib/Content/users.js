@@ -74,8 +74,8 @@ do_set_password_users:
                    this.user.role == 'admin' ? this.rq.id : 
                    this.user.uuid
 
-        let salt     = await this.session.password_hash (Math.random (), new Date ().toJSON ())
-        let password = await this.session.password_hash (salt, this.rq.p1)
+        let salt     = await this.fork ({action: 'encrypt_password'}, {salt: Math.random (), password: new Date ().toJSON ()})
+        let password = await this.fork ({action: 'encrypt_password'}, {salt, password: this.rq.p1}) 
 
         return this.db.update ('users', {uuid, salt, password})
 
@@ -142,5 +142,32 @@ do_create_users:
         return d
 
     },
+    
+////////////////////////////////////////////////////////////////////////////////
+
+do_encrypt_password_users:
+
+	async function () {
+            
+		const fs     = require ('fs')
+		const crypto = require ('crypto')
+		const hash   = crypto.createHash ('sha256')
+		const input  = fs.createReadStream (this.conf.auth.salt_file)
+
+		return new Promise ((resolve, reject) => {
+
+			input.on ('error', reject)
+
+			input.on ('end', () => {
+				hash.update (String (this.rq.salt))
+				hash.update (String (this.rq.password), 'utf8')
+				resolve (hash.digest ('hex'))
+			})
+
+			input.pipe (hash, {end: false})
+
+		})
+            
+	},
 
 }
