@@ -160,10 +160,18 @@ module.exports.create_http_server = function (conf) {
             	let url = request.url
             	
             	if (url == '/') return response.writeHead (302, {'Location': '/_front'}) + response.end ()
+            	
+            	let root = (() => {
+            		
+            		if (url == '/favicon.ico') return '_front'
 
-				let root = request.url.split ('/').filter (s => s) [0]; 
-				
-				if (root == conf.static.prefix) root = '_front'
+					let root = request.url.split ('/').filter (s => s) [0]; 
+
+					if (root == conf.static.prefix) return '_front'
+					
+					return root
+
+            	})();
 
 				let h = new (handler [root] || handler._default) ({conf, pools, http: {request, response}})
 
@@ -219,11 +227,15 @@ handler._front = class extends HTTPStatic.Handler {
 
 		let rq = this.http.request
 
-		let url = rq.url
-
-		let pre = this.conf.static.prefix
-
-		rq.url = url.substr (1, pre.length) == pre ? url.replace (pre, '_') : '/index.html'
+		rq.url = (url => {
+		
+			if (url == '/favicon.ico') return '/_mandatory_content/favicon.ico'
+			
+			let pre = this.conf.static.prefix; if (url.substr (1, pre.length) == pre) return url.replace (pre, '_')
+			
+			return '/index.html'
+			
+		}) (rq.url)
 
 	}
 
