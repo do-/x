@@ -64,7 +64,7 @@ get_item_of_ssh_commands:
 
     async function () {
         
-        let data = await this.db.get ([{ssh_commands: 
+        let data = await this.db.get ([{vw_ssh_commands: 
 
             {uuid: this.rq.id},
 
