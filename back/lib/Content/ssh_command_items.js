@@ -66,9 +66,7 @@ do_run_ssh_command_items:
 
     async function () {
 
-		let item = await this.db.get ([{ssh_command_items: {uuid: this.rq.id}}
-        	, 'ssh_commands'
-        ])    
+		let item = await this.db.get ([{vw_ssh_command_items: {uuid: this.rq.id}}])    
 
         let uuid = item.uuid
 
@@ -86,7 +84,7 @@ do_run_ssh_command_items:
 		
 		let fn = this.rq.data.path + '/' + o.host + '.' 
 
-		let append = (ext) => ((data) => fs.appendFile (fn + ext + '.txt', data, darn))
+		let append = (ext) => ((data) => fs.appendFile (fn + ext + '.txt', data, e => {if (e) darn (e)}))
 
 		let conn = new Client ()
 		
@@ -94,7 +92,7 @@ do_run_ssh_command_items:
 
 			log ('connected', {ts_conn: new Date ()})
 			
-			conn.exec ('timeout ' + item ['ssh_commands.ttl'] + 's ' + item ['ssh_commands.cmd'], function (err, stream) {
+			conn.exec ('timeout ' + item.ttl + 's ' + item.cmd, function (err, stream) {
 
 				if (err) throw err
 
@@ -115,13 +113,11 @@ do_run_ssh_command_items:
 			let error = data.message
 			log ('connection failed: ' + error, {ts_to: new Date (), error})
 		})
-		
+				
 		return new Promise (function (resolve, reject) {
 
 			conn.on ('end', async function () {
-			
-//				await Promise.all (updates)
-				
+							
 				resolve (uuid)
 
 			})

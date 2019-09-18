@@ -36,9 +36,9 @@ select_ssh_commands:
         
         filter.is_deleted = 0
 
-        let data = await this.db.add_all_cnt ({}, [{ssh_commands: filter}])
+        let data = await this.db.add_all_cnt ({}, [{vw_ssh_commands: filter}])
 
-		let idx = {}; for (let i of data.ssh_commands) {
+		let idx = {}; for (let i of data.vw_ssh_commands) {
 			i.cnt = 0
 			idx [i.uuid] = i			
 		}

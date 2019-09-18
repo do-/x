@@ -18,6 +18,8 @@ module.exports = {
 		ms_total   : 'int,           // время, мс',
 		status     : 'string,        // статус',
 		path_out   : 'string         // относительный stdout',
+        cmd        : 'string          // Команда',
+        ttl        : 'int             // Время на исполнение, с',
     },
 
     sql: `
@@ -43,7 +45,9 @@ module.exports = {
 				                   ELSE 'error'
 			END status,
 			ssh_commands.path || '/' || ssh_command_items.host || '.out.txt' AS path_out,
-			ssh_commands.path || '/' || ssh_command_items.host || '.err.txt' AS path_err
+			ssh_commands.path || '/' || ssh_command_items.host || '.err.txt' AS path_err,
+			ssh_commands.cmd,
+			ssh_commands.ttl
     	FROM
     		ssh_command_items
     		INNER JOIN ssh_commands ON ssh_command_items.id_command = ssh_commands.uuid

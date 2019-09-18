@@ -15,6 +15,8 @@ $_DRAW.ssh_commands = async function (data) {
         columns: [                
             {field: 'ts_created', caption: 'Дата/время', size: 28, render: _ts},
             {field: 'cmd',        caption: 'Команда',    size: 100},
+            {field: 'ms_exec',        caption: 'Исполнение, мс',    size: 10, render: 'int'},
+            {field: 'ms_notif',        caption: 'Извещение, мс',    size: 10, render: 'int'},
             {field: 'cnt',        caption: 'hostов',    size: 10, render: 'int'},
             {field: 's_pending',    caption: 'pending',    size: 10, render: 'int'},
             {field: 's_ok',    caption: 'ok',    size: 10, render: 'int'},
