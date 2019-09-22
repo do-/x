@@ -4,6 +4,28 @@ $_DRAW.ssh_command = async function (data) {
     
     $('main').html (await to_fill ('ssh_command', data))
     
+    $('#totals').w2regrid ({
+    
+        name: 'ssh_command_totals_grid',             
+        
+        show: {
+            toolbarInput: false,
+            toolbar: true,
+            footer: false,
+//            toolbarAdd: true,
+        },            
+
+        columns: [                
+            {field: 'label',          caption: 'Событие',    size: 40},
+            {field: 'ts',             caption: 'Дата/время',    size: 25, render: _ts},
+            {field: 'delta',          caption: 'Ожидание, мс',    size: 15, render: 'float:1'},
+            {field: 'error',          caption: 'Ошибка',    size: 100},
+        ],
+        
+        records: data.totals
+              
+    }).refresh ()
+    
     var layout = $('#container').w2relayout ({
 
         name: 'main',
@@ -16,23 +38,4 @@ $_DRAW.ssh_command = async function (data) {
                 
     })    
 
-/*
-    var layout = $('main').w2relayout ({
-
-        name: 'main',
-
-        panels: [
-            {type: 'main', size: 400},
-        ],
-                
-    })
-
-    $(layout.el ('main')).html (await to_fill ('user', data)).w2reform ({
-
-        name: 'form',
-        
-        record: data,
-        
-    })
-*/
 }

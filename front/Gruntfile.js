@@ -87,7 +87,7 @@ module.exports = function (grunt) {
     watch: {
 
       general: {
-        files: ['root/**/*.*'],
+        files: ['root/_/app/**/*.*'],
         tasks: ['bump', 'replace'],
         options: {nospawn: true}
       },

@@ -166,8 +166,10 @@ module.exports.create_http_server = function (conf) {
             		if (url == '/favicon.ico') return '_front'
 
 					let root = request.url.split ('/').filter (s => s) [0]; 
+					
+					if (url.charAt (1) == '_' && url.charAt (2) == '_') return '_front'
 
-					if (root == conf.static.prefix) return '_front'
+//					if (root == conf.static.prefix) return '_front'
 					
 					return root
 
@@ -230,11 +232,17 @@ handler._front = class extends HTTPStatic.Handler {
 		rq.url = (url => {
 		
 			if (url == '/favicon.ico') return '/_mandatory_content/favicon.ico'
-			
-			let pre = this.conf.static.prefix; if (url.substr (1, pre.length) == pre) return url.replace (pre, '_')
-			
+
+//			let pre = this.conf.static.prefix; if (url.substr (1, pre.length) == pre) return url.replace (pre, '_')
+
+			if (url.charAt (1) == '_' && url.charAt (2) == '_') {
+				let parts = url.substr (1).split ('/')
+				parts [0] = '_'
+				return '/' + parts.join ('/')
+			}
+
 			return '/index.html'
-			
+
 		}) (rq.url)
 
 	}
