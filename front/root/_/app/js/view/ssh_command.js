@@ -14,6 +14,15 @@ $_DRAW.ssh_command = async function (data) {
             footer: false,
 //            toolbarAdd: true,
         },            
+        
+        toolbar: {items: [
+        	{
+        		type: 'button',
+        		caption: 'Отправить извещение',
+        		off: data.ts_notif_finish,
+        		onClick: $_DO.notify_completion_ssh_command,
+        	}
+        ].filter (not_off)},
 
         columns: [                
             {field: 'label',          caption: 'Событие',    size: 40},
