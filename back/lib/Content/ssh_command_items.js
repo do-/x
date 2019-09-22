@@ -20,10 +20,12 @@ select_ssh_command_items:
     
     async function () {
    
-        this.rq.sort = this.rq.sort || [{field: "host", direction: "asc"}]
+        this.rq.sort = this.rq.sort || [{field: "ts_from", direction: "asc"}]
     
         let filter = this.w2ui_filter ()
-darn (filter)        
+
+		filter.id_command = this.rq.data.id_command
+	
         let data = await this.db.add_all_cnt ({}, [{vw_ssh_command_items: filter}])
         
 		const fs = require ('fs')
