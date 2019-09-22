@@ -29,17 +29,24 @@ select_ssh_commands:
             this.rq.search = [
                 {field: 'cmd', operator: 'contains', value: q},
             ]
+            
+            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test (q)) 
+            	this.rq.search.push ({field: 'uuid', operator: 'is', value: q})
 
         }
-    
+
         let filter = this.w2ui_filter ()
         
         filter.is_deleted = 0
 
         let data = await this.db.add_all_cnt ({}, [{vw_ssh_commands: filter}])
+        
+        if (data.vw_ssh_commands.length == 0) return data
 
 		let idx = {}; for (let i of data.vw_ssh_commands) {
 			i.cnt = 0
+			i.s_ok = 0
+			i.s_nok = 0
 			idx [i.uuid] = i			
 		}
 		
@@ -52,8 +59,9 @@ select_ssh_commands:
 			let cnt = parseInt (i.cnt)
 			r ['s_' + i.status] = cnt
 			r.cnt += cnt
+			if (i.status != 'ok') r.s_nok += cnt
 		})
-
+		
         return data
 
     },
