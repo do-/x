@@ -108,39 +108,40 @@ do_run_ssh_command_items:
 			})
 
 		})
-		
-		conn.on ('error', function(data) {
-			let error = data.message
-			log ('connection failed: ' + error, {error})
-			conn.end ()
-		})		
-		
-		conn.on ('continue', function() {
-			darn ('continue')
-		})
-				
+								
 		return new Promise (function (ok, fail) {
 		
 			let off = false
+			
+			function done () {if (!off) ok (off = uuid)}
 
 			conn.on ('end', () => {
 				log ('disconnected', {ts_to: new Date ()})
-				ok (off = uuid)
+				done ()
 			})
 
-			setTimeout (() => {
-			
+			function die (error) {
 				if (off) return
-				let error = 'timeout expired'
 				log (error, {ts_to: new Date (), error})
 				conn.end ()
-				ok (off = uuid)
-				
-			}, 1000 * (item.ttl + 1))
+				done ()
+			}
+			
+			conn.on ('error', function (x) {
+				darn (x)
+				die (x.message)
+			})					
+
+			setTimeout (() => die ('timeout expired'), 1000 * (item.ttl + 1))
 
 			log ('connecting', {ts_from: new Date ()})
-
-			conn.connect (o)		
+			
+			try {
+				conn.connect (o)		
+			}
+			catch (x) {
+				die (x.message)
+			}
 
 		})
 
