@@ -162,9 +162,20 @@ do_run_ssh_commands:
 			action: 'run',
 		}))
 
-		let all = await Promise.all (tia.map (i => this.fork (i, data)))
-
-		this.fork ({action: 'notify_completion'})
+		let all = (tia.map (i => this.fork (i, data)))
+		
+//		let watch = setInterval (() => darn (all), 1000)
+		
+		await Promise.all (all)
+		
+//		clearInterval (watch)
+		
+		try {
+			await this.fork ({action: 'notify_completion'})
+		}
+		catch (e) {
+			darn (e)
+		}
 
     },
 

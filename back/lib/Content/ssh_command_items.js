@@ -67,6 +67,8 @@ do_run_ssh_command_items:
     async function () {
 
 		let item = await this.db.get ([{vw_ssh_command_items: {uuid: this.rq.id}}])    
+		await this.release_resources ()    
+		this.__resources = []
 
         let uuid = item.uuid
 
@@ -75,11 +77,11 @@ do_run_ssh_command_items:
         let o = {privateKey: fs.readFileSync (this.conf.ssh.private_key)}
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
-		let key = `${item.id_command} ${o.username}@${o.host}:${o.port}`
+		let key = `${item.id_command} ${item.uuid} ${o.username}@${o.host}:${o.port}`
 						
-		let log = async (msg, data) => {
-			darn (`SSH ${key} ${msg}`)
-			await this.fork ({action: 'update'}, {data})
+		let log = (msg, data) => {
+			darn (`SSH ${key} ${msg}`);
+			(async () => {await this.fork ({action: 'update'}, {data})}) ()			
 		}
 		
 		let fn = this.rq.data.path + '/' + o.host + '.' 
@@ -87,7 +89,7 @@ do_run_ssh_command_items:
 		let append = (ext) => ((data) => fs.appendFile (fn + ext + '.txt', data, e => {if (e) darn (e)}))
 
 		let conn = new Client ()
-		
+				
 		conn.on ('ready', function () {
 
 			log ('connected', {ts_conn: new Date ()})
@@ -96,12 +98,11 @@ do_run_ssh_command_items:
 
 				if (err) throw err
 
-				stream.on ('data', append ('out'))
 				stream.stderr.on ('data', append ('err'))
-
-				stream.on ('close', function (code, signal) {
+				stream.on        ('data', append ('out'))
+				stream.on        ('close', function (code, signal) {
+					log ('closed', {code, signal})
 					conn.end ()
-					log ('disconnected', {code, signal, ts_to: new Date ()})
 				})
 
 			})
@@ -109,19 +110,34 @@ do_run_ssh_command_items:
 		})
 		
 		conn.on ('error', function(data) {
-			conn.end ()
 			let error = data.message
-			log ('connection failed: ' + error, {ts_to: new Date (), error})
+			log ('connection failed: ' + error, {error})
+			conn.end ()
+		})		
+		
+		conn.on ('continue', function() {
+			darn ('continue')
 		})
 				
-		return new Promise (function (resolve, reject) {
+		return new Promise (function (ok, fail) {
+		
+			let off = false
 
-			conn.on ('end', async function () {
-							
-				resolve (uuid)
-
+			conn.on ('end', () => {
+				log ('disconnected', {ts_to: new Date ()})
+				ok (off = uuid)
 			})
+
+			setTimeout (() => {
 			
+				if (off) return
+				let error = 'timeout expired'
+				log (error, {ts_to: new Date (), error})
+				conn.end ()
+				ok (off = uuid)
+				
+			}, 1000 * (item.ttl + 1))
+
 			log ('connecting', {ts_from: new Date ()})
 
 			conn.connect (o)		

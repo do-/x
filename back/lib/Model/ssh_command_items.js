@@ -18,5 +18,23 @@ module.exports = {
     keys: {
         id_command: 'id_command,host',
     },
+    
+    triggers: {
+
+    	before_update: `
+    	
+    		IF 1=1
+    			AND NEW.ts_to IS NOT NULL
+    			AND NEW.ts_conn IS NULL
+    			AND NEW.error IS NULL
+    		THEN 
+    			NEW.error := 'connection failed for unknown reason';
+    		END IF;
+
+			RETURN NEW;
+
+    	`,
+
+    }
 
 }
