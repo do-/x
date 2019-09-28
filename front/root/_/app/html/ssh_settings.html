@@ -5,7 +5,8 @@
 			width: 400px;
 			margin-right: 10px;
 		}
-		input[data-block-name=ssh_settings] {width: 50px!important;}
+		input[data-block-name=ssh_settings] {width: 300px!important;}
+		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
 	<div>
@@ -34,6 +35,27 @@
                 <label>Максимальное время исполнения запроса в целом, с:</label>
                 <div>
                     <input name=timeout required type=number min=1 />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>URL для отправки извещения:</label>
+                <div>
+                    <input name=cb_url />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Имя пользователя:</label>
+                <div>
+                    <input name=cb_user />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Пароль:</label>
+                <div>
+                    <input name=cb_pass type=password />
                 </div>
             </div>
 
