@@ -186,6 +186,8 @@ do_run_ssh_commands:
 			on --
 
 		}
+		
+		let tasks = []
 						
 		await new Promise (function (ok, fail) {
 
@@ -211,13 +213,15 @@ do_run_ssh_commands:
 				
 				if (todo > available) todo = available
 
-				for (let i = 0; i < todo; i ++) subtask ()
+				for (let i = 0; i < todo; i ++) tasks.push (subtask ())
 				
 			}, 5)
 			
 			setTimeout (terminate, 1000 * parseInt (item.timeout))
 		
 		})
+		
+		await Promise.all (tasks)
 				
 		try {
 			
