@@ -255,12 +255,17 @@ do_notify_completion_ssh_commands:
 				
 		let json = JSON.stringify (data)
 		
-		let o = this.conf.ssh.callback
-		o.method = 'POST'
-		o.headers = {
-			'Content-Type': 'application/json',
-			'Content-Length': json.length
-		}				
+		let ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
+		
+		let o = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Content-Length': json.length
+			}
+		}
+		
+		if (ssh_settings.cb_user) o.auth = ssh_settings.cb_user + ':' + ssh_settings.cb_pass
 
 		async function update (data) {
 			data.uuid = id
@@ -280,7 +285,7 @@ do_notify_completion_ssh_commands:
 					notif_error     : null,
 				})
 
-				http.request (o, rp => {
+				http.request (ssh_settings.cb_url, o, rp => {
 
 					let code = rp.statusCode; if (code == 200) return ok ()
 
