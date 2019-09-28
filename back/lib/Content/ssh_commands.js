@@ -169,15 +169,48 @@ do_run_ssh_commands:
 			id: i.uuid, 
 			action: 'run',
 		}))
+		
+		let on = 0, subtask = async () => {
 
-		let all = (tia.map (i => this.fork (i, data)))
+			on ++
+			
+				try {
+					await this.fork (tia.pop (), data)
+				}
+				catch (e) {
+					darn (e)
+				}
+			
+			on --
+
+		}
 		
-//		let watch = setInterval (() => darn (all), 1000)
+		let par = parseInt (item.par)
 		
-		await Promise.all (all)
+		if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
+				
+		await new Promise (function (ok, fail) {
+
+			function check () {
+			
+				let todo = tia.length;      
+
+				if (todo == 0 && on == 0) return ok ()
+				
+				let available = par - on;   
+				
+				if (todo > available) todo = available
+
+				for (let i = 0; i < todo; i ++) subtask ()
+				
+				setTimeout (check, 1000)
+			
+			}
+			
+			check ()
 		
-//		clearInterval (watch)
-		
+		})
+				
 		try {
 			await this.fork ({action: 'notify_completion'})
 		}
