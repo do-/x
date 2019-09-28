@@ -189,12 +189,24 @@ do_run_ssh_commands:
 						
 		await new Promise (function (ok, fail) {
 
-			setInterval (function () {
+			let watch = null
 			
-				let todo = tia.length;      
-
-				if (todo == 0 && on == 0) return ok ()
+			function terminate () {
+			
+				if (watch) clearInterval (watch)
+									
+				return ok (watch = null)
 				
+			}
+			
+			watch = setInterval (function () {
+			
+				if (!watch) return
+
+				let todo = tia.length
+
+				if (todo == 0 && on == 0) return terminate ()
+
 				let available = par - on
 				
 				if (todo > available) todo = available
@@ -202,11 +214,17 @@ do_run_ssh_commands:
 				for (let i = 0; i < todo; i ++) subtask ()
 				
 			}, 5)
+			
+			setTimeout (terminate, 1000 * parseInt (item.timeout))
 		
 		})
 				
 		try {
+			
+			await this.db.do ('UPDATE ssh_command_items SET ts_from = now(), ts_to = now(), error = ? WHERE id_command = ? AND ts_from IS NULL', ['Global timeout expired', item.uuid])
+		
 			await this.fork ({action: 'notify_completion'})
+			
 		}
 		catch (e) {
 			darn (e)

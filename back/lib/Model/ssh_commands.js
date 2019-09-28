@@ -7,6 +7,7 @@ module.exports = {
         cmd             : 'string          // Команда',
         ttl             : 'int             // Время на исполнение, с',
         par             : 'int             // Максимальное число одновременных соединений',
+        timeout         : 'int             // Максимальное время исполнения запроса в целом, с',
 		ts_created      : 'timestamp=now() // Дата/время создания',
 		addr            : 'text            // JSON-массив записей {host, port, username}',
 		ts_notif_start  : 'timestamp       // Дата/время начала отправки извещения',
@@ -24,8 +25,8 @@ module.exports = {
 
     	before_insert: `
     	    		
-			SELECT ttl, par INTO NEW.ttl, NEW.par FROM ssh_settings WHERE id = 1;
-			
+			SELECT ttl, par, timeout INTO NEW.ttl, NEW.par, NEW.timeout FROM ssh_settings WHERE id = 1;
+
 			RETURN NEW;
 			
     	`,
