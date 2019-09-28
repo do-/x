@@ -6,6 +6,7 @@ module.exports = {
         is_deleted      : 'int=0           // 1, если удалена', 
         cmd             : 'string          // Команда',
         ttl             : 'int             // Время на исполнение, с',
+        par             : 'int             // Максимальное число одновременных соединений',
 		ts_created      : 'timestamp=now() // Дата/время создания',
 		addr            : 'text            // JSON-массив записей {host, port, username}',
 		ts_notif_start  : 'timestamp       // Дата/время начала отправки извещения',
@@ -23,7 +24,7 @@ module.exports = {
 
     	before_insert: `
     	    		
-			SELECT ttl INTO NEW.ttl FROM ssh_settings WHERE id = 1;
+			SELECT ttl, par INTO NEW.ttl, NEW.par FROM ssh_settings WHERE id = 1;
 			
 			RETURN NEW;
 			
