@@ -1,0 +1,39 @@
+<span>
+
+	<style>
+		label[data-block-name=ssh_settings] {
+			width: 300px;
+			margin-right: 10px;
+		}
+		input[data-block-name=ssh_settings] {width: 300px!important;}
+	</style>
+
+	<div>
+
+        <div class="w2ui-page page-0">
+
+			<header>
+				Настройки SSH
+			</header>
+
+            <div class="w2ui-field">
+                <label>Максимальное время ожидания на host'е, с:</label>
+                <div>
+                    <input name=ttl required type=number min=0/>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="w2ui-buttons">
+        	<span>
+
+                <button class=w2ui-btn name=edit   data-on=__read_only data-hotkey=F4>Редактировать</button>
+                <button class=w2ui-btn name=update data-off=__read_only data-hotkey=Ctrl-Enter>Сохранить</button>
+                <button class=w2ui-btn name=cancel data-off=__read_only data-hotkey=Esc>Отменить</button>
+
+            </span>
+        </div>
+
+	</div>
+</span>

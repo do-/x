@@ -7,6 +7,12 @@ $_DO.open_ssh_commands_nav = function () {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.open_ssh_settings_nav = function () {
+    open_tab ('/ssh_settings')
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.open_users_nav = function () {
     open_tab ('/users')
 }
@@ -45,6 +51,11 @@ $_GET.nav = async function (o) {
                 id: "open_ssh_commands",
                 label: "Запуски SSH",
                 icon: "menu",
+            },
+            {
+                id: "open_ssh_settings",
+                label: "Настройки SSH",
+                icon: "settings",
             },
 /*            
             {

@@ -21,6 +21,14 @@ module.exports = {
     
     triggers: {
 
+    	before_insert: `
+    	    		
+			SELECT ttl INTO NEW.ttl FROM ssh_settings WHERE id = 1;
+			
+			RETURN NEW;
+			
+    	`,
+    	
     	after_insert: `
     	    		
 			INSERT INTO ssh_command_items (id_command, host, port, username) 
