@@ -96,7 +96,7 @@ do_run_ssh_command_items:
 
 			log ('connected', {ts_conn: new Date ()})
 			
-			conn.exec ('timeout ' + item.ttl + 's ' + item.cmd, function (err, stream) {
+			conn.exec ('nohup ' + item.cmd + ' & sleep 0.01s', {pty: true}, function (err, stream) {
 
 				if (err) throw err
 
