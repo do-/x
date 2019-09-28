@@ -34,6 +34,29 @@ async function fork (tia, data) {
 
 }    
 
+async function fork0 (tia, data) {
+
+	let conf = this.conf
+
+	let rq = {}
+
+	if (data) for (let k in data) rq [k] = data [k]
+	for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
+	
+	let b = this.get_log_banner ()
+
+	return new Promise (function (resolve, reject) {
+
+		let h = new Async_handler ({conf, rq, pools: []}, resolve, reject)
+		
+		darn (b + ' -> ' + h.get_log_banner ())
+
+		setImmediate (() => h.run ())        
+
+	})
+
+}    
+
 let handler = {}
 
 handler._back = class extends Dia.HTTP.Handler {
@@ -206,6 +229,7 @@ let Async_handler = class extends Async.Handler {
     }
     
     async fork (tia, rq) {return fork.apply (this, [tia, rq])}
+    async fork0 (tia, rq) {return fork0.apply (this, [tia, rq])}
 
 }
 

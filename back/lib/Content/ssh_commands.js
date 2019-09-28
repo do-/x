@@ -162,13 +162,7 @@ do_run_ssh_commands:
 
 		require ('fs').mkdirSync (path, {recursive: true})
 
-		let data = {data: {path}}
-
-		let tia = (await this.db.list ([{'ssh_command_items(uuid)': {id_command: this.rq.id}}])).map (i => ({
-			type: 'ssh_command_items', 
-			id: i.uuid, 
-			action: 'run',
-		}))
+		let items = (await this.db.list ([{vw_ssh_command_items: {id_command: this.rq.id}}]))
 		
 		let par = parseInt (item.par); if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
 
@@ -177,7 +171,14 @@ do_run_ssh_commands:
 			on ++
 			
 				try {
-					await this.fork (tia.pop (), data)
+				
+					let item = items.pop ()
+					
+					await this.fork0 (
+						{type: 'ssh_command_items', action: 'run', id: item.uuid}, 
+						{data: {item, path}}
+					)
+
 				}
 				catch (e) {
 					darn (e)
@@ -205,7 +206,7 @@ do_run_ssh_commands:
 			
 				if (!watch) return
 
-				let todo = tia.length
+				let todo = items.length
 
 				if (todo == 0 && on == 0) return terminate ()
 

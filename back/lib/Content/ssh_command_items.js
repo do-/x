@@ -68,9 +68,7 @@ do_run_ssh_command_items:
 
     async function () {
 
-		let item = await this.db.get ([{vw_ssh_command_items: {uuid: this.rq.id}}])    
-		await this.release_resources ()    
-		this.__resources = []
+		let item = this.rq.data.item
 
         let uuid = item.uuid
 
