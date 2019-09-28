@@ -170,6 +170,8 @@ do_run_ssh_commands:
 			action: 'run',
 		}))
 		
+		let par = parseInt (item.par); if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
+
 		let on = 0, subtask = async () => {
 
 			on ++
@@ -184,30 +186,22 @@ do_run_ssh_commands:
 			on --
 
 		}
-		
-		let par = parseInt (item.par)
-		
-		if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
-				
+						
 		await new Promise (function (ok, fail) {
 
-			function check () {
+			setInterval (function () {
 			
 				let todo = tia.length;      
 
 				if (todo == 0 && on == 0) return ok ()
 				
-				let available = par - on;   
+				let available = par - on
 				
 				if (todo > available) todo = available
 
 				for (let i = 0; i < todo; i ++) subtask ()
 				
-				setTimeout (check, 1000)
-			
-			}
-			
-			check ()
+			}, 5)
 		
 		})
 				
