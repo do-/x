@@ -162,30 +162,20 @@ do_run_ssh_commands:
 
 		require ('fs').mkdirSync (path, {recursive: true})
 
-		let items = (await this.db.list ([{vw_ssh_command_items: {id_command: this.rq.id}}]))
+		let args = (await this.db.list ([{vw_ssh_command_items: {id_command: this.rq.id}}])).map (item => ([
+			{type: 'ssh_command_items', action: 'run', id: item.uuid}, 
+			{data: {item, path}}
+		]))
 		
 		let par = parseInt (item.par); if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
 
-		let on = 0, subtask = async () => {
-
-			on ++
-			
-				try {
-				
-					let item = items.pop ()
-					
-					await this.fork0 (
-						{type: 'ssh_command_items', action: 'run', id: item.uuid}, 
-						{data: {item, path}}
-					)
-
-				}
-				catch (e) {
-					darn (e)
-				}
-			
-			on --
-
+		let on = 0, task = async (arg) => {			
+			try {
+				await this.fork0 (arg [0], arg [1])
+			}
+			finally {
+				on --
+			}			
 		}
 		
 		let tasks = []
@@ -206,17 +196,23 @@ do_run_ssh_commands:
 			
 				if (!watch) return
 
-				let todo = items.length
+				let todo = args.length
 
 				if (todo == 0 && on == 0) return terminate ()
 
 				let available = par - on
 				
 				if (todo > available) todo = available
-
-				for (let i = 0; i < todo; i ++) tasks.push (subtask ())
 				
-			}, 5)
+				if (todo < 0) todo = 0
+				
+				if (todo == 0) return
+				
+				on += todo
+				
+				tasks = tasks.concat (args.splice (0, todo).map (task))
+
+			}, 10)
 			
 			setTimeout (terminate, 1000 * parseInt (item.timeout))
 		
