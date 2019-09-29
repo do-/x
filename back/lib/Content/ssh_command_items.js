@@ -78,10 +78,12 @@ do_run_ssh_command_items:
         for (let k of ['username', 'host', 'port']) o [k] = item [k]
 
 		let key = `${item.id_command} ${item.uuid} ${o.username}@${o.host}:${o.port}`
+		
+		let subtasks = []
 						
 		let log = (msg, data) => {
 			darn (`SSH ${key} ${msg}`);
-			(async () => {await this.fork ({action: 'update'}, {data})}) ()			
+			subtasks.push (this.fork ({action: 'update'}, {data}))
 		}
 		
 		let fn = this.rq.data.path + '/' + o.host + '.' 
@@ -113,7 +115,11 @@ do_run_ssh_command_items:
 		
 			let off = false
 			
-			function done () {if (!off) ok (off = uuid)}
+			function done () {
+				if (off) return
+				let quit = () => ok (off = uuid)
+				Promise.all (subtasks).then (quit).catch (quit)
+			}
 
 			conn.on ('end', () => {
 				log ('disconnected', {ts_to: new Date ()})
