@@ -12,9 +12,9 @@ $_DRAW.ssh_command_items = async function (data) {
 
         columns: [                
             {field: 'host',           caption: 'Host',    size: 50, sortable: true, searchable: true},
-            {field: 'ts_from',        caption: 'Начало',    size: 50, render: _ts, sortable: true},
-            {field: 'ts_conn',        caption: 'Соединение',    size: 50, render: _ts, sortable: true},
-            {field: 'ts_to',          caption: 'Окончание',    size: 50, render: _ts, sortable: true},
+            {field: 'ts_from',        caption: 'Начало',    size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'ts_conn',        caption: 'Соединение',    size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'ts_to',          caption: 'Окончание',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ms_conn',        caption: 'Ожидание, мс',    size: 15, render: 'int'},
             {field: 'ms_exec',        caption: 'Исполнение, мс',    size: 15, render: 'int'},
             {field: 'ms_total',        caption: 'Всего, мс',    size: 15, render: 'int'},

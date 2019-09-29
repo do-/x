@@ -1,21 +1,78 @@
-<span>
+<span
+	data-popup-width=700
+	data-popup-height=330
+	data-popup-title='Параметры SSH'
+>
 
 	<style>
 		label[data-block-name=ssh_settings] {
-			width: 400px;
+			width: 320px;
 			margin-right: 10px;
 		}
-		input[data-block-name=ssh_settings] {width: 300px!important;}
+		input[data-block-name=ssh_settings] {width: 310px!important;}
 		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
-	<div>
+	<div class="w2ui-reset w2ui-form" style="height:270px; margin:8px 0 0 0;">
 
         <div class="w2ui-page page-0">
 
-			<header>
-				Настройки SSH
-			</header>
+            <div class="w2ui-field">
+                <label>Максимальное время ожидания на host'е, с:</label>
+                <div>
+                    <input name=ttl required type=number min=0/>
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Максимальное число одновременных соединений:</label>
+                <div>
+                    <input name=par required type=number min=1 />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Максимальное время исполнения запроса в целом, с:</label>
+                <div>
+                    <input name=timeout required type=number min=1 />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>URL для отправки извещения:</label>
+                <div>
+                    <input name=cb_url />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Имя пользователя:</label>
+                <div>
+                    <input name=cb_user />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Пароль:</label>
+                <div>
+                    <input name=cb_pass type=password />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="w2ui-buttons">
+			<button class=w2ui-btn name=update data-hotkey=Ctrl-Enter>Применить</button>
+        </div>
+
+	</div>
+
+
+
+<!--
+	<div>
+
+        <div class="w2ui-page page-0">
 
             <div class="w2ui-field">
                 <label>Максимальное время ожидания на host'е, с:</label>
@@ -72,4 +129,5 @@
         </div>
 
 	</div>
+-->
 </span>

@@ -22,7 +22,7 @@ $_DO.update_ssh_settings = async function (e) {
 
     if (!confirm ('Сохранить изменения?')) return
     
-    let form = w2_panel_form ()
+    let form = w2_popup_form ()
     
     let data = form.values ().actual ().validated ()
     
@@ -32,7 +32,9 @@ $_DO.update_ssh_settings = async function (e) {
 
     await response ({type: 'ssh_settings', action: 'update'}, {data})
 
-    location.reload ()
+    w2popup.close ()
+    
+    alert ('Значения параметров записаны в БД')
 
 }
 
@@ -40,12 +42,6 @@ $_DO.update_ssh_settings = async function (e) {
 
 $_GET.ssh_settings = async function (o) {
 
-    let data = await response ({type: 'ssh_settings', id: 1})
-    
-    $('body').data ('data', data)
-
-    $_SESSION.set ('__read_only', 1)
-
-    return data
+    return await response ({type: 'ssh_settings', id: 1})
 
 }
