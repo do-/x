@@ -8,16 +8,22 @@ $_DRAW.ssh_command_items = async function (data) {
             toolbarInput: true,
             toolbar: true,
             footer: true,
-        },            
+        },
+        
+	    toolbar: {
+      		items: [
+      		  {type: 'button', id: 'printButton', caption: 'MS Excel', onClick: function (e) {this.owner.saveAsXLS ()}},
+      		]
+      	},
 
         columns: [                
             {field: 'host',           caption: 'Host',    size: 50, sortable: true, searchable: true},
             {field: 'ts_from',        caption: 'Начало',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_conn',        caption: 'Соединение',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_to',          caption: 'Окончание',    size: 1, min: 155, render: _ts, sortable: true},
-            {field: 'ms_conn',        caption: 'Ожидание, мс',    size: 15, render: 'int'},
-            {field: 'ms_exec',        caption: 'Исполнение, мс',    size: 15, render: 'int'},
-            {field: 'ms_total',        caption: 'Всего, мс',    size: 15, render: 'int'},
+            {field: 'ms_conn',        caption: 'Ожидание, мс',    size: 15, render: 'float:0'},
+            {field: 'ms_exec',        caption: 'Исполнение, мс',    size: 15, render: 'float:1'},
+            {field: 'ms_total',        caption: 'Всего, мс',    size: 15, render: 'float:1'},
             {field: 'code',           caption: 'Код',    size: 10},
             {field: 'signal',         caption: 'Сигнал',    size: 20},
             {field: 'error',          caption: 'Ошибка',    size: 20},
