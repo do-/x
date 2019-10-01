@@ -94,7 +94,7 @@ handler._back = class extends Dia.HTTP.Handler {
     	} (h, {
     		sessions:    p.sessions,
     		users:       p.users,
-    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid'
+    		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
     	})
 
     }
