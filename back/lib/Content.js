@@ -71,39 +71,17 @@ handler._back = class extends Dia.HTTP.Handler {
     check_params () {
         super.check ()
         let h = this.http.request.headers
-        let rq = this.rq
-        this.uri = `${h.scheme}://${h.host}/${rq.type}/`
-        if (rq.id) this.uri += rq.id
     }
 
     get_session () {
 
     	let h = this
-    	let p = h.pools
 
-    	return new class extends CachedCookieSession {
-
-			async get_user_by_id (uuid) {
-
-				let r = await h.db.get ([{vw_users: {uuid}}])
-
-				return r.uuid ? r : null
-
-			}
-
-    	} (h, {
-    		sessions:    p.sessions,
-    		users:       p.users,
+    	return new CachedCookieSession (h, {
+    		sessions:    h.pools.sessions,
     		cookie_name: h.conf.auth.sessions.cookie_name || 'sid',
     	})
 
-    }
-    
-    async get_user () {
-        let user = await super.get_user ()
-        if (!this.is_transactional () || !user) return user
-        await this.db.do ("SELECT set_config ('tasks.id_user', ?, true)", [user.uuid])
-        return user
     }
     
     get_method_name () { return get_method_name.apply (this) }

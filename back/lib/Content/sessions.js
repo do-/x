@@ -24,12 +24,20 @@ do_create_sessions:
         }
 
         this.session.user = user
+
         await this.session.start ()
         
-        user.role = user ['roles.name']
-        user.id = user.uuid
+        return {
         
-        return {user, timeout: this.session.o.timeout}
+			user: {
+				id    : user.uuid,
+				label : user.label,
+				role  : user ['roles.name'],
+			},
+			
+			timeout: this.session.o.timeout,
+			
+        }
 
     },
     

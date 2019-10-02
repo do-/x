@@ -13,7 +13,6 @@ module.exports = class {
         	db                 : this.setup_db (),
         	http_static_server : this.setup_http_static_server (),
             sessions           : this.setup_sessions (),
-            users              : new Dia.Cache ({name: 'user'}),
         }
 
         const pk = JSON.parse (fs.readFileSync ('../../front/package.json', 'utf8'))
