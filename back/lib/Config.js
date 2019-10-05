@@ -1,5 +1,6 @@
 const fs  = require ('fs')
 const Dia = require ('./Ext/Dia/Dia.js')
+const Cache = require ('./Ext/Dia/Cache/MapTimer.js')
 
 module.exports = class {
 
@@ -39,7 +40,7 @@ module.exports = class {
 
     setup_sessions () {
     
-        return new Dia.Cache ({
+        return new Cache ({
         	name: 'session',
         	ttl : this.auth.sessions.timeout * 60 * 1000,
         })
