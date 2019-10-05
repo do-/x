@@ -21,22 +21,17 @@ module.exports = class {
 			}),
 			
         }
-        
-		try {
+
+    }
+    
+    async init () {
+    
+		let db = this.pools.db
 		
-			let db = this.pools.db;
-			
-			(async () => {
-				await db.load_schema ()
-				await db.update_model ()
-			})()
-
-		}
-		catch (x) {
-			darn (['DB MIGRATION FAILED', x])
-			throw x
-		}        
-
+		await db.load_schema ()
+		
+		await db.update_model ()
+		
     }
         
 }

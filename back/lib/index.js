@@ -5,33 +5,43 @@ const dispatcher = new class {
 
 	constructor () {
 	
-		this.h = {
+		this.for = {
 			_back  : require ('./Content/Handler/WebUiBackend.js'),
 			_front : require ('./Content/Handler/WebUiStatic.js'),
 			_rpc   : require ('./Content/Handler/RPC.js'),
 		}
 		
-		this.constructor.prototype.is_static = this.h._front.prototype.is_static
+		this.constructor.prototype.is_static = this.for._front.prototype.is_static
 		
 	}
-
-	get_handler_class (url) {
 	
-		let name = this.is_static (url) ? '_front' : url.split ('/').filter (s => s) [0]
+	route (request, response) {
+	
+		let url = request.url; if (url == '/') return response.writeHead (302, {'Location': '/_front'}) + response.end ()
 		
-		return this.h [name] || this.h._rpc
+		let root = this.is_static (url) ? '_front' : url.split ('/').filter (s => s) [0]
 		
+		let handler = this.for [root] || this.for._rpc
+		
+		let instance = new handler ({conf, pools, http: {request, response}})
+		
+		instance.run ()
+
 	}
 
-} ()	
+} ();
 
-require ('http').createServer ((request, response) => {
+(async () => {
 
-	let url = request.url; if (url == '/') return response.writeHead (302, {'Location': '/_front'}) + response.end ()
+	try {
+		await conf.init ()
+	}
+	catch (e) {
+		return darn (['Failed to initialize', e])
+	}
 
-	let h = new (dispatcher.get_handler_class (url)) ({conf, pools, http: {request, response}})
+	require ('http')
+		.createServer ((q, p) => dispatcher.route (q, p))
+		.listen       (conf.listen, function () {darn ('Listening to HTTP at ' + this._connectionKey)})
 
-	h.run ()
-
-}).listen (conf.listen, () => darn ('Listening to HTTP at ' + this._connectionKey))
-
+}) ()
