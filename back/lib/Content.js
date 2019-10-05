@@ -1,12 +1,25 @@
-const handler = {
-	_back:    require ('./Content/Handler/WebUiBackend.js'),
-	_front:   require ('./Content/Handler/WebUiStatic.js'),
-	_default: require ('./Content/Handler/RPC.js'),
-}
-
 module.exports.create_http_server = function (conf) {
 
 	let pools = conf.pools
+	
+	const dispatcher = new class {
+
+		constructor () {
+			this._back    = require ('./Content/Handler/WebUiBackend.js')
+			this._front   = require ('./Content/Handler/WebUiStatic.js')
+			this._default = require ('./Content/Handler/RPC.js')
+		}
+
+		get_name (url) {
+			if (this._front.prototype.is_static (url)) return '_front'
+			return url.split ('/').filter (s => s) [0]		
+		}	
+
+		get_class (url) {
+			return this [this.get_name (url)] || this._default
+		}	
+
+	} ()	
 
     require ('http')
     
@@ -17,20 +30,8 @@ module.exports.create_http_server = function (conf) {
             	let url = request.url
             	
             	if (url == '/') return response.writeHead (302, {'Location': '/_front'}) + response.end ()
-            	
-            	let root = (() => {
-            		
-            		if (url == '/favicon.ico') return '_front'
-
-					let root = request.url.split ('/').filter (s => s) [0]; 
-					
-					if (url.charAt (1) == '_' && url.charAt (2) == '_') return '_front'
-					
-					return root
-
-            	})();
-
-				let h = new (handler [root] || handler._default) ({conf, pools, http: {request, response}})
+            	            	
+				let h = new (dispatcher.get_class (url)) ({conf, pools, http: {request, response}})
 
 				h.run ()
 				
