@@ -22,10 +22,6 @@ module.exports = class {
 			
         }
 
-        const pk = JSON.parse (fs.readFileSync ('../../front/package.json', 'utf8'))
-
-        this.static = {prefix: '__' + pk.version.replace (/\./g, '_')}
-
     }
         
 }
