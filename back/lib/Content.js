@@ -1,57 +1,18 @@
 const Dia = require ('./Ext/Dia/Dia.js')
-const Async = require ('./Ext/Dia/Content/Handler/Async.js')
 const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
 const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
 const CachedCookieSession = require ('./Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
 
-let Async_handler = class extends Async.Handler {
-
-    get_method_name () {
-		let rq = this.rq
-		if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
-		if (rq.action) return 'do_'  + rq.action + '_' + rq.type
-		return (rq.id ? 'get_item_of_' : 'select_') + rq.type
-    }
-
-    is_transactional () { return false }
-
-    get_log_banner () {
-        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
-    }
-    	
-	async fork (tia, data, pools) {
-
-		let conf = this.conf
-		if (!pools) pools = conf.pools
-
-		let rq = {}
-
-		if (data) for (let k in data) rq [k] = data [k]
-		for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
-
-		let b = this.get_log_banner ()
-
-		return new Promise (function (resolve, reject) {
-
-			let h = new Async_handler ({conf, rq, pools}, resolve, reject)
-
-			darn (b + ' -> ' + h.get_log_banner ())
-
-			setImmediate (() => h.run ())        
-
-		})
-
-	}
-	
-	async fork0 (tia, data) {
-		return this.fork (tia, data, [])
-	}
-    
-}
+const Async_handler = require ('./Content/Handler/Async.js') 
 
 let handler = {}
 
 handler._back = class extends Dia.HTTP.Handler {
+
+    constructor (o) {
+    	super (o)
+    	this.import (Async_handler, ['get_method_name', 'fork'])
+    }
 
     check () {
         super.check ()
@@ -140,6 +101,11 @@ module.exports.create_http_server = function (conf) {
 
 handler._default = class extends HTTPJsonRpc.Handler {
 
+    constructor (o) {
+    	super (o)
+    	this.import (Async_handler, ['get_method_name', 'fork'])
+    }
+
     is_transactional () { return false }
 
     get_log_banner () {
@@ -173,7 +139,3 @@ handler._front = class extends HTTPStatic.Handler {
 	}
 
 }
-
-for (let hn of ['_back', '_default']) 
-	for (let mn of ['get_method_name', 'fork']) 
-		handler [hn].prototype [mn] = Async_handler.prototype [mn]
