@@ -1,22 +1,7 @@
-const Dia = require ('./Ext/Dia/Dia.js')
-const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
-const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
-
-const Base = require ('./Content/Handler/Base.js') 
-
-let handler = {
-	_back:  require ('./Content/Handler/WebUiBackend.js'),
-	_front: require ('./Content/Handler/WebUiStatic.js'),
-}
-
-function http_listener (conf) {
-
-    (request, response) => {new HTTP_handler ({
-        conf, 
-        pools: {db: conf.pools.db}, 
-        http: {request, response}}
-    ).run ()}
-
+const handler = {
+	_back:    require ('./Content/Handler/WebUiBackend.js'),
+	_front:   require ('./Content/Handler/WebUiStatic.js'),
+	_default: require ('./Content/Handler/RPC.js'),
 }
 
 module.exports.create_http_server = function (conf) {
@@ -53,29 +38,6 @@ module.exports.create_http_server = function (conf) {
 
         )
         
-        .listen (
-        
-            conf.listen, 
-            
-            function () {
-                darn ('default app is listening to HTTP at ' + this._connectionKey)
-            }
-        
-        )
+        .listen (conf.listen, () => darn ('Listening to HTTP at ' + this._connectionKey))
 
-}
-
-handler._default = class extends HTTPJsonRpc.Handler {
-
-    constructor (o) {
-    	super (o)
-    	this.import (Base, ['get_method_name', 'fork'])
-    }
-
-    is_transactional () { return false }
-
-    get_log_banner () {
-        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
-    }
-    
 }
