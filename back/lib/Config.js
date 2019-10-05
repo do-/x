@@ -33,7 +33,8 @@ module.exports = class {
 
 		}
 		catch (x) {
-			return darn (['DB MIGRATION FAILED', x])
+			darn (['DB MIGRATION FAILED', x])
+			throw x
 		}        
 
     }
