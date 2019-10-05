@@ -67,11 +67,6 @@ handler._back = class extends Dia.HTTP.Handler {
         let m = this.http.request.method
         if (m != 'POST') throw '405 No ' + m + 's please'
     }
-    
-    check_params () {
-        super.check ()
-        let h = this.http.request.headers
-    }
 
     get_session () {
 
