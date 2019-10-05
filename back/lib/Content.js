@@ -4,29 +4,6 @@ const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
 const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
 const CachedCookieSession = require ('./Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
 
-async function fork0 (tia, data) {
-
-	let conf = this.conf
-
-	let rq = {}
-
-	if (data) for (let k in data) rq [k] = data [k]
-	for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
-	
-	let b = this.get_log_banner ()
-
-	return new Promise (function (resolve, reject) {
-
-		let h = new Async_handler ({conf, rq, pools: []}, resolve, reject)
-		
-		darn (b + ' -> ' + h.get_log_banner ())
-
-		setImmediate (() => h.run ())        
-
-	})
-
-}    
-
 let Async_handler = class extends Async.Handler {
 
     get_method_name () {
@@ -41,11 +18,11 @@ let Async_handler = class extends Async.Handler {
     get_log_banner () {
         return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
     }
-	
-	async fork (tia, data) {
+    	
+	async fork (tia, data, pools) {
 
 		let conf = this.conf
-		let pools = conf.pools
+		if (!pools) pools = conf.pools
 
 		let rq = {}
 
@@ -65,9 +42,11 @@ let Async_handler = class extends Async.Handler {
 		})
 
 	}
+	
+	async fork0 (tia, data) {
+		return this.fork (tia, data, [])
+	}
     
-    async fork0 (tia, rq) {return fork0.apply (this, [tia, rq])}
-
 }
 
 let handler = {}
