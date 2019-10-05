@@ -4,37 +4,6 @@ const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
 const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
 const CachedCookieSession = require ('./Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
 
-function get_method_name () {
-	let rq = this.rq
-	if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
-	if (rq.action) return 'do_'  + rq.action + '_' + rq.type
-	return (rq.id ? 'get_item_of_' : 'select_') + rq.type
-}
-
-async function fork (tia, data) {
-
-	let conf = this.conf
-	let pools = conf.pools
-
-	let rq = {}
-
-	if (data) for (let k in data) rq [k] = data [k]
-	for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
-	
-	let b = this.get_log_banner ()
-
-	return new Promise (function (resolve, reject) {
-
-		let h = new Async_handler ({conf, rq, pools}, resolve, reject)
-		
-		darn (b + ' -> ' + h.get_log_banner ())
-
-		setImmediate (() => h.run ())        
-
-	})
-
-}    
-
 async function fork0 (tia, data) {
 
 	let conf = this.conf
@@ -58,6 +27,49 @@ async function fork0 (tia, data) {
 
 }    
 
+let Async_handler = class extends Async.Handler {
+
+    get_method_name () {
+		let rq = this.rq
+		if (rq.part)   return 'get_' + rq.part + '_of_' + rq.type
+		if (rq.action) return 'do_'  + rq.action + '_' + rq.type
+		return (rq.id ? 'get_item_of_' : 'select_') + rq.type
+    }
+
+    is_transactional () { return false }
+
+    get_log_banner () {
+        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
+    }
+	
+	async fork (tia, data) {
+
+		let conf = this.conf
+		let pools = conf.pools
+
+		let rq = {}
+
+		if (data) for (let k in data) rq [k] = data [k]
+		for (let k of ['type', 'id', 'action']) rq [k] = tia [k] || this.rq [k]
+
+		let b = this.get_log_banner ()
+
+		return new Promise (function (resolve, reject) {
+
+			let h = new Async_handler ({conf, rq, pools}, resolve, reject)
+
+			darn (b + ' -> ' + h.get_log_banner ())
+
+			setImmediate (() => h.run ())        
+
+		})
+
+	}
+    
+    async fork0 (tia, rq) {return fork0.apply (this, [tia, rq])}
+
+}
+
 let handler = {}
 
 handler._back = class extends Dia.HTTP.Handler {
@@ -79,8 +91,6 @@ handler._back = class extends Dia.HTTP.Handler {
 
     }
     
-    get_method_name () { return get_method_name.apply (this) }
-
     is_anonymous () {
         return this.rq.type == 'sessions' && this.rq.action == 'create'
     }
@@ -88,9 +98,7 @@ handler._back = class extends Dia.HTTP.Handler {
     w2ui_filter () {
         return new (require ('./Ext/DiaW2ui/Filter.js')) (this.rq)
     }
-    
-	async fork (tia, rq) {return fork.apply (this, [tia, rq])}
-	
+    	
 }
 
 function http_listener (conf) {
@@ -151,33 +159,14 @@ module.exports.create_http_server = function (conf) {
 
 }
 
-let Async_handler = class extends Async.Handler {
-
-    get_method_name () { return get_method_name.apply (this) }
-
-    is_transactional () { return false }
-
-    get_log_banner () {
-        return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
-    }
-    
-    async fork (tia, rq) {return fork.apply (this, [tia, rq])}
-    async fork0 (tia, rq) {return fork0.apply (this, [tia, rq])}
-
-}
-
 handler._default = class extends HTTPJsonRpc.Handler {
 
-    get_method_name () { return get_method_name.apply (this) }
-
     is_transactional () { return false }
 
     get_log_banner () {
         return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
     }
     
-    async fork (tia, rq) {return fork.apply (this, [tia, rq])}
-
 }
 
 handler._front = class extends HTTPStatic.Handler {
@@ -205,3 +194,7 @@ handler._front = class extends HTTPStatic.Handler {
 	}
 
 }
+
+for (let hn of ['_back', '_default']) 
+	for (let mn of ['get_method_name', 'fork']) 
+		handler [hn].prototype [mn] = Async_handler.prototype [mn]
