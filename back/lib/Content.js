@@ -3,7 +3,7 @@ const HTTPJsonRpc = require ('./Ext/Dia/Content/Handler/HTTP/JsonRpc.js')
 const HTTPStatic = require ('./Ext/Dia/Content/Handler/HTTP/Static.js')
 const CachedCookieSession = require ('./Ext/Dia/Content/Handler/HTTP/Session/CachedCookieSession.js')
 
-const Async_handler = require ('./Content/Handler/Async.js') 
+const Base = require ('./Content/Handler/Base.js') 
 
 let handler = {}
 
@@ -11,7 +11,7 @@ handler._back = class extends Dia.HTTP.Handler {
 
     constructor (o) {
     	super (o)
-    	this.import (Async_handler, ['get_method_name', 'fork'])
+    	this.import (Base, ['get_method_name', 'fork'])
     }
 
     check () {
@@ -103,7 +103,7 @@ handler._default = class extends HTTPJsonRpc.Handler {
 
     constructor (o) {
     	super (o)
-    	this.import (Async_handler, ['get_method_name', 'fork'])
+    	this.import (Base, ['get_method_name', 'fork'])
     }
 
     is_transactional () { return false }
