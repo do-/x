@@ -41,7 +41,6 @@ module.exports = {
 			CASE
 				WHEN ts_to IS NULL THEN 'pending'
 				WHEN code = 0      THEN 'ok'
-				WHEN code = 124    THEN 'timeout'
 				                   ELSE 'error'
 			END status,
 			ssh_commands.path || '/' || ssh_command_items.host || '.out.txt' AS path_out,

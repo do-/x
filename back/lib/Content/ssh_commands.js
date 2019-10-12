@@ -242,14 +242,20 @@ do_notify_completion_ssh_commands:
 		let db = this.db
     	let id = this.rq.id
     
-		let status = await db.fold (
-			[{'vw_ssh_command_items(host, status)': {id_command: id}}],
-			(i, h) => h [i.host] = i.status,
-			{}
+		let log = await db.list (
+			[{'vw_ssh_command_items(host AS ci_code, status, error AS comments)': {
+				id_command: id, 
+				'status <>': 'ok'
+			}}]
 		)
 		
-		let data = {id, status}
-				
+		let data = {
+			x5cideploymentlog: {
+				log: JSON.stringify (log), 
+				task_id: id
+			}
+		}
+
 		let json = JSON.stringify (data)
 		
 		let ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
