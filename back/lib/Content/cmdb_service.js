@@ -14,7 +14,7 @@ do_call_cmdb_service:
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Content-Length': json.length
+//				'Content-Length': json.length
 			}
 		}
 		
