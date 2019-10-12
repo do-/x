@@ -1,5 +1,4 @@
 const Dia = require ('../Ext/Dia/Dia.js')
-const http = require ('http')
 
 module.exports = {
 
@@ -249,67 +248,37 @@ do_notify_completion_ssh_commands:
 			}}]
 		)
 		
-		let data = {
-			x5cideploymentlog: {
-				log: JSON.stringify (log), 
-				task_id: id
-			}
-		}
-
-		let json = JSON.stringify (data)
-		
-		let ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
-		
-		let o = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Content-Length': json.length
-			}
-		}
-		
-		if (ssh_settings.cb_user) o.auth = ssh_settings.cb_user + ':' + ssh_settings.cb_pass
-
-		async function update (data) {
-			data.uuid = id
-			return db.update ('ssh_commands', data)
-		}
-		
 		db.commit ()
-		
-		try {
 
-			await new Promise (async function (ok, fail) {
+		await this.fork ({action: 'call', type: 'cmdb_service'}, {
 
-				await update ({
-					ts_notif_start  : new Date (),
-					ts_notif_finish : null,
-					ts_notif_error  : null,
-					notif_error     : null,
-				})
+			url: 'cb_url',
 
-				http.request (ssh_settings.cb_url, o, rp => {
-
-					let code = rp.statusCode; if (code == 200) return ok ()
-
-					fail (new Error (code + ' ' + rp.statusMessage))
-
-				}).on ('error', fail).end (json)
-
-			})		
-
-		}
-		catch (x) {
-		
-			let notif_error = x.message
+			body: {
 			
-			await update ({ts_notif_error: new Date (), notif_error})		
-			
-			throw ('#foo#: ' + notif_error)
-		
-		}
-		
-		await update ({ts_notif_finish: new Date ()})
+				x5cideploymentlog: {
+					log: JSON.stringify (log), 
+					task_id: id
+				}
+				
+			},
+
+			log: {
+						
+				table: 'ssh_commands',
+				
+				id,
+				
+				fields: {
+					ts_start : 'ts_notif_start',
+					ts_finish: 'ts_notif_finish',  
+					ts_error:  'ts_notif_error', 
+					error:     'notif_error',  					
+				}
+
+			}
+
+		})
 
     },
 
