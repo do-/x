@@ -29,7 +29,7 @@ module.exports = class extends Dia.HTTP.Handler {
     }
     
     w2ui_filter () {
-        return new (require ('../../Ext/DiaW2ui/Filter.js')) (this.rq)
+        return new (require ('../../Ext/Dia/Content/Handler/HTTP/Ext/w2ui/Filter.js')) (this.rq)
     }
 
 }
