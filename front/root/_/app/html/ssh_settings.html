@@ -1,7 +1,7 @@
 <span
 	data-popup-width=700
-	data-popup-height=330
-	data-popup-title='Параметры SSH'
+	data-popup-height=360
+	data-popup-title='Параметры'
 >
 
 	<style>
@@ -13,7 +13,7 @@
 		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
-	<div class="w2ui-reset w2ui-form" style="height:270px; margin:8px 0 0 0;">
+	<div class="w2ui-reset w2ui-form" style="height:300px; margin:8px 0 0 0;">
 
         <div class="w2ui-page page-0">
 
@@ -42,6 +42,13 @@
                 <label>URL для отправки извещения:</label>
                 <div>
                     <input name=cb_url />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>URL для отправки конфигурации:</label>
+                <div>
+                    <input name=cf_url />
                 </div>
             </div>
 
