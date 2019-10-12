@@ -1,6 +1,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.open_equipment_cfg_nav = function () {
+    open_tab ('/equipment_configs')
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.open_ssh_commands_nav = function () {
     open_tab ('/ssh_commands')
 }
@@ -50,6 +56,11 @@ $_GET.nav = async function (o) {
             {
                 id: "open_ssh_commands",
                 label: "Запуски SSH",
+                icon: "menu",
+            },
+            {
+                id: "open_equipment_cfg",
+                label: "Передача конфигураций",
                 icon: "menu",
             },
             {
