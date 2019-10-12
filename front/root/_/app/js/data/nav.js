@@ -60,8 +60,8 @@ $_GET.nav = async function (o) {
             },
             {
                 id: "open_equipment_cfg",
-                label: "Передача конфигураций",
-                icon: "menu",
+                label: "Передача конфигураций оборудования",
+                icon: "pos",
             },
             {
                 id: "open_ssh_settings",

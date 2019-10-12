@@ -1,6 +1,6 @@
 $_DRAW.equipment_configs = async function (data) {
 
-    $('title').text ("Команды SSH")
+    $('title').text ("Передача конфигурации оборудования")
 
     $('main').w2regrid ({ 
     
