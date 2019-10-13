@@ -96,18 +96,25 @@ do_run_ssh_command_items:
 
 			log ('connected', {ts_conn: new Date ()})
 			
-			conn.exec ('nohup ' + item.cmd + ' & sleep 0.01s', {pty: true}, function (err, stream) {
+			try {
+			
+				conn.exec ('nohup ' + item.cmd + ' & sleep 0.01s', {pty: true}, function (err, stream) {
 
-				if (err) throw err
+					if (err) throw err
 
-				stream.stderr.on ('data', append ('err'))
-				stream.on        ('data', append ('out'))
-				stream.on        ('close', function (code, signal) {
-					log ('closed', {code, signal})
-					conn.end ()
+					stream.stderr.on ('data', append ('err'))
+					stream.on        ('data', append ('out'))
+					stream.on        ('close', function (code, signal) {
+						log ('closed', {code, signal})
+						conn.end ()
+					})
+
 				})
-
-			})
+			
+			}
+			catch (err) {
+				darn (err)
+			}
 
 		})
 								
