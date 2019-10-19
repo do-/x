@@ -17,7 +17,8 @@ $_DRAW.ssh_command_items = async function (data) {
       	},
 
         columns: [                
-            {field: 'host',           caption: 'Host',    size: 50, sortable: true, searchable: true},
+            {field: 'host',           caption: 'Host',    size: 20, sortable: true, searchable: true},
+            {field: 'cmd',            caption: 'Команда',  size: 50, sortable: true, searchable: true},
             {field: 'ts_from',        caption: 'Начало',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_conn',        caption: 'Соединение',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_to',          caption: 'Окончание',    size: 1, min: 155, render: _ts, sortable: true},

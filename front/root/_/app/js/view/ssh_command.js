@@ -1,6 +1,6 @@
 $_DRAW.ssh_command = async function (data) {
 
-    $('title').text (data.cmd)
+    $('title').text (data.request)
     
     $('main').html (await to_fill ('ssh_command', data))
     

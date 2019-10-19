@@ -16,9 +16,11 @@ module.exports = {
 		ts_notif_error  : 'timestamp       // Дата/время ошибки доставки извещения',
 		notif_error     : 'string          // Ошибка доставки извещения',
 		path            : 'string          // Относительный путь для файлов',
+		request         : 'string          // Номер запроса из CMDB',
 
 		ms_exec         : 'int,            // время исполнения, мс',
 		ms_notif        : 'int,            // время извещения, мс',
+
 	
     },
 
@@ -38,7 +40,8 @@ module.exports = {
 			ts_notif_error,
 			notif_error, 
 			path,    
-			
+			request,
+
 			1000 * (extract (epoch from ts_notif_start) - extract (epoch from ts_created)) ms_exec,
 			1000 * (extract (epoch from coalesce (ts_notif_finish, ts_notif_error)) - extract (epoch from ts_notif_start)) ms_notif
 

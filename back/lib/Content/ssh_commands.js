@@ -113,7 +113,7 @@ darn (data)
 
         for (let host in hosts) {
 			addr.push ({host, 
-				cmd: cmd + ' ' + hosts [host].replace (/[;\s]+/g, ' ')
+				cmd: cmd + ' ' + data.request + ' ' + hosts [host].replace (/[;\s]+/g, ' ')
 			})
         }
         
