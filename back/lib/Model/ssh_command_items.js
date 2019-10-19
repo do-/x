@@ -14,6 +14,7 @@ module.exports = {
 		signal     : 'string,        // Сигнал',
 		error      : 'string,        // Ошибка',
         cmd        : 'string         // Команда',
+        src        : 'string         // Перечисление id устройств в исходной форме',
     },
 
     keys: {

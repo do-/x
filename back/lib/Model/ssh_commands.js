@@ -9,7 +9,7 @@ module.exports = {
         par             : 'int             // Максимальное число одновременных соединений',
         timeout         : 'int             // Максимальное время исполнения запроса в целом, с',
 		ts_created      : 'timestamp=now() // Дата/время создания',
-		addr            : 'text            // JSON-массив записей {host, cmd}',
+		addr            : 'text            // JSON-массив записей {host, cmd, src}',
 		ts_notif_start  : 'timestamp       // Дата/время начала отправки извещения',
 		ts_notif_finish : 'timestamp       // Дата/время подтверждения доставки извещения',
 		ts_notif_error  : 'timestamp       // Дата/время ошибки доставки извещения',
@@ -34,12 +34,12 @@ module.exports = {
 
     	after_insert: `
     	    		
-			INSERT INTO ssh_command_items (id_command, host, cmd) 
+			INSERT INTO ssh_command_items (id_command, host, cmd, src) 
 				SELECT 
 					NEW.uuid id_command, 
 					addr.* 
 				FROM 
-					json_to_recordset (NEW.addr::json) AS addr (host TEXT, cmd TEXT);
+					json_to_recordset (NEW.addr::json) AS addr (host TEXT, cmd TEXT, src TEXT);
 
 			RETURN NEW;
 			

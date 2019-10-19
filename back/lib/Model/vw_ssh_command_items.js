@@ -18,8 +18,9 @@ module.exports = {
 		ms_total   : 'int,           // время, мс',
 		status     : 'string,        // статус',
 		path_out   : 'string         // относительный stdout',
-        cmd        : 'string          // Команда',
-        ttl        : 'int             // Время на исполнение, с',
+        cmd        : 'string         // Команда',
+        src        : 'string         // Перечисление id устройств в исходной форме',
+        ttl        : 'int            // Время на исполнение, с',
     },
 
     sql: `
@@ -46,6 +47,7 @@ module.exports = {
 			ssh_commands.path || '/' || ssh_command_items.host || '.out.txt' AS path_out,
 			ssh_commands.path || '/' || ssh_command_items.host || '.err.txt' AS path_err,
 			ssh_command_items.cmd,
+			ssh_command_items.src,
 			ssh_commands.ttl
     	FROM
     		ssh_command_items

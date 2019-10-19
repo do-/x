@@ -103,7 +103,7 @@ do_create_ssh_commands:
     async function () {
     
         let data = this.rq.data
-darn (data)
+
 		let addr = []
 
         let hosts = data.hosts
@@ -112,11 +112,15 @@ darn (data)
         let cmd = await this.db.select_scalar ('SELECT cmd FROM ssh_settings WHERE id = 1')
 
         for (let host in hosts) {
-			addr.push ({host, 
-				cmd: cmd + ' ' + data.request + ' ' + hosts [host].replace (/[;\s]+/g, ' ')
+
+        	let src = hosts [host]
+
+			addr.push ({host, src,
+				cmd: cmd + ' ' + data.request + ' ' + src.replace (/[;\s]+/g, ' ')
 			})
+
         }
-        
+
         data.addr = JSON.stringify (addr)
 
         data.uuid = this.rq.id
@@ -212,7 +216,7 @@ do_run_ssh_commands:
 			
 			await this.db.do ('UPDATE ssh_command_items SET ts_from = now(), ts_to = now(), error = ? WHERE id_command = ? AND ts_from IS NULL', ['Global timeout expired', item.uuid])
 		
-			await this.fork ({action: 'notify_completion'})
+			await this.fork ({action: 'notify_completion'}, {item})
 			
 		}
 		catch (e) {
@@ -226,15 +230,26 @@ do_run_ssh_commands:
 do_notify_completion_ssh_commands: 
 
     async function () {
-    
+
 		let db = this.db
-    	let id = this.rq.id
-    
-		let log = await db.list (
-			[{'vw_ssh_command_items(host AS ci_code, status, error AS comments)': {
+    	let id = this.rq.id   	
+
+		let log = await db.fold (
+		
+			[{'vw_ssh_command_items(host, src)': {
 				id_command: id, 
 				'status <>': 'ok'
 			}}]
+			
+			, (r, h) => {h.HOSTS [r.host] = r.src}
+			
+			, {
+				GUID:    id, 
+				Status:  "FAILED", 
+				REQUEST: this.rq.item.request, 
+				HOSTS:   {}
+			}
+		
 		)
 		
 		db.commit ()
