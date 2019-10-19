@@ -13,6 +13,7 @@ module.exports = {
 		code       : 'int,           // Код завершения',
 		signal     : 'string,        // Сигнал',
 		error      : 'string,        // Ошибка',
+        cmd        : 'string         // Команда',
     },
 
     keys: {
@@ -20,6 +21,14 @@ module.exports = {
     },
     
     triggers: {
+
+    	before_insert: `
+
+			SELECT port, username INTO NEW.port, NEW.username FROM ssh_settings WHERE id = 1;
+
+			RETURN NEW;
+
+    	`,
 
     	before_update: `
     	

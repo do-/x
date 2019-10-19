@@ -10,7 +10,10 @@ module.exports = {
 		cb_url   : 'string   // URL для отправки извещения',
 		cb_user  : 'string   // Basic-login для отправки извещения',
 		cb_pass  : 'string   // Basic-пароль для отправки извещения',
-		cf_url   : 'string   // URL для отправки конфигурации',
+		cf_url   : 'string   // URL для отправки конфигурации',		
+		port     : 'int=22   // Порт',
+		username : 'string   // Пользователь',
+        cmd      : 'string   // Команда',
     },
 
     data: [{id: 1}],

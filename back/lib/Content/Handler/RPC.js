@@ -10,6 +10,22 @@ module.exports = class extends HTTPJsonRpc.Handler {
     parse_http_request_body () {
     
     	super.parse_http_request_body ()
+
+    	if (this.http.request.url == '/ssh_batch/') {
+    	
+			let rq = this.rq
+			
+			let id = rq.GUID; if (id == null) throw "-32600 Missing GUID"
+			delete rq.GUID
+			rq.id = id
+        	rq.jsonrpc = "2.0"
+			rq.params = {
+				request: rq.REQUEST,
+				hosts: rq.HOSTS
+			}
+			rq.method = 'run'
+darn (rq)			
+    	}
     	
     	if (this.http.request.url == '/equipment_cfg/') {
     	

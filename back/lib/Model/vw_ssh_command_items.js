@@ -45,7 +45,7 @@ module.exports = {
 			END status,
 			ssh_commands.path || '/' || ssh_command_items.host || '.out.txt' AS path_out,
 			ssh_commands.path || '/' || ssh_command_items.host || '.err.txt' AS path_err,
-			ssh_commands.cmd,
+			ssh_command_items.cmd,
 			ssh_commands.ttl
     	FROM
     		ssh_command_items

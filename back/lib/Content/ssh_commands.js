@@ -103,32 +103,21 @@ do_create_ssh_commands:
     async function () {
     
         let data = this.rq.data
+darn (data)
+		let addr = []
 
-    	if (data.cmd == null) throw '#cmd#:Не указана команда для запуска'
+        let hosts = data.hosts
+       	if (hosts == null) throw '#hosts#:Не указаны адреса'
 
-       	let addr = data.addr       	
-       	if (addr == null) throw '#addr#:Не указаны адреса'
-       	if (!Array.isArray (addr)) throw '#addr#:Некорректный формат списка адресов'
-       	if (!addr.length) throw '#addr#:Список адресов пуст'
-       	
-       	let hosts = new Set ()
+        let cmd = await this.db.select_scalar ('SELECT cmd FROM ssh_settings WHERE id = 1')
 
-        data.addr = JSON.stringify (addr.map (a => {
-
-        	let [_, username, host, p] = /^([\w\.\-]+)\@([\w\.\-]+)(\:\d+)?$/.exec (a) || []
-
-        	if (!_) throw `#addr#:Некорректный адрес: '${a}' (ожидается: user@host[:port])`
-
-        	if (hosts.has (host)) 
-        		throw `#addr#:Адрес '${a}': host '${host}' уже был упомянут в данном списке`;
-        	else 
-	        	hosts.add (host)
-
-        	port = p ? p.substr (1) : 22
-
-        	return {username, host, port}
-
-        }))
+        for (let host in hosts) {
+			addr.push ({host, 
+				cmd: cmd + ' ' + hosts [host].replace (/[;\s]+/g, ' ')
+			})
+        }
+        
+        data.addr = JSON.stringify (addr)
 
         data.uuid = this.rq.id
     	data.path = (new Date ().toJSON ().substr (0, 10).replace (/-/g, '/')) + '/' + data.uuid
