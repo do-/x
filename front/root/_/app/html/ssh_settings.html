@@ -1,6 +1,6 @@
 <span
 	data-popup-width=700
-	data-popup-height=360
+	data-popup-height=450
 	data-popup-title='Параметры'
 >
 
@@ -13,9 +13,30 @@
 		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
-	<div class="w2ui-reset w2ui-form" style="height:300px; margin:8px 0 0 0;">
+	<div class="w2ui-reset w2ui-form" style="height:390px; margin:8px 0 0 0;">
 
         <div class="w2ui-page page-0">
+
+            <div class="w2ui-field">
+                <label>SSH-пользователь:</label>
+                <div>
+                    <input name=username required />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>SSH-порт:</label>
+                <div>
+                    <input name=port required type=number min=0/>
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Команда на исполнение по SSH:</label>
+                <div>
+                    <input name=cmd />
+                </div>
+            </div>
 
             <div class="w2ui-field">
                 <label>Максимальное время ожидания на host'е, с:</label>
