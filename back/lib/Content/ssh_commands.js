@@ -241,12 +241,15 @@ do_notify_completion_ssh_commands:
 				'status <>': 'ok'
 			}}]
 			
-			, (r, h) => {h.HOSTS [r.host] = r.src}
+			, (r, h) => {
+				h.HOSTS [r.host] = r.src
+				h.Status         = "FAILED"
+			}
 			
 			, {
-				GUID:    id, 
-				Status:  "FAILED", 
-				REQUEST: this.rq.item.request, 
+				GUID:    id,
+				Status:  "SUCCESS",
+				REQUEST: this.rq.item.request,
 				HOSTS:   {}
 			}
 		
