@@ -86,6 +86,8 @@ do_post_equipment_cfg:
             if (this.db.is_pk_violation (x)) return {}
             throw x
         }
+        
+        let idx = {}
     
     	for (let item of items) {
     		
@@ -98,7 +100,28 @@ do_post_equipment_cfg:
 				id_cfg: this.uuid,
 				json:   JSON.stringify (item),
 	       	})
+	       	
+	       	idx [uuid] = item
+	       	
+	    }
 
+		this.fork ({action: 'send'}, {idx})
+    
+    },
+    
+    
+////////////////////////////////////////////////////////////////////////////////
+
+do_send_equipment_cfg: 
+
+    async function () {
+    
+    	let idx = this.rq.idx
+    
+    	for (let id in idx) {
+    	
+    		let item = idx [id]
+    	    	
 			this.fork ({action: 'call', type: 'cmdb_service'}, {
 
 				url: 'cf_url',
@@ -109,7 +132,7 @@ do_post_equipment_cfg:
 
 					table: 'equipment_cfg_items',
 
-					id: uuid,
+					id,
 
 					fields: {
 						ts_start:  'ts_start',
@@ -124,6 +147,6 @@ do_post_equipment_cfg:
 
     	}
     
-    },
+	}    
 
 }
