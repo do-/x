@@ -14,6 +14,9 @@ module.exports = {
 		port     : 'int=22   // Порт',
 		username : 'string   // Пользователь',
         cmd      : 'string   // Команда',
+		shop_user: 'string   // Basic-login магазина',
+        shop_salt: 'string   // "Соль" пароля магазина',
+		shop_pass: 'string   // Basic-пароль магазина',
     },
 
     data: [{id: 1}],

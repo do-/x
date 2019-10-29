@@ -1,6 +1,6 @@
 <span
 	data-popup-width=700
-	data-popup-height=450
+	data-popup-height=510
 	data-popup-title='Параметры'
 >
 
@@ -13,7 +13,7 @@
 		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
-	<div class="w2ui-reset w2ui-form" style="height:390px; margin:8px 0 0 0;">
+	<div class="w2ui-reset w2ui-form" style="height:460px; margin:8px 0 0 0;">
 
         <div class="w2ui-page page-0">
 
@@ -74,16 +74,30 @@
             </div>
 
             <div class="w2ui-field">
-                <label>Имя пользователя:</label>
+                <label>Имя пользователя WS CMDB:</label>
                 <div>
                     <input name=cb_user />
                 </div>
             </div>
 
             <div class="w2ui-field">
-                <label>Пароль:</label>
+                <label>Пароль пользователя WS CMDB:</label>
                 <div>
                     <input name=cb_pass type=password />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Имя пользователя-магазина:</label>
+                <div>
+                    <input name=shop_user />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Пароль пользователя-магазина:</label>
+                <div>
+                    <input name=shop_pass type=password />
                 </div>
             </div>
 
@@ -95,67 +109,4 @@
 
 	</div>
 
-
-
-<!--
-	<div>
-
-        <div class="w2ui-page page-0">
-
-            <div class="w2ui-field">
-                <label>Максимальное время ожидания на host'е, с:</label>
-                <div>
-                    <input name=ttl required type=number min=0/>
-                </div>
-            </div>
-
-            <div class="w2ui-field">
-                <label>Максимальное число одновременных соединений:</label>
-                <div>
-                    <input name=par required type=number min=1 />
-                </div>
-            </div>
-
-            <div class="w2ui-field">
-                <label>Максимальное время исполнения запроса в целом, с:</label>
-                <div>
-                    <input name=timeout required type=number min=1 />
-                </div>
-            </div>
-
-            <div class="w2ui-field">
-                <label>URL для отправки извещения:</label>
-                <div>
-                    <input name=cb_url />
-                </div>
-            </div>
-
-            <div class="w2ui-field">
-                <label>Имя пользователя:</label>
-                <div>
-                    <input name=cb_user />
-                </div>
-            </div>
-
-            <div class="w2ui-field">
-                <label>Пароль:</label>
-                <div>
-                    <input name=cb_pass type=password />
-                </div>
-            </div>
-
-        </div>
-
-        <div class="w2ui-buttons">
-        	<span>
-
-                <button class=w2ui-btn name=edit   data-on=__read_only data-hotkey=F4>Редактировать</button>
-                <button class=w2ui-btn name=update data-off=__read_only data-hotkey=Ctrl-Enter>Сохранить</button>
-                <button class=w2ui-btn name=cancel data-off=__read_only data-hotkey=Esc>Отменить</button>
-
-            </span>
-        </div>
-
-	</div>
--->
 </span>

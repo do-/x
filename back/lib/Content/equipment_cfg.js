@@ -54,7 +54,25 @@ select_equipment_cfg:
 do_post_equipment_cfg: 
 
     async function () {
-    
+    	
+    	let auth = this.http.request.headers.authorization
+    	
+    	if (!auth) throw 401
+    	
+    	let [sch, b64] = auth.split (' ')
+    	
+    	if (sch != 'Basic') throw 401
+    	
+    	let [user, password] = new Buffer (b64, 'base64').toString ('utf-8').split (':')
+
+        let s = await this.db.select_hash ('SELECT shop_user, shop_salt, shop_pass FROM ssh_settings WHERE id = 1')
+
+		if (user != s.shop_user) throw 401
+
+		let hash = await this.fork ({type: 'users', action: 'encrypt_password'}, {salt: s.shop_salt, password})
+
+		if (s.shop_pass != hash) throw 401
+
     	let items = this.rq.items
     
         try {

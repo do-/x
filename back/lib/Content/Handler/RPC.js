@@ -70,9 +70,17 @@ module.exports = class extends HTTPJsonRpc.Handler {
     send_out_error (x) {
 
     	if (this.http.request.url == '/equipment_cfg/') {
-			this.send_out_json (200, {
-				response: "format_fail"
-			})
+    	
+    		if (x == 401) {
+    			this.send_out_text ("401")
+    		}
+    		else {
+    			darn (x)
+				this.send_out_json (200, {
+					response: "format_fail"
+				})
+    		}
+    	
 		}
 		else {
 			super.send_out_error (x)
