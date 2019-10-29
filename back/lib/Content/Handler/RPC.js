@@ -24,29 +24,24 @@ module.exports = class extends HTTPJsonRpc.Handler {
 				hosts: rq.HOSTS
 			}
 			rq.method = 'run'
-darn (rq)			
+
     	}
     	
     	if (this.http.request.url == '/equipment_cfg/') {
     	
-			let rq = this.rq
+			let rq = this.rq						
 			
-			let ID = rq.ID; if (ID == null) throw "-32600 Missing ID"
-			
-        	if (ID.GUID == null) throw "-32600 Missing ID/GUID"
-        	if (ID.ID_SAP == null) throw "-32600 Missing ID/ID_SAP"
-        	
-        	delete rq.ID
-        	
-        	let items = []; for (let k in rq) if (k != 'ID') {
-        		let item = rq [k]
-        		if (k != item.ID_FULL) throw `#${k}#:ID_FULL mismatch`
-        		items.push (item)
-        	}
-
-        	rq.id = ID.GUID
+        	if (rq.GUID == null) throw "-32600 Missing GUID"
+        	rq.id = rq.GUID
+        	delete rq.GUID
+        	        	
+        	if (rq.ID_SAP == null) throw "-32600 Missing ID_SAP"
+        	let params = {id: rq.ID_SAP}
+        	delete rq.ID_SAP        	
+        	params.items = Object.values (rq)
+        	        	
+			rq.params = params
         	rq.jsonrpc = "2.0"
-			rq.params = {items, id: ID.ID_SAP}
 			rq.method = 'post'
 
     	}
