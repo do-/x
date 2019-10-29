@@ -51,5 +51,33 @@ module.exports = class extends HTTPJsonRpc.Handler {
     }    
 
     is_transactional () { return false }
+    
+    send_out_data (result) {
 
+    	if (this.http.request.url == '/equipment_cfg/') {
+			this.send_out_json (200, {
+				ID_SAP: this.rq.id,
+				GUID: this.uuid,
+				response: "ok"
+			})
+		}
+		else {
+			super.send_out_data (result)
+		}
+
+    }
+    
+    send_out_error (x) {
+
+    	if (this.http.request.url == '/equipment_cfg/') {
+			this.send_out_json (200, {
+				response: "format_fail"
+			})
+		}
+		else {
+			super.send_out_error (x)
+		}
+		
+    }
+    
 }
