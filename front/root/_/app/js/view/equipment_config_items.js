@@ -17,7 +17,7 @@ $_DRAW.equipment_config_items = async function (data) {
       	},
 
         columns: [                
-            {field: 'ext_id',         caption: 'Host',    size: 50, sortable: true, searchable: true},
+            {field: 'ext_id',         caption: 'uniq_ID',    size: 50, sortable: true, searchable: true},
             {field: 'ts_start',       caption: 'Начало',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_finish',      caption: 'Окончание',    size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_error',       caption: 'Ошибка',    size: 1, min: 155, render: _ts, sortable: true},

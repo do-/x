@@ -70,12 +70,10 @@ do_post_equipment_cfg:
         }
     
     	for (let item of items) {
-    	
-    		let ext_id = item.ID_FULL
-    		delete item.ID_FULL
-    		item.ext_id = ext_id
     		
-    		item = {X5StoreEquipment: item}
+    		let ext_id = item.uniq_ID
+    	    		
+    		item = {x5storeequipment: item}
 
 	       	let uuid = await this.db.insert ('equipment_cfg_items', {				
 				ext_id,
