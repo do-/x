@@ -1,19 +1,19 @@
 <span
-	data-popup-width=700
-	data-popup-height=510
+	data-popup-width=750
+	data-popup-height=540
 	data-popup-title='Параметры'
 >
 
 	<style>
 		label[data-block-name=ssh_settings] {
-			width: 320px;
+			width: 350px;
 			margin-right: 10px;
 		}
 		input[data-block-name=ssh_settings] {width: 310px!important;}
 		input[data-block-name=ssh_settings][min] {width: 50px!important;}
 	</style>
 
-	<div class="w2ui-reset w2ui-form" style="height:460px; margin:8px 0 0 0;">
+	<div class="w2ui-reset w2ui-form" style="height:490px; margin:8px 0 0 0;">
 
         <div class="w2ui-page page-0">
 
@@ -98,6 +98,13 @@
                 <label>Пароль пользователя-магазина:</label>
                 <div>
                     <input name=shop_pass type=password />
+                </div>
+            </div>
+
+            <div class="w2ui-field">
+                <label>Максимальное число одновременных подключений к CMDB:</label>
+                <div>
+                    <input name=cf_par required type=number min=1 />
                 </div>
             </div>
 
