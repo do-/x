@@ -65,7 +65,7 @@ do_post_equipment_cfg:
     	
     	let [user, password] = new Buffer (b64, 'base64').toString ('utf-8').split (':')
 
-        let s = await this.db.select_hash ('SELECT shop_user, shop_salt, shop_pass FROM ssh_settings WHERE id = 1')
+        let s = await this.db.select_hash ('SELECT shop_user, shop_salt, shop_pass, cf_par FROM ssh_settings WHERE id = 1')
 
 		if (user != s.shop_user) throw 401
 
@@ -105,7 +105,7 @@ do_post_equipment_cfg:
 	       	
 	    }
 
-		this.fork ({action: 'send'}, {idx})
+		this.fork ({action: 'send'}, {idx, par: s.cf_par})
     
     },
     
@@ -116,14 +116,55 @@ do_send_equipment_cfg:
 
     async function () {
     
-    	let idx = this.rq.idx
-    
-    	for (let id in idx) {
-    	    		
-    		this.fork0 ({type: 'equipment_cfg_items', id}, {item: idx [id]})    		
-    		
-    	}
-    
+    	let idx = this.rq.idx    	
+    	
+    	let ids = Object.keys (idx)
+    	
+		let par = parseInt (this.rq.par); if (!(par > 0)) throw `#par#:Broken parallelism limit value: ${item.par}`
+
+		let on = 0, task = async (id) => {			
+			try {
+				await this.fork0 ({type: 'equipment_cfg_items', id}, {item: idx [id]})
+			}
+			finally {
+				on --
+			}			
+		}
+		
+		let tasks = []
+		
+		let watch = null
+		
+		function terminate () {
+		
+			if (watch) clearInterval (watch)
+								
+			watch = null
+			
+		}
+		
+		watch = setInterval (function () {
+		
+			if (!watch) return
+
+			let todo = ids.length
+
+			if (todo == 0 && on == 0) return terminate ()
+
+			let available = par - on
+			
+			if (todo > available) todo = available
+			
+			if (todo < 0) todo = 0
+			
+			if (todo == 0) return
+			
+			on += todo
+			
+			tasks = tasks.concat (ids.splice (0, todo).map (task))
+
+		}, 10)
+		
 	}    
 
 }

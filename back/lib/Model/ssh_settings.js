@@ -5,7 +5,7 @@ module.exports = {
     columns: {
         id       : 'int',
         ttl      : 'int=5    // Максимальное время ожидания для отдельного hostа, с',
-        par      : 'int=1000 // Максимальное число одновременных соединений',
+        par      : 'int=1000 // Максимальное число одновременных SSH-соединений',
         timeout  : 'int=5    // Максимальное время исполнения запроса в целом, с',
 		cb_url   : 'string   // URL для отправки извещения',
 		cb_user  : 'string   // Basic-login для отправки извещения',
@@ -17,6 +17,7 @@ module.exports = {
 		shop_user: 'string   // Basic-login магазина',
         shop_salt: 'string   // "Соль" пароля магазина',
 		shop_pass: 'string   // Basic-пароль магазина',
+        cf_par   : 'int=10   // Максимальное число одновременных подключений к CMDB',
     },
 
     data: [{id: 1}],
