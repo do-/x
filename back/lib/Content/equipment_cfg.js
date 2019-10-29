@@ -119,32 +119,9 @@ do_send_equipment_cfg:
     	let idx = this.rq.idx
     
     	for (let id in idx) {
-    	
-    		let item = idx [id]
-    	    	
-			this.fork ({action: 'call', type: 'cmdb_service'}, {
-
-				url: 'cf_url',
-
-				body: item,
-
-				log: {
-
-					table: 'equipment_cfg_items',
-
-					id,
-
-					fields: {
-						ts_start:  'ts_start',
-						ts_finish: 'ts_finish',  
-						ts_error:  'ts_error', 
-						error:     'error',  					
-					}
-
-				}
-
-			})
-
+    	    		
+    		this.fork0 ({type: 'equipment_cfg_items', id}, {item: idx [id]})    		
+    		
     	}
     
 	}    
