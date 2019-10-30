@@ -12,7 +12,7 @@ $_DRAW.equipment_config_items = async function (data) {
         
 	    toolbar: {
       		items: [
-      		  {type: 'button', id: 'printButton', caption: 'MS Excel', onClick: function (e) {this.owner.saveAsXLS ()}},
+//      		  {type: 'button', id: 'printButton', caption: 'MS Excel', onClick: function (e) {this.owner.saveAsXLS ()}},
       		]
       	},
 
@@ -26,7 +26,7 @@ $_DRAW.equipment_config_items = async function (data) {
                     
         src: data.src,
 
-        onDblClick: null,
+        onDblClick: function (e) {show_block ('equipment_config_item_popup', this.get (e.recid))}
 
     }).refresh ();
     
