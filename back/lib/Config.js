@@ -12,9 +12,7 @@ module.exports = class {
         this.pools = {
         
         	db: Dia.DB.Pool (this.db, new (require ('./Model.js')) ({path: './Model'})),
-        	
-        	http_static_server: new (require ('node-static')).Server ('../../front/root', {serverInfo: '.'}),
-            
+
             sessions: new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
 				name: 'session',
 				ttl: this.auth.sessions.timeout * 60 * 1000,
