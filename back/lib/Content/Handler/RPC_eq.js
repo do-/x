@@ -1,5 +1,9 @@
 module.exports = class extends require ('./Rpc.js') {
     
+    get_session () {
+    	return new (require ('./HTTP/EqSession.js')) (this)
+    }
+
     parse_http_request_body () {
     
     	super.parse_http_request_body ()
@@ -37,16 +41,13 @@ module.exports = class extends require ('./Rpc.js') {
     
     send_out_error (x) {
 
-    	if (x == 401) {
-    		this.send_out_text ("401")
-    	}
-    	else {
-    		darn (x)
-			this.send_out_json (200, {
-				response: "format_fail"
-			})
-    	}
-    			
+    	if (x == 401) return this.send_out_text ("401")
+    	if (x == 403) return this.send_out_text ("403")
+
+ 		darn (x)
+
+		this.send_out_json (200, {response: "format_fail"})
+
     }
     
 }
