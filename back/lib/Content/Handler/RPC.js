@@ -27,65 +27,8 @@ module.exports = class extends HTTPJsonRpc.Handler {
 
     	}
     	
-    	if (this.http.request.url == '/equipment_cfg/') {
-    	
-			let rq = this.rq						
-			
-        	if (rq.GUID == null) throw "-32600 Missing GUID"
-        	let id = rq.GUID
-        	delete rq.GUID
-        	        	
-        	if (rq.ID_SAP == null) throw "-32600 Missing ID_SAP"
-        	let params = {id: rq.ID_SAP}
-        	delete rq.ID_SAP        	
-
-        	params.items = Object.values (rq)
-        	        	
-			rq.id = id
-			rq.params = params
-        	rq.jsonrpc = "2.0"
-			rq.method = 'post'
-
-    	}
-
     }    
 
     is_transactional () { return false }
-    
-    send_out_data (result) {
 
-    	if (this.http.request.url == '/equipment_cfg/') {
-			this.send_out_json (200, {
-				ID_SAP: this.rq.id,
-				GUID: this.uuid,
-				response: "ok"
-			})
-		}
-		else {
-			super.send_out_data (result)
-		}
-
-    }
-    
-    send_out_error (x) {
-
-    	if (this.http.request.url == '/equipment_cfg/') {
-    	
-    		if (x == 401) {
-    			this.send_out_text ("401")
-    		}
-    		else {
-    			darn (x)
-				this.send_out_json (200, {
-					response: "format_fail"
-				})
-    		}
-    	
-		}
-		else {
-			super.send_out_error (x)
-		}
-		
-    }
-    
 }
