@@ -10,6 +10,10 @@ module.exports = class {
     get_log_banner () {
         return `${this.get_module_name ()}.${this.get_method_name ()} (${this.rq.id}) #${this.uuid}`
     }
+    
+    async encrypt_password (pasword, salt) {
+    	return this.pwd_calc.encrypt (pasword, salt)
+    }
     	
 	async fork (tia, data, pools) {
 

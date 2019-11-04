@@ -18,6 +18,10 @@ module.exports = class {
 				ttl: this.auth.sessions.timeout * 60 * 1000,
 			}),
 			
+			pwd_calc: new (require ('./Ext/Dia/Crypto/FileSaltHashCalculator.js')) ({
+				salt_file: this.auth.salt_file,
+			}),
+
         }
 
     }

@@ -11,7 +11,7 @@ module.exports = class extends require ('../../../Ext/Dia/Content/Handler/HTTP/S
 
 		if (this.user != s.shop_user) throw 403
 
-		let hash = await this.h.fork ({type: 'users', action: 'encrypt_password'}, {salt: s.shop_salt, password: this.password})
+		let hash = await this.h.encrypt_password (this.password, s.shop_salt)
 
 		if (s.shop_pass != hash) throw 403
 		

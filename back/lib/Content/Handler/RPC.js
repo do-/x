@@ -4,7 +4,7 @@ module.exports = class extends HTTPJsonRpc.Handler {
 
     constructor (o) {
     	super (o)
-    	this.import ((require ('./Base')), ['get_log_banner', 'get_method_name', 'fork'])
+    	this.import ((require ('./Base')), ['get_log_banner', 'get_method_name', 'fork', 'encrypt_password'])
     }
     
     parse_http_request_body () {
