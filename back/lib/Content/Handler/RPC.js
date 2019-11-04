@@ -26,7 +26,7 @@ module.exports = class extends HTTPJsonRpc.Handler {
 			rq.method = 'run'
 
     	}
-    	
+darn (this.get_restored_http_request ())    	
     }    
 
     is_transactional () { return false }
