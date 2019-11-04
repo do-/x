@@ -159,7 +159,7 @@ do_encrypt_password_users:
 			input.on ('error', reject)
 
 			input.on ('end', () => {
-				hash.update (String (this.rq.salt))
+				hash.update (String (this.rq.salt), 'utf8')
 				hash.update (String (this.rq.password), 'utf8')
 				resolve (hash.digest ('hex'))
 			})
