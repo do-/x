@@ -53,11 +53,11 @@ do_call_cmdb_service:
 					
 					rp.setEncoding ('utf8')
 					rp.on ('data', s => body += s)
-					rp.on ('end', () => sniff (rq, rp, body))
-
-					let code = rp.statusCode; if (code == 200) return ok ()
-
-					fail (new Error (code + ' ' + rp.statusMessage))
+					rp.on ('end', () => {
+						sniff (rq, rp, body)
+						let code = rp.statusCode; if (code == 200) return ok ()
+						fail (new Error (JSON.stringify ({code: rp.statusMessage, body})))
+					})
 
 				}).on ('error', fail).end (json)
 
@@ -70,7 +70,9 @@ do_call_cmdb_service:
 			
 			await update ({ts_error: new Date (), error})		
 			
-			throw ('#foo#: ' + error)
+			x.message = this.uuid + ': ' + error
+			
+			darn (x)
 		
 		}
 		
