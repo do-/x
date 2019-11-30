@@ -71,18 +71,27 @@ do_check_equipment_cfg_schedule:
 
         if (q.cnt == 0) return 'The queue is empty, bailing out'
         
-        for (let i of q.equipment_cfg_items) {
+        let list = q.equipment_cfg_items
+        
+        for (let i of list) {
         	let id = i.uuid
         	let item = JSON.parse (i.json)
         	this.fork0 ({type: 'equipment_cfg_items', action: 'send', id}, {item})
         }
         
+        let len = list.length
+        
         if (q.cnt > sch.fq) {
-    	    this.pools.equip_timer.next ()
-	        return q.length + 'request(s) sent, more to do'
+    	
+    		this.pools.equip_timer.next ()
+
+			return this.uuid + ' ' + len + ' request(s) sent, more to do, timer on'
+        
         }
         else {
-	        return 'last' + q.length + 'request(s) sent'
+        
+	        return this.uuid + ' Last ' + len + ' request(s) sent, timer off'
+        
         }
 
     },
