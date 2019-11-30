@@ -14,6 +14,8 @@ get_item_of_equipment_cfg:
         
         data._fields = this.db.model.tables.ssh_commands.columns
         
+        data.next_time = this.pools.equip_timer.get ()
+        
         return data
 
     },

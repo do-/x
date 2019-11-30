@@ -21,7 +21,7 @@ $_GET.equipment_config_item_popup = async function (o) {
     	data.ts_finish = data.ts_error
     }
     else {
-    	data.error = '200 OK'
+    	data.error = data.ts_start ? '200 OK' : ''
     }
 
     return data

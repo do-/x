@@ -26,7 +26,10 @@ select_equipment_cfg_items:
 
 		filter.id_cfg = this.rq.data.id_cfg
 
-        let data = await this.db.add_all_cnt ({}, [{equipment_cfg_items: filter}])
+        let data = await this.db.add_all_cnt ({}, [
+        	{equipment_cfg_items: filter},
+        	'equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
+        ])
 
         return data
 

@@ -88,5 +88,11 @@ module.exports = class {
 		this.in (when - new Date ().getTime ())
 
 	}	
+	
+	get () {
+	
+		return new Date (this.when)
+	
+	}
 
 }

@@ -17,8 +17,9 @@ $_DRAW.equipment_config_items = async function (data) {
       	},
 
         columns: [                
-            {field: 'ext_id',         caption: 'uniq_ID',    size: 50, sortable: true, searchable: true},
+            {field: 'ext_id',         caption: 'uniq_ID',    size: 20, sortable: true, searchable: true},
             {field: 'ts_created',     caption: 'Запись в БД',    size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'equipment_cfg_items_queue.uuid',     caption: 'Очередь',    size: 1, min: 175, render: (r, x, y, v) => !v ? '' : data.next_time_label},
             {field: 'ts_start',       caption: 'Отправка',       size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_finish',      caption: 'Ответ',          size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_error',       caption: 'Ошибка',         size: 1, min: 155, render: _ts, sortable: true},
