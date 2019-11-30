@@ -28,7 +28,28 @@ do_update_equipment_cfg_schedule:
         
         data.id = 1
         
-        return this.db.update ('equipment_cfg_schedule', data)
+        await this.db.update ('equipment_cfg_schedule', data)
+        
+        this.pools.equip_timer.in (60000)
+
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
+do_check_equipment_cfg_schedule: 
+
+    async function () {
+    
+        let sch = await this.db.get ([{equipment_cfg_schedule: {id: 1}}])
+darn (sch)        
+        if (sch.fq == 0) {
+        	darn ('The frequency is set to 0, bailing out')
+        	return
+        }
+        
+        this.pools.equip_timer.in (60000)
+
+        return 1
 
     },
 

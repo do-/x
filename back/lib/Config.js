@@ -1,5 +1,6 @@
 const fs  = require ('fs')
 const Dia = require ('./Ext/Dia/Dia.js')
+const Async = require ('./Content/Handler/Async.js')
 
 module.exports = class {
 
@@ -21,6 +22,25 @@ module.exports = class {
 			pwd_calc: new (require ('./Ext/Dia/Crypto/FileSaltHashCalculator.js')) ({
 				salt_file: this.auth.salt_file,
 			}),
+			
+			equip_timer: new (require ('./Timer.js')) ({
+
+				todo: () => {
+				
+					(new Async ({
+					
+						conf:  this, 
+						pools: this.pools, 
+						rq: {
+							type: 'equipment_cfg_schedule', 
+							action: 'check'
+						}
+						
+					}, darn, darn)).run ()
+
+				}
+
+			}),
 
         }
 
@@ -33,6 +53,8 @@ module.exports = class {
 		await db.load_schema ()
 		
 		await db.update_model ()
+		
+		this.pools.equip_timer.in (0)
 		
     }
         
