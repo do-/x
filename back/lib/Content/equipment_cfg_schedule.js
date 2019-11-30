@@ -47,7 +47,7 @@ do_load_equipment_cfg_schedule:
         
         this.pools.equip_timer.from_to (hms (sch.hh_from, sch.mm_from), hms (sch.hh_to, sch.mm_to))
 
-        this.pools.equip_timer.on ()
+        this.pools.equip_timer.next ()
 
         return 1
 
@@ -66,7 +66,7 @@ do_check_equipment_cfg_schedule:
         let q = await this.db.add_all_cnt ({}, [{equipment_cfg_items: {ORDER: 'uuid', LIMIT: sch.fq}}
         	, '$equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
         ])
-darn (q)        
+
         if (q.cnt == 0) return 'The queue is empty, bailing out'
         
         for (let i of q.equipment_cfg_items) {

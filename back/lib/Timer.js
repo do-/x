@@ -57,7 +57,7 @@ module.exports = class {
 		this.t = setTimeout (() => {
 			this.clear  ()
 			this.o.todo ()
-		}, ms)
+		}, when - new Date ().getTime ())
 
 		darn ('Scheduled at ' + new Date (when))
 		
