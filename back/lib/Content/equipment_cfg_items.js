@@ -20,7 +20,7 @@ select_equipment_cfg_items:
 
     async function () {
 
-        this.rq.sort = this.rq.sort || [{field: "ts_start", direction: "asc"}]
+        this.rq.sort = this.rq.sort || [{field: "ts_created", direction: "asc"}]
 
         let filter = this.w2ui_filter ()
 

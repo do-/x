@@ -65,7 +65,7 @@ do_check_equipment_cfg_schedule:
 
         if (sch.fq == 0) return 'The frequency is set to 0, bailing out'
         
-        let q = await this.db.add_all_cnt ({}, [{equipment_cfg_items: {ORDER: 'uuid', LIMIT: sch.fq}}
+        let q = await this.db.add_all_cnt ({}, [{equipment_cfg_items: {ORDER: 'ts_created', LIMIT: sch.fq}}
         	, '$equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
         ])
 

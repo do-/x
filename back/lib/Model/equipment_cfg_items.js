@@ -8,6 +8,7 @@ module.exports = {
 		ext_id    : 'string           // ext_id (имя хоста)',
 		json      : 'string           // тело сообщения',
 
+		ts_created: 'timestamp        // Дата/время записив БД',
 		ts_start  : 'timestamp        // Дата/время начала отправки',
 		ts_finish : 'timestamp        // Дата/время подтверждения доставки',
 		ts_error  : 'timestamp        // Дата/время ошибки доставки',

@@ -69,7 +69,7 @@ do_post_equipment_cfg:
             throw x
         }
     
-    	for (let item of items) {
+    	for (let item of items.sort (i => !i.uniq_ID.match (/^POS/))) {
     		
     		let ext_id = item.uniq_ID
     	    		
@@ -77,8 +77,9 @@ do_post_equipment_cfg:
 
 	       	let uuid = await this.db.insert ('equipment_cfg_items', {				
 				ext_id,
-				id_cfg: this.uuid,
-				json:   JSON.stringify (item),
+				id_cfg:     this.uuid,
+				ts_created: new Date (),
+				json:       JSON.stringify (item),
 	       	})
 	       	
 	    }
