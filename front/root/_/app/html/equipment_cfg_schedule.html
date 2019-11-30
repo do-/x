@@ -1,0 +1,45 @@
+<span
+	data-popup-width=600
+	data-popup-height=225
+	data-popup-title='Расписание отправки в CMDB'
+>
+
+	<style>
+		label[data-block-name=equipment_cfg_schedule] {
+			width: 350px;
+			margin-right: 10px;
+		}
+		input[data-block-name=equipment_cfg_schedule]{width: 30px!important;}
+		input[data-block-name=equipment_cfg_schedule][name=fq] {width: 73px!important;}
+	</style>
+
+	<div class="w2ui-reset w2ui-form" style="height:175px; margin:8px 0 0 0;">
+
+        <div class="w2ui-page page-0">
+
+            <div class="w2ui-field">
+                <label>Максимальное число запросов в минуту:</label>
+                <div>
+                    <input name=fq required type=number min=0 />
+                </div>
+                <label>Начало периода отправки:</label>
+                <div>
+                    <input name=hh_from required type=number min=0 /> ч
+                    <input name=mm_from required type=number min=0 /> мин
+                </div>
+                <label>Окончание периода отправки:</label>
+                <div>
+                    <input name=hh_to required type=number min=0 /> ч
+                    <input name=mm_to required type=number min=0 /> мин
+                </div>
+            </div>
+
+        </div>
+
+        <div class="w2ui-buttons">
+			<button class=w2ui-btn name=update data-hotkey=Ctrl-Enter>Применить</button>
+        </div>
+
+	</div>
+
+</span>

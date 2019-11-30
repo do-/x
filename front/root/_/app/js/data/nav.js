@@ -1,6 +1,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.open_equipment_cfg_schedule_nav = function () {
+    show_block ('equipment_cfg_schedule')
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.open_equipment_cfg_nav = function () {
     open_tab ('/equipment_configs')
 }
@@ -59,14 +65,19 @@ $_GET.nav = async function (o) {
                 icon: "menu",
             },
             {
+                id: "open_ssh_settings",
+                label: "Настройки",
+                icon: "settings",
+            },
+            {
                 id: "open_equipment_cfg",
                 label: "Передача конфигураций оборудования",
                 icon: "pos",
             },
             {
-                id: "open_ssh_settings",
-                label: "Настройки SSH",
-                icon: "settings",
+                id: "open_equipment_cfg_schedule",
+                label: "Расписание",
+                icon: "clock",
             },
 /*            
             {
