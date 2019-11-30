@@ -1,19 +1,34 @@
 <span
 	data-popup-width=800
 	data-popup-height=600
-	data-popup-title='JSON'
+	data-popup-title='Запрос в CMDB'
 >
 
 	<style>
+		td[data-block-name=equipment_config_item_popup] {
+			width: 381px;
+		}
 		textarea[data-block-name=equipment_config_item_popup] {
 			height: 100%!important;
 			width: 100%!important;
+			outline: none;
 		}
 	</style>
 
 	<div class="w2ui-reset w2ui-form" style="height:550px; margin:8px 0 0 0;">
 
-		<textarea name=json readonly />
+		<table width=100% height=100% border=0 cellpadding=0 cellspacing=0>
+			<tr height=20>
+				<td valign=top>
+					<span data-text=ts_start /> &ndash; тело запроса
+				<td valign=top>
+					<span data-text=ts_finish /> &ndash; ответ
+			<tr>
+				<td>
+					<textarea name=json readonly />
+				<td>
+					<textarea name=error readonly />
+		</table>
 
 	</div>
 
