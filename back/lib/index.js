@@ -1,5 +1,6 @@
 const conf         = new (require ('./Config.js'))
 const http_router  = new (require ('./HttpRouter.js')) (conf)
+const Async        = require ('./Content/Handler/Async.js')
 
 ;(async () => {
 
@@ -9,7 +10,7 @@ const http_router  = new (require ('./HttpRouter.js')) (conf)
         console.log ('Configuration loaded OK')
         
 		await http_router.init ()
-        console.log ('Listening to HTTP on ' + http_router._._connectionKey)
+        console.log ('Listening to HTTP on ' + http_router._._connectionKey);
 		
 	}
 	catch (e) {

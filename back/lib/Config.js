@@ -27,9 +27,6 @@ module.exports = class {
 			
 				period: 60000,
 				
-				from: '01:00:00',
-				to: '06:00:00',
-
 				todo: () => {
 				
 					(new Async ({
@@ -59,8 +56,20 @@ module.exports = class {
 		
 		await db.update_model ()
 		
-//		this.pools.equip_timer.from_to ('23:00:00', '18:00:00')
-		this.pools.equip_timer.now ()
+		await new Promise ((ok, fail) => {
+
+			(new Async ({
+			
+				conf: this, 
+				pools: this.pools, 
+				rq: {
+					type: 'equipment_cfg_schedule', 
+					action: 'load'
+				}
+				
+			}, ok, fail)).run ()        
+
+		})
 		
     }
         

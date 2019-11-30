@@ -22,13 +22,6 @@ module.exports = class {
 
 		let when = ms + new Date ().getTime ()
 
-		if (this.t) {
-			if (this.when <= when) return darn ('Already was scheduled at ' + new Date (this.when))
-			this.clear ()
-		}
-
-		this.when = when
-
 		if (this.o.from) {
 		
 			let dt         = new Date (when)
@@ -54,6 +47,13 @@ module.exports = class {
 						
 		}
 				
+		if (this.t) {
+			if (this.when <= when) return darn ('Already was scheduled at ' + new Date (this.when))
+			this.clear ()
+		}
+
+		this.when = when
+
 		this.t = setTimeout (() => {
 			this.clear  ()
 			this.o.todo ()
@@ -77,9 +77,9 @@ module.exports = class {
 	
 	at (when) {
 
-		if (when instanceof Date) when = 0 + when
+		if (when instanceof Date) when = when.getTime ()
 		
-		this.in (when - new Date ())
+		this.in (when - new Date ().getTime ())
 
 	}	
 
