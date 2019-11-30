@@ -19,4 +19,26 @@ module.exports = {
         id_cfg: 'id_cfg,ext_id',
     },
 
+    triggers: {    
+
+    	after_insert: `
+
+			INSERT INTO equipment_cfg_items_queue (uuid) VALUES (NEW.uuid);
+
+			RETURN NEW;
+
+    	`,
+
+    	after_update: `
+
+    		IF NEW.ts_finish IS NOT NULL OR NEW.ts_error IS NOT NULL THEN 
+    			DELETE FROM equipment_cfg_items_queue WHERE uuid = NEW.uuid;
+    		END IF;
+
+			RETURN NEW;
+
+    	`,
+
+    },
+
 }

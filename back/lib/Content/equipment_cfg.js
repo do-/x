@@ -69,7 +69,7 @@ do_post_equipment_cfg:
             throw x
         }
         
-        let idx = {}
+//        let idx = {}
     
     	for (let item of items) {
     		
@@ -82,20 +82,20 @@ do_post_equipment_cfg:
 				id_cfg: this.uuid,
 				json:   JSON.stringify (item),
 	       	})
-	       	
-	       	idx [uuid] = item
+
+//	       	idx [uuid] = item
 	       	
 	    }
 	    
         let s = await this.db.select_hash ('SELECT cf_par FROM ssh_settings WHERE id = 1')
 
-		this.fork ({action: 'send'}, {idx, par: s.cf_par})
+//		this.fork ({action: 'send'}, {idx, par: s.cf_par})
     
     },
     
     
 ////////////////////////////////////////////////////////////////////////////////
-
+/*
 do_send_equipment_cfg: 
 
     async function () {
@@ -150,5 +150,5 @@ do_send_equipment_cfg:
 		}, 10)
 		
 	}    
-
+*/
 }
