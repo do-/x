@@ -30,7 +30,9 @@ do_update_equipment_cfg_schedule:
         
         await this.db.update ('equipment_cfg_schedule', data)
         
-		this.fork ({action: 'load'}, {})
+		await this.fork ({action: 'load'}, {})
+
+        this.pools.equip_timer.next ()
 
     },
 
@@ -47,7 +49,7 @@ do_load_equipment_cfg_schedule:
         
         this.pools.equip_timer.from_to (hms (sch.hh_from, sch.mm_from), hms (sch.hh_to, sch.mm_to))
 
-        this.pools.equip_timer.next ()
+        this.pools.equip_timer.on ()
 
         return 1
 
