@@ -30,6 +30,8 @@ do_update_equipment_cfg_schedule:
         
         await this.db.update ('equipment_cfg_schedule', data)
         
+        await this.db.commit ()
+        
 		await this.fork ({action: 'load'}, {})
 
         this.pools.equip_timer.next ()
@@ -63,13 +65,13 @@ do_check_equipment_cfg_schedule:
     
         let sch = await this.db.get ([{equipment_cfg_schedule: {id: 1}}])
 
-        if (sch.fq == 0) return 'The frequency is set to 0, bailing out'
+        if (sch.fq == 0) return this.uuid + ' The frequency is set to 0, bailing out'
         
         let q = await this.db.add_all_cnt ({}, [{equipment_cfg_items: {ORDER: 'ts_created', LIMIT: sch.fq}}
         	, '$equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
         ])
 
-        if (q.cnt == 0) return 'The queue is empty, bailing out'
+        if (q.cnt == 0) return this.uuid + ' The queue is empty, bailing out'
         
         let list = q.equipment_cfg_items
         
