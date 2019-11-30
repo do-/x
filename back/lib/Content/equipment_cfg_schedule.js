@@ -30,7 +30,7 @@ do_update_equipment_cfg_schedule:
         
         await this.db.update ('equipment_cfg_schedule', data)
         
-        this.pools.equip_timer.in (60000)
+        this.pools.equip_timer.next ()
 
     },
 
@@ -47,7 +47,7 @@ darn (sch)
         	return
         }
         
-        this.pools.equip_timer.in (60000)
+        this.pools.equip_timer.next ()
 
         return 1
 

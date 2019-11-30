@@ -24,6 +24,8 @@ module.exports = class {
 			}),
 			
 			equip_timer: new (require ('./Timer.js')) ({
+			
+				period: 60000,
 
 				todo: () => {
 				
@@ -54,7 +56,7 @@ module.exports = class {
 		
 		await db.update_model ()
 		
-		this.pools.equip_timer.in (0)
+		this.pools.equip_timer.now ()
 		
     }
         
