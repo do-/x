@@ -63,21 +63,25 @@ do_check_equipment_cfg_schedule:
 
         if (sch.fq == 0) return 'The frequency is set to 0, bailing out'
         
-        let q = await this.db.list ([{equipment_cfg_items: {LIMIT: sch.fq}}
+        let q = await this.db.add_all_cnt ({}, [{equipment_cfg_items: {ORDER: 'uuid', LIMIT: sch.fq}}
         	, '$equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
         ])
 darn (q)        
-        if (q.length == 0) return 'The queue is empty, bailing out'
+        if (q.cnt == 0) return 'The queue is empty, bailing out'
         
-        for (let i of q) {
+        for (let i of q.equipment_cfg_items) {
         	let id = i.uuid
         	let item = JSON.parse (i.json)
         	this.fork0 ({type: 'equipment_cfg_items', action: 'send', id}, {item})
         }
         
-        this.pools.equip_timer.next ()
-        
-        return q.length + 'requests sent'
+        if (q.cnt > sch.fq) {
+    	    this.pools.equip_timer.next ()
+	        return q.length + 'request(s) sent, more to do'
+        }
+        else {
+	        return 'last' + q.length + 'request(s) sent'
+        }
 
     },
 
