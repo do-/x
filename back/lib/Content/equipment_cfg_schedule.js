@@ -47,7 +47,7 @@ do_load_equipment_cfg_schedule:
         
         this.pools.equip_timer.from_to (hms (sch.hh_from, sch.mm_from), hms (sch.hh_to, sch.mm_to))
 
-        this.pools.equip_timer.next ()
+        this.pools.equip_timer.on ()
 
         return 1
 
@@ -60,15 +60,24 @@ do_check_equipment_cfg_schedule:
     async function () {
     
         let sch = await this.db.get ([{equipment_cfg_schedule: {id: 1}}])
-darn (sch)        
-        if (sch.fq == 0) {
-        	darn ('The frequency is set to 0, bailing out')
-        	return
+
+        if (sch.fq == 0) return 'The frequency is set to 0, bailing out'
+        
+        let q = await this.db.list ([{equipment_cfg_items: {LIMIT: sch.fq}}
+        	, '$equipment_cfg_items_queue ON equipment_cfg_items.uuid = equipment_cfg_items_queue.uuid'
+        ])
+darn (q)        
+        if (q.length == 0) return 'The queue is empty, bailing out'
+        
+        for (let i of q) {
+        	let id = i.uuid
+        	let item = JSON.parse (i.json)
+        	this.fork0 ({type: 'equipment_cfg_items', action: 'send', id}, {item})
         }
         
         this.pools.equip_timer.next ()
-
-        return 1
+        
+        return q.length + 'requests sent'
 
     },
 

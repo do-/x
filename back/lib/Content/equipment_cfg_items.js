@@ -37,29 +37,36 @@ select_equipment_cfg_items:
 do_send_equipment_cfg_items: 
 
     async function () {
+    
+    	try {
         	    	
-		await this.fork ({action: 'call', type: 'cmdb_service'}, {
+			await this.fork ({action: 'call', type: 'cmdb_service'}, {
 
-			url: 'cf_url',
+				url: 'cf_url',
 
-			body: this.rq.item,
+				body: this.rq.item,
 
-			log: {
+				log: {
 
-				table: 'equipment_cfg_items',
+					table: 'equipment_cfg_items',
 
-				id: this.rq.id,
+					id: this.rq.id,
 
-				fields: {
-					ts_start:  'ts_start',
-					ts_finish: 'ts_finish',  
-					ts_error:  'ts_error', 
-					error:     'error',  					
+					fields: {
+						ts_start:  'ts_start',
+						ts_finish: 'ts_finish',  
+						ts_error:  'ts_error', 
+						error:     'error',  					
+					}
+
 				}
 
-			}
-
-		})
+			})
+		
+		}
+		catch (e) {
+			darn (e)
+		}
 	
 	}
 

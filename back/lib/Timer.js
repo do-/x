@@ -74,6 +74,12 @@ module.exports = class {
 		this.in (this.o.period)
 
 	}
+
+	on () {
+	
+		if (!this.t) this.now ()
+
+	}
 	
 	at (when) {
 

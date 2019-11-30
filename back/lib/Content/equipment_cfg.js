@@ -87,7 +87,10 @@ do_post_equipment_cfg:
 	       	
 	    }
 	    
-        let s = await this.db.select_hash ('SELECT cf_par FROM ssh_settings WHERE id = 1')
+        this.pools.equip_timer.on ()
+	    
+	    
+//      let s = await this.db.select_hash ('SELECT cf_par FROM ssh_settings WHERE id = 1')
 
 //		this.fork ({action: 'send'}, {idx, par: s.cf_par})
     
