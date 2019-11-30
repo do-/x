@@ -6,6 +6,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "content-disposition": "^0.5.3",
     "pg": "^7.0.0",
     "ssh2": "^0.8.5"
   }
