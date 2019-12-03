@@ -32,7 +32,7 @@ module.exports = {
 
     	after_update: `
 
-    		IF NEW.ts_finish IS NOT NULL OR NEW.ts_error IS NOT NULL THEN 
+    		IF NEW.ts_start IS NOT NULL THEN
     			DELETE FROM equipment_cfg_items_queue WHERE uuid = NEW.uuid;
     		END IF;
 
