@@ -1,4 +1,4 @@
-module.exports = class extends require ('./Rpc.js') {
+module.exports = class extends require ('./RPC.js') {
     
     get_session () {
     	return new (require ('./HTTP/EqSession.js')) (this)
