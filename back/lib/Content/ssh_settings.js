@@ -29,8 +29,8 @@ do_update_ssh_settings:
         data.id = 1
         
         if (data.shop_pass != null) {
-			data.shop_salt = await this.fork ({type: 'users', action: 'encrypt_password'}, {salt: Math.random (), password: new Date ().toJSON ()})
-			data.shop_pass = await this.fork ({type: 'users', action: 'encrypt_password'}, {salt: data.shop_salt, password: data.shop_pass})
+			data.shop_salt = await this.encrypt_password (new Date ().toJSON ())
+			data.shop_pass = await this.encrypt_password (data.shop_pass, data.shop_salt)
         }
         else {
         	delete data.shop_pass
