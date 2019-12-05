@@ -27,18 +27,22 @@ module.exports = class {
 			
 				period: 60000,
 				
-				todo: () => {
+				todo: async () => {
 				
-					(new Async ({
+					darn (await new Promise ((ok, fail) => {
 					
-						conf:  this, 
-						pools: this.pools, 
-						rq: {
-							type: 'equipment_cfg_schedule', 
-							action: 'check'
-						}
-						
-					}, darn, darn)).run ()
+						(new Async ({
+
+							conf:  this, 
+							pools: this.pools, 
+							rq: {
+								type: 'equipment_cfg_schedule', 
+								action: 'check'
+							}
+
+						}, ok, fail)).run ()
+
+					})) 
 
 				}
 

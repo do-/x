@@ -68,10 +68,33 @@ module.exports = class {
 			this.clear ()
 		}
 
-		this.t = setTimeout (() => {
+		this.t = setTimeout (async () => {
+		
 			darn ('Timer: about to clean up and call todo ()')
-			this.clear  ()
-			this.o.todo ()
+			
+			this.is_busy = 1
+			
+				let ts = new Date ().getTime ()
+
+					this.clear ()
+					await this.o.todo ()
+
+				let elapsed = new Date ().getTime () - ts
+
+				darn ('Timer: todo () took ' + elapsed + ' ms')
+			
+			delete this.is_busy
+			
+			if (this.is_reset) {
+			
+				darn ('Timer: about to reset')
+
+				delete this.is_reset
+				
+				this.in (this.o.period - elapsed)
+			
+			}
+		
 		}, when - new Date ().getTime ())
 
 		darn ('Timer: now scheduled at ' + new Date (this.when = when))
@@ -95,8 +118,16 @@ module.exports = class {
 	on () {
 	
 		darn ('Timer: on () called')
-		
+
 		if (this.t) return darn ('Timer: already scheduled, exiting on ()')
+
+		if (this.is_busy) {
+
+			this.is_reset = 1
+
+			return darn ('Timer: busy, resetting')
+
+		}
 	
 		this.now ()
 
