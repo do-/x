@@ -71,7 +71,7 @@ do_set_password_users:
         if (this.rq.p1 != this.rq.p2) throw '#p2#: Повторное значение пароля не сходится'
 
         let uuid = 
-                   this.user.role == 'admin' ? this.rq.id : 
+                   this.user.id_role == 1 ? this.rq.id : 
                    this.user.uuid
 
         let salt     = await this.encrypt_password (new Date ().toJSON (), Math.random ())
