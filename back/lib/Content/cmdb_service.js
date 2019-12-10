@@ -12,6 +12,7 @@ do_call_cmdb_service:
 				
 		let o = {
 			method: 'POST',
+			timeout: 100,
 			headers: {
 				'Content-Type': 'application/json',
 //				'Content-Length': json.length
@@ -46,20 +47,27 @@ do_call_cmdb_service:
 					ts_error  : null,
 					error     : null,
 				})
-
-				let rq = http.request (url, o, rp => {
 				
-					let body = ''
-					
-					rp.setEncoding ('utf8')
-					rp.on ('data', s => body += s)
-					rp.on ('end', () => {
-						sniff (rq, rp, body)
-						let code = rp.statusCode; if (code == 200) return ok ()
-						fail (new Error (JSON.stringify ({code: rp.statusMessage, body})))
-					})
+				try {
 
-				}).on ('error', fail).end (json)
+					let rq = http.request (url, o, rp => {
+
+						let body = ''
+
+						rp.setEncoding ('utf8')
+						rp.on ('data', s => body += s)
+						rp.on ('end', () => {
+							sniff (rq, rp, body)
+							let code = rp.statusCode; if (code == 200) return ok ()
+							fail (new Error (JSON.stringify ({code: rp.statusMessage, body})))
+						})
+
+					}).on ('error', fail).end (json)
+
+				}
+				catch (x) {
+					fail (x)
+				}
 
 			})		
 
