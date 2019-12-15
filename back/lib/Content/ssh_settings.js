@@ -1,4 +1,5 @@
 const Dia = require ('../Ext/Dia/Dia.js')
+const HTTP = require ('../Ext/Dia/HTTP.js')
 
 module.exports = {
     
@@ -37,6 +38,8 @@ do_update_ssh_settings:
         }
         
         await this.db.update ('ssh_settings', data)
+
+        await this.db.commit ()
         
 		await this.fork ({action: 'load'})
 
@@ -48,9 +51,13 @@ do_load_ssh_settings:
 
     async function () {
     
-		this.conf.ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
+		let s = this.conf.ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
+		
+		let o = {timeout: 100}
+		
+		if (s.cb_user) o.auth = s.cb_user + ':' + s.cb_pass
 
-darn (this.conf)
+		for (let k of ['cb_url', 'cf_url']) this.conf.pools ['http_' + k] = new HTTP (Object.assign ({url: s [k]}, o))
 
     },
 

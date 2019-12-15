@@ -9,67 +9,27 @@ do_call_cmdb_service:
     async function () {
     
 		let json = JSON.stringify (this.rq.body)
-				
-		let o = {
-			method: 'POST',
-			timeout: 100,
-			headers: {
-				'Content-Type': 'application/json',
-//				'Content-Length': json.length
-			}
-		}
-		
+
 		let db = this.db		
-
-		let ssh_settings = this.conf.ssh_settings
-
-		let url = ssh_settings [this.rq.url]
-
-		if (ssh_settings.cb_user) o.auth = ssh_settings.cb_user + ':' + ssh_settings.cb_pass
 		
+		let http_client = this ['http_' + this.rq.url]
+
 		let log = this.rq.log; async function update (data) {
 			let d = {uuid: log.id}
 			for (let k in data) d [log.fields [k]] = data [k]
 			return db.update (log.table, d)
 		}
-		
-		let sniff = (rq, rp, body) => {
-			darn (`${this.uuid}: ${JSON.stringify (rq._header)} ${json} -> ${JSON.stringify (rp.headers)} ${body}`)
-		}
-				
+						
 		try {
 
-			await new Promise (async function (ok, fail) {
-
-				await update ({
-					ts_start  : new Date (),
-					ts_finish : null,
-					ts_error  : null,
-					error     : null,
-				})
-				
-				try {
-
-					let rq = http.request (url, o, rp => {
-
-						let body = ''
-
-						rp.setEncoding ('utf8')
-						rp.on ('data', s => body += s)
-						rp.on ('end', () => {
-							sniff (rq, rp, body)
-							let code = rp.statusCode; if (code == 200) return ok ()
-							fail (new Error (JSON.stringify ({code: rp.statusMessage, body})))
-						})
-
-					}).on ('error', fail).end (json)
-
-				}
-				catch (x) {
-					fail (x)
-				}
-
-			})		
+			await update ({
+				ts_start  : new Date (),
+				ts_finish : null,
+				ts_error  : null,
+				error     : null,
+			})
+			
+			await http_client.response ({}, json)
 
 		}
 		catch (x) {
