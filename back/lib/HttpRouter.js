@@ -36,7 +36,11 @@ module.exports = class extends require ('./Ext/Dia/Content/Handler/HTTP/Router.j
 		
 		if (key == 'front') return new clazz ({http})
 		
-		return new clazz ({conf: this.conf, pools: this.conf.pools, http})
+		let pools = Object.assign ({}, this.conf.pools)
+
+		if (key == 'back') pools.db = this.conf.ui_db_pool
+
+		return new clazz ({conf: this.conf, pools, http})
 
 	}
 		

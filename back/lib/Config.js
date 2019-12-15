@@ -9,10 +9,16 @@ module.exports = class {
         const conf = JSON.parse (fs.readFileSync ('../conf/elud.json', 'utf8'))
 
         for (let k in conf) this [k] = conf [k]
+        
+        let model = new (require ('./Model.js')) ({path: './Model'})
+        
+        let create_db_pool = () => Dia.DB.Pool (this.db, model)
+        
+        this.ui_db_pool = create_db_pool ()
 
         this.pools = {
         
-        	db: Dia.DB.Pool (this.db, new (require ('./Model.js')) ({path: './Model'})),
+        	db: create_db_pool (),
 
             sessions: new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
 				name: 'session',
