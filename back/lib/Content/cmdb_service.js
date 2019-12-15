@@ -21,7 +21,7 @@ do_call_cmdb_service:
 		
 		let db = this.db		
 
-		let ssh_settings = await db.get ([{ssh_settings: {id: 1}}])
+		let ssh_settings = this.conf.ssh_settings
 
 		let url = ssh_settings [this.rq.url]
 
