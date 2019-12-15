@@ -285,6 +285,9 @@ do_notify_completion_ssh_commands:
 
 			}
 
+		},
+		{
+			http_cb_url: this.conf.http.cb_url,
 		})
 
     },

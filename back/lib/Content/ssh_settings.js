@@ -57,7 +57,11 @@ do_load_ssh_settings:
 		
 		if (s.cb_user) o.auth = s.cb_user + ':' + s.cb_pass
 
-		for (let k of ['cb_url', 'cf_url']) this.conf.pools ['http_' + k] = new HTTP (Object.assign ({url: s [k]}, o))
+//		for (let k of ['cb_url', 'cf_url']) this.conf.pools ['http_' + k] = new HTTP (Object.assign ({url: s [k]}, o))
+		
+		this.conf.http = {}
+		
+		for (let k of ['cb_url', 'cf_url']) this.conf.http [k] = new HTTP (Object.assign ({url: s [k]}, o))
 
     },
 

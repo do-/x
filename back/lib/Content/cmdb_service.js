@@ -4,6 +4,23 @@ module.exports = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+do_log_cmdb_service: 
+
+    async function () {
+
+		let log = this.rq.log
+		let data = this.rq.data
+		
+		let d = {uuid: log.id}
+			
+		for (let k in data) d [log.fields [k]] = data [k]
+			
+		return this.db.update (log.table, d)		
+
+    },
+
+////////////////////////////////////////////////////////////////////////////////
+
 do_call_cmdb_service: 
 
     async function () {
@@ -13,12 +30,8 @@ do_call_cmdb_service:
 		let db = this.db		
 		
 		let http_client = this ['http_' + this.rq.url]
-
-		let log = this.rq.log; async function update (data) {
-			let d = {uuid: log.id}
-			for (let k in data) d [log.fields [k]] = data [k]
-			return db.update (log.table, d)
-		}
+		
+		let update = async (data) => this.fork ({action: 'log'}, {data, log: this.rq.log})
 						
 		try {
 

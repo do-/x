@@ -64,6 +64,8 @@ do_send_equipment_cfg_items:
 
 				}
 
+			}, {
+				http_cf_url: this.conf.http.cf_url
 			})
 		
 		}
