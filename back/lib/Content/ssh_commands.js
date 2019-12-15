@@ -257,7 +257,7 @@ do_notify_completion_ssh_commands:
 		
 		db.commit ()
 
-		await this.fork ({action: 'call', type: 'cmdb_service'}, {
+		await this.call_cmdb_service ({
 
 			url: 'cb_url',
 
@@ -285,9 +285,6 @@ do_notify_completion_ssh_commands:
 
 			}
 
-		},
-		{
-			http_cb_url: this.conf.http.cb_url,
 		})
 
     },

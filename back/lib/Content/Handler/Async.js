@@ -13,4 +13,8 @@ module.exports = class extends Async.Handler {
 		return this.fork (tia, data, [])
 	}
 
+	async call_cmdb_service (o) {	
+		return this.fork ({action: 'call', type: 'cmdb_service'}, o, {http: this.conf.http [o.url]})	
+	}
+
 }

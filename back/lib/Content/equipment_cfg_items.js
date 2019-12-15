@@ -43,7 +43,7 @@ do_send_equipment_cfg_items:
     
     	try {
         	    	
-			await this.fork ({action: 'call', type: 'cmdb_service'}, {
+			await this.call_cmdb_service ({
 
 				url: 'cf_url',
 
@@ -64,8 +64,6 @@ do_send_equipment_cfg_items:
 
 				}
 
-			}, {
-				http_cf_url: this.conf.http.cf_url
 			})
 		
 		}
