@@ -67,6 +67,21 @@ module.exports = class {
 				conf: this, 
 				pools: this.pools, 
 				rq: {
+					type: 'ssh_settings', 
+					action: 'load'
+				}
+				
+			}, ok, fail)).run ()        
+
+		})
+
+		await new Promise ((ok, fail) => {
+
+			(new Async ({
+			
+				conf: this, 
+				pools: this.pools, 
+				rq: {
 					type: 'equipment_cfg_schedule', 
 					action: 'load'
 				}

@@ -36,7 +36,21 @@ do_update_ssh_settings:
         	delete data.shop_pass
         }
         
-        return this.db.update ('ssh_settings', data)
+        await this.db.update ('ssh_settings', data)
+        
+		await this.fork ({action: 'load'})
+
+    },
+    
+////////////////////////////////////////////////////////////////////////////////
+
+do_load_ssh_settings: 
+
+    async function () {
+    
+		this.conf.ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
+
+darn (this.conf)
 
     },
 
