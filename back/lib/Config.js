@@ -52,44 +52,26 @@ module.exports = class {
 
     }
     
+    async call_load (type) {    
+    	return new Promise ((ok, fail) => {		
+			(new Async ({			
+				conf: this, 
+				pools: this.pools, 
+				rq: {type, action: 'load'}				
+			}, ok, fail)).run ()        		
+		})
+    }
+    
     async init () {
     
 		let db = this.pools.db
 		
-		await db.load_schema ()
-		
+		await db.load_schema ()		
 		await db.update_model ()
 		
-		await new Promise ((ok, fail) => {
-
-			(new Async ({
-			
-				conf: this, 
-				pools: this.pools, 
-				rq: {
-					type: 'ssh_settings', 
-					action: 'load'
-				}
+		await this.call_load ('ssh_settings')
+		await this.call_load ('equipment_cfg_schedule')
 				
-			}, ok, fail)).run ()        
-
-		})
-
-		await new Promise ((ok, fail) => {
-
-			(new Async ({
-			
-				conf: this, 
-				pools: this.pools, 
-				rq: {
-					type: 'equipment_cfg_schedule', 
-					action: 'load'
-				}
-				
-			}, ok, fail)).run ()        
-
-		})
-		
     }
         
 }
