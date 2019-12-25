@@ -25,6 +25,12 @@ $_DO.open_ssh_settings_nav = function () {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+$_DO.open_mfsm_settings_nav = function () {
+    show_block ('mfsm_settings')
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 $_DO.open_users_nav = function () {
     open_tab ('/users')
 }
@@ -67,6 +73,11 @@ $_GET.nav = async function (o) {
             {
                 id: "open_ssh_settings",
                 label: "Настройки",
+                icon: "settings",
+            },
+            {
+                id: "open_mfsm_settings",
+                label: "Настройки WS MFSM",
                 icon: "settings",
             },
             {

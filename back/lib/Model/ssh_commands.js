@@ -10,12 +10,19 @@ module.exports = {
         timeout         : 'int             // Максимальное время исполнения запроса в целом, с',
 		ts_created      : 'timestamp=now() // Дата/время создания',
 		addr            : 'text            // JSON-массив записей {host, cmd, src}',
+		path            : 'string          // Относительный путь для файлов',
+		request         : 'string          // Номер запроса из CMDB',
+
 		ts_notif_start  : 'timestamp       // Дата/время начала отправки извещения',
 		ts_notif_finish : 'timestamp       // Дата/время подтверждения доставки извещения',
 		ts_notif_error  : 'timestamp       // Дата/время ошибки доставки извещения',
 		notif_error     : 'string          // Ошибка доставки извещения',
-		path            : 'string          // Относительный путь для файлов',
-		request         : 'string          // Номер запроса из CMDB',
+
+		ts_notif_start2  : 'timestamp       // Дата/время начала отправки извещения',
+		ts_notif_finish2 : 'timestamp       // Дата/время подтверждения доставки извещения',
+		ts_notif_error2  : 'timestamp       // Дата/время ошибки доставки извещения',
+		notif_error2     : 'string          // Ошибка доставки извещения',
+
     },
 
     keys : {

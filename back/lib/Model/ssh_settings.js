@@ -7,10 +7,17 @@ module.exports = {
         ttl      : 'int=5    // Максимальное время ожидания для отдельного hostа, с',
         par      : 'int=1000 // Максимальное число одновременных SSH-соединений',
         timeout  : 'int=5    // Максимальное время исполнения запроса в целом, с',
-		cb_url   : 'string   // URL для отправки извещения',
-		cb_user  : 'string   // Basic-login для отправки извещения',
-		cb_pass  : 'string   // Basic-пароль для отправки извещения',
-		cf_url   : 'string   // URL для отправки конфигурации',		
+		
+		cb_url   : 'string   // URL 1-го WS MFSM для отправки извещения',
+		cf_url   : 'string   // URL 1-го WS MFSM для отправки конфигурации',		
+		cb_user  : 'string   // Basic-login 1-го WS MFSM',
+		cb_pass  : 'string   // Basic-пароль 1-го WS MFSM',
+		
+		cb2_url  : 'string   // URL 2-го WS MFSM для отправки извещения',
+		cf2_url  : 'string   // URL 2-го WS MFSM для отправки конфигурации',		
+		cb2_user : 'string   // Basic-login 2-го WS MFSM',
+		cb2_pass : 'string   // Basic-пароль 2-го WS MFSM',
+		
 		port     : 'int=22   // Порт',
 		username : 'string   // Пользователь',
         cmd      : 'string   // Команда',

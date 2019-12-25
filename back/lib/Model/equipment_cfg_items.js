@@ -9,10 +9,16 @@ module.exports = {
 		json      : 'string           // тело сообщения',
 
 		ts_created: 'timestamp        // Дата/время записив БД',
+
 		ts_start  : 'timestamp        // Дата/время начала отправки',
 		ts_finish : 'timestamp        // Дата/время подтверждения доставки',
 		ts_error  : 'timestamp        // Дата/время ошибки доставки',
 		error     : 'string           // Ошибка доставки',
+
+		ts_start2  : 'timestamp        // Дата/время начала отправки',
+		ts_finish2 : 'timestamp        // Дата/время подтверждения доставки',
+		ts_error2  : 'timestamp        // Дата/время ошибки доставки',
+		error2     : 'string           // Ошибка доставки',
 		
     },
 

@@ -24,6 +24,9 @@ $_GET.ssh_command = async function (o) {
     if (data.ts_notif_finish) data.totals.push ({recid: 30, label: 'Извещение доставлено', ts: data.ts_notif_finish, delta: data.ms_notif})
     if (data.ts_notif_error)  data.totals.push ({recid: 40, label: 'Ошибка доставки', ts: data.ts_notif_error, delta: data.ms_notif, error: data.notif_error})
     
+    if (data.ts_notif_finish2) data.totals.push ({recid: 50, label: 'Извещение доставлено 2', ts: data.ts_notif_finish2, delta: data.ms_notif2})
+    if (data.ts_notif_error2)  data.totals.push ({recid: 60, label: 'Ошибка доставки 2', ts: data.ts_notif_error2, delta: data.ms_notif2, error: data.notif_error2})
+
     return data
 
 }

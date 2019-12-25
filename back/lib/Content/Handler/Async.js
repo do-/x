@@ -14,7 +14,21 @@ module.exports = class extends Async.Handler {
 	}
 
 	async call_cmdb_service (o) {	
-		return this.fork ({action: 'call', type: 'cmdb_service'}, o, {http: this.conf.http [o.url]})	
+	
+		let todo = [this.fork ({action: 'call', type: 'cmdb_service'}, o, {http: this.conf.http [o.url]})]
+	
+		let http = this.conf.http2 [o.url]; if (http) {
+		
+			let o2 = clone (o)
+
+			let f = o2.log.fields; for (let k in f) f [k] += '2'
+		
+			todo.push (this.fork ({action: 'call', type: 'cmdb_service'}, o2, {http}))
+		
+		}
+		
+		return Promise.all (todo)
+		
 	}
 
 }

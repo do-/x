@@ -53,15 +53,21 @@ do_load_ssh_settings:
     
 		let s = this.conf.ssh_settings = await this.db.get ([{ssh_settings: {id: 1}}])
 		
+		this.conf.http = {}
+
 		let o = {timeout: 100}
-		
+
 		if (s.cb_user) o.auth = s.cb_user + ':' + s.cb_pass
 
-//		for (let k of ['cb_url', 'cf_url']) this.conf.pools ['http_' + k] = new HTTP (Object.assign ({url: s [k]}, o))
-		
-		this.conf.http = {}
-		
 		for (let k of ['cb_url', 'cf_url']) this.conf.http [k] = new HTTP (Object.assign ({url: s [k]}, o))
+
+		this.conf.http2 = {}
+
+		let o2 = {timeout: 100}
+
+		if (s.cb2_user) o2.auth = s.cb2_user + ':' + s.cb2_pass
+
+		for (let k of ['cb2_url', 'cf2_url']) if (s [k]) this.conf.http2 [k.replace (/2/, '')] = new HTTP (Object.assign ({url: s [k]}, o2))
 
     },
 

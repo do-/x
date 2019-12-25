@@ -38,7 +38,7 @@ do_call_cmdb_service:
 
 			let error = x.message
 
-			await update ({ts_error: new Date (), error})		
+			await log ({ts_error: new Date (), error})		
 
 			x.message = this.uuid + ': ' + error
 

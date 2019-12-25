@@ -6,7 +6,7 @@
 
 	<style>
 		td[data-block-name=equipment_config_item_popup] {
-			width: 381px;
+			width: 253px;
 		}
 		textarea[data-block-name=equipment_config_item_popup] {
 			height: 100%!important;
@@ -20,14 +20,18 @@
 		<table width=100% height=100% border=0 cellpadding=0 cellspacing=0>
 			<tr height=20>
 				<td valign=top>
-					<span data-text=ts_start /> &ndash; тело запроса
+					<span data-text=ts_start /> <br><br> тело запроса<br><br>
 				<td valign=top>
-					<span data-text=ts_finish /> &ndash; ответ
+					<span data-text=ts_finish /> <br><br> ответ<br><br>
+				<td valign=top>
+					<span data-text=ts_finish2 /> <br><br> ответ 2<br><br>
 			<tr>
 				<td>
 					<textarea name=json readonly />
 				<td>
 					<textarea name=error readonly />
+				<td>
+					<textarea name=error2 readonly />
 		</table>
 
 	</div>

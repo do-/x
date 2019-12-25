@@ -87,7 +87,9 @@ module.exports = function (grunt) {
     watch: {
 
       general: {
-        files: ['root/_/app/**/*.*'],
+        files: [
+            'root/_/app/html/*.html',
+        ],
         tasks: ['bump', 'replace'],
         options: {nospawn: true}
       },
@@ -99,8 +101,12 @@ module.exports = function (grunt) {
       },
 
       js: {
-        files: ['root/_/app/js/data/*.js', 'root/_/app/js/view/*.js', 'root/_/app/handler.js'],
-        tasks: ['concat:js'],
+        files: [
+        	'root/_/app/js/data/*.js', 
+        	'root/_/app/js/view/*.js', 
+        	'root/_/app/handler.js'
+        ],
+        tasks: ['bump', 'replace', 'concat:js'],
         options: {nospawn: true}
       },
 /*

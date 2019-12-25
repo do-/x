@@ -24,6 +24,12 @@ $_DRAW.equipment_config_items = async function (data) {
             {field: 'ts_finish',      caption: 'Ответ',          size: 1, min: 155, render: _ts, sortable: true},
             {field: 'ts_error',       caption: 'Ошибка',         size: 1, min: 155, render: _ts, sortable: true},
             {field: 'error',          caption: 'Суть проблемы',    size: 20},
+
+            {field: 'ts_start2',       caption: 'Отправка 2',       size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'ts_finish2',      caption: 'Ответ 2',          size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'ts_error2',       caption: 'Ошибка 2',         size: 1, min: 155, render: _ts, sortable: true},
+            {field: 'error2',          caption: 'Суть проблемы 2',    size: 20},
+
         ],
                     
         src: data.src,
