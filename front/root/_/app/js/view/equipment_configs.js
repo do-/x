@@ -12,6 +12,12 @@ $_DRAW.equipment_configs = async function (data) {
 //            toolbarAdd: true,
         },            
         
+	    toolbar: {
+      		items: [
+      		  	{type: 'button', id: 'qButton', caption: 'Очередь', onClick: () => open_tab ('/equipment_config_items_queue')},
+      		]
+      	},
+        
         columns: [                
             {field: 'ts_created', caption: 'Дата/время', size: 28, min: 155, render: _ts},
             {field: 'uuid', caption: 'UUID', size: 50, min: 250, style: 'font-family:courier'},
