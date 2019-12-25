@@ -71,6 +71,11 @@ $_GET.nav = async function (o) {
                 icon: "menu",
             },
             {
+                id: "open_equipment_cfg",
+                label: "Передача конфигураций оборудования",
+                icon: "pos",
+            },
+            {
                 id: "open_ssh_settings",
                 label: "Настройки",
                 icon: "settings",
@@ -78,12 +83,7 @@ $_GET.nav = async function (o) {
             {
                 id: "open_mfsm_settings",
                 label: "Настройки WS MFSM",
-                icon: "settings",
-            },
-            {
-                id: "open_equipment_cfg",
-                label: "Передача конфигураций оборудования",
-                icon: "pos",
+                icon: "plug",
             },
             {
                 id: "open_equipment_cfg_schedule",
